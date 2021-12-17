@@ -1,0 +1,126 @@
+//O2can O2bek (Özcan Özbek)
+//@version=5
+
+indicator('Gün Sonu Fibo Al SAT Talimatları V1.0', overlay=true)
+src = close
+
+acEtiket = input(defval = false, title = 'Fibo Al Saat Talimatları Panosu')   
+acFiboLines = input(defval = false, title = 'Fibo Yatay Çizgileri')   
+
+//Fiblines
+len = 200 //input(title='Period', defval=200)
+fractal_top = 0.0
+fractal_top := high < high[2] and high[1] < high[2] and high[3] < high[2] and high[4] < high[2] ? high[2] : fractal_top[1]
+fractal_bottom = 0.0
+fractal_bottom := low > low[2] and low[1] > low[2] and low[3] > low[2] and low[4] > low[2] ? low[2] : fractal_bottom[1]
+
+srcHigh = ta.highest(fractal_top, len)
+srcLow = ta.lowest(fractal_bottom, len)
+diff = srcHigh - srcLow
+
+line2272 = srcLow + diff * 2.272
+line2000 = srcLow + diff * 2.000
+line1618 = srcLow + diff * 1.618
+line1414 = srcLow + diff * 1.414
+line1272 = srcLow + diff * 1.272
+line1000 = srcHigh
+line0786 = srcLow + diff * 0.786
+line0618 = srcLow + diff * 0.618
+line0500 = srcLow + diff * 0.500
+line0382 = srcLow + diff * 0.382
+line0236 = srcLow + diff * 0.236
+line0000 = srcLow
+line1272_2 = srcHigh - diff * 1.272
+line1414_2 = srcHigh - diff * 1.414
+line1618_2 = srcHigh - diff * 1.618
+line2000_2 = srcHigh - diff * 2.000
+line2272_2 = srcHigh - diff * 2.272
+
+plot(line0000 and acFiboLines ? line0000 : na, title='0.000', color=color.new(#2E9AFE, 33), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line0236 and acFiboLines ? line0236 : na, title='0.236', color=color.new(#2E9AFE, 33), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line0382 and acFiboLines ? line0382 : na, title='0.382', color=color.new(#2E9AFE, 33), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line0500 and acFiboLines ? line0500 : na, title='0.500', color=color.new(#2E9AFE, 33), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line0618 and acFiboLines ? line0618 : na, title='0.618', color=color.new(#2E9AFE, 33), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line0786 and acFiboLines ? line0786 : na, title='0.786', color=color.new(#2E9AFE, 33), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1000 and acFiboLines ? line1000 : na, title='1.000', color=color.new(#2E9AFE, 33), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1272 and acFiboLines ? line1272 : na, title='1.272', color=color.new(color.green, 33), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1414 and acFiboLines ? line1414 : na, title='1.414', color=color.new(color.green, 33), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1618 and acFiboLines ? line1618 : na, title='1.618', color=color.new(color.green, 33), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line2000 and acFiboLines ? line2000 : na, title='2.000', color=color.new(color.green, 33), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line2272 and acFiboLines ? line2272 : na, title='2.272', color=color.new(color.green, 33), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1272_2 and acFiboLines ? line1272_2 : na, title='-0.272', color=color.new(color.red, 33), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1414_2 and acFiboLines ? line1414_2 : na, title='-0.414', color=color.new(color.red, 33), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1618_2 and acFiboLines ? line1618_2 : na, title='-0.618', color=color.new(color.red, 33), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line2000_2 and acFiboLines ? line2000_2 : na, title='-1.000', color=color.new(color.red, 33), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line2272_2 and acFiboLines ? line2272_2 : na, title='-1.272', color=color.new(color.red, 33), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+
+
+
+f_datestamp(_time)=>
+    _sec = _time * 0.001 
+    _year = 1970 + math.floor(_sec / 31556926) 
+    _sec %= 31556926
+    _month = math.floor(_sec / 2629743)+1 
+    _sec %= 2629743
+    _day = math.floor(_sec / 86400)+1
+    str.format('Tarih:{2}.{1}.{0}', str.tostring(_year, '####'), _month, _day)
+
+
+position = 40
+info_label_off = 40
+info_label_size = input.string(size.normal, options=[size.tiny, size.small, size.normal, size.large, size.huge], title='Liste Panel Büyüklüğü')
+info_panel_x = timenow + math.round(ta.change(time) * info_label_off) + 10
+info_panel_y = (ta.highest(position) + ta.lowest(position))/2
+
+mumTipi = "Mum Birimi:" + timeframe.period
+Long =  f_datestamp(timenow) + ", " + mumTipi
+sonFiyat =  ", Sembol:" + syminfo.ticker + ", Son Fiyat: " + str.tostring(close, '##.##') 
+
+pp1 = line2272 > close ? '\n1) 1 adet, ' + str.tostring(line2272, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line2000, '##.00') + ' fiyattan Zincir AL' : na
+pp2 = line2000 > close ? '\n2) 1 adet, ' + str.tostring(line2000, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line1618, '##.00') + ' fiyattan Zincir AL' : na
+pp3 = line1618 > close ? '\n3) 1 adet, ' + str.tostring(line1618, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line1414, '##.00') + ' fiyattan Zincir AL' : na
+pp4 = line1414 > close ? '\n4) 1 adet, ' + str.tostring(line1414, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line1272, '##.00') + ' fiyattan Zincir AL' : na
+pp5 = line1272 > close ? '\n5) 1 adet, ' + str.tostring(line1272, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line1000, '##.00') + ' fiyattan Zincir AL' : na
+pp6 = line1000 > close ? '\n6) 1 adet, ' + str.tostring(line1000, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line0786, '##.00') + ' fiyattan Zincir AL' : na
+pp7 = line0786 > close ? '\n7) 1 adet, ' + str.tostring(line0786, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line0618, '##.00') + ' fiyattan Zincir AL' : na
+pp8 = line0618 > close ? '\n8) 1 adet, ' + str.tostring(line0618, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line0500, '##.00') + ' fiyattan Zincir AL' : na
+pp9 = line0500 > close ? '\n9) 1 adet, ' + str.tostring(line0500, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line0382, '##.00') + ' fiyattan Zincir AL' : na
+pp10 = line0382 > close ? '\n10) 1 adet, ' + str.tostring(line0382, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line0236, '##.00') + ' fiyattan Zincir AL' : na
+pp11 = line0236 > close ? '\n11) 1 adet, ' + str.tostring(line0236, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line0000, '##.00') + ' fiyattan Zincir AL' : na
+pp12 = line0000 > close ? '\n12) 1 adet, ' + str.tostring(line0000, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line1272_2, '##.00') + ' fiyattan Zincir AL' : na
+pp13 = line1272_2 > close ? '\n13) 1 adet, ' + str.tostring(line1272_2, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line1414_2, '##.00') + ' fiyattan Zincir AL' : na
+pp14 = line1414_2 > close ? '\n14) 1 adet, ' + str.tostring(line1414_2, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line1618_2, '##.00') + ' fiyattan Zincir AL' : na
+pp15 = line1618_2 > close ? '\n15) 1 adet, ' + str.tostring(line1618_2, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line2000_2, '##.00') + ' fiyattan Zincir AL' : na
+pp16 = line2000_2 > close ? '\n16) 1 adet, ' + str.tostring(line2000_2, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line2272_2, '##.00') + ' fiyattan Zincir AL' : na
+
+
+pp1a = line2000 < close ? '\n1) 1 adet, ' + str.tostring(line2000, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line2272, '##.00') + ' fiyattan Zincir SAT' : na
+pp2a = line1618 < close ? '\n2) 1 adet, ' + str.tostring(line1618, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line2000, '##.00') + ' fiyattan Zincir SAT' : na
+pp3a = line1414 < close ? '\n3) 1 adet, ' + str.tostring(line1414, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line1618, '##.00') + ' fiyattan Zincir SAT' : na
+pp4a = line1272 < close ? '\n4) 1 adet, ' + str.tostring(line1272, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line1414, '##.00') + ' fiyattan Zincir SAT' : na
+pp5a = line1000 < close ? '\n5) 1 adet, ' + str.tostring(line1000, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line1272, '##.00') + ' fiyattan Zincir SAT' : na
+pp6a = line0786 < close ? '\n6) 1 adet, ' + str.tostring(line0786, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line1000, '##.00') + ' fiyattan Zincir SAT' : na
+pp7a = line0618 < close ? '\n7) 1 adet, ' + str.tostring(line0618, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line0786, '##.00') + ' fiyattan Zincir SAT' : na
+pp8a = line0500 < close ? '\n8) 1 adet, ' + str.tostring(line0500, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line0618, '##.00') + ' fiyattan Zincir SAT' : na
+pp9a = line0382 < close ? '\n9) 1 adet, ' + str.tostring(line0382, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line0500, '##.00') + ' fiyattan Zincir SAT' : na
+pp10a = line0236 < close ? '\n10) 1 adet, ' + str.tostring(line0236, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line0382, '##.00') + ' fiyattan Zincir SAT' : na
+pp11a = line0000 < close ? '\n11) 1 adet, ' + str.tostring(line0000, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line0236, '##.00') + ' fiyattan Zincir SAT' : na
+pp12a = line1272_2 < close ? '\n12) 1 adet, ' + str.tostring(line1272_2, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line0000, '##.00') + ' fiyattan Zincir SAT' : na
+pp13a = line1414_2 < close ? '\n13) 1 adet, ' + str.tostring(line1414_2, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line1272_2, '##.00') + ' fiyattan Zincir SAT' : na
+pp14a = line1618_2 < close ? '\n14) 1 adet, ' + str.tostring(line1618_2, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line1414_2, '##.00') + ' fiyattan Zincir SAT' : na
+pp15a = line2000_2 < close ? '\n15) 1 adet, ' + str.tostring(line2000_2, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line1618_2, '##.00') + ' fiyattan Zincir SAT' : na
+pp16a = line2272_2 < close ? '\n16) 1 adet, ' + str.tostring(line2272_2, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line2000_2, '##.00') + ' fiyattan Zincir SAT' : na
+
+ara1 = "\n\n -----------------------------ALIŞ TALİMATLARI-----------------------"
+ara2 = "\n -----------------------------SATIŞ TALİMATLARI----------------------"
+ara3 = "\n -----------------------------------------------------------------------"
+info_text1 = Long + sonFiyat + ara1 + pp1 + pp2 + pp3 + pp4 + pp5 + pp6 + pp7 + pp8 + pp9 + pp10 + pp11 + pp12 + pp14 + pp15 + pp16
+info_text2 = "\n" + ara2 + pp1a + pp2a + pp3a + pp4a + pp5a + pp6a + pp7a + pp8a + pp9a + pp10a + pp11a + pp12a + pp14a + pp15a + pp16a + ara3
+info_textlongbuy = info_text1 + info_text2
+
+if acEtiket
+    info_panellongbuy =  label.new(x=info_panel_x, y=info_panel_y, text=info_textlongbuy, xloc=xloc.bar_time, yloc=yloc.price, color=color.new(color.black, 0), style=label.style_label_left, textcolor=color.new(color.lime, 0), size=info_label_size) 
+    label.delete(info_panellongbuy[1])
+
+    
+
