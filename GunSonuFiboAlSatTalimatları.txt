@@ -131,11 +131,10 @@ ara2 = "\n -----------------------------SATIŞ TALİMATLARI---------------------
 ara3 = "\n -----------------------------------------------------------------------"
 info_text1 = Long + sonFiyat + ara1 + pp1 + pp2 + pp3 + pp4 + pp5 + pp6 + pp7 + pp8 + pp9 + pp10 + pp11 + pp12 + pp13 + pp14 + pp15 + pp16
 info_text2 = "\n" + ara2 + pp1a + pp2a + pp3a + pp4a + pp5a + pp6a + pp7a + pp8a + pp9a + pp10a + pp11a + pp12a + pp13a + pp14a + pp15a + pp16a + ara3
-info_textlongbuy = info_text1 + info_text2
+info_textlongbuy = info_text1 + info_text2 + "\n" + str.tostring(close)
 
 if acEtiket
     info_panellongbuy =  label.new(x=info_panel_x, y=info_panel_y, text=info_textlongbuy, xloc=xloc.bar_time, yloc=yloc.price, color=color.new(color.black, 0), style=label.style_label_left, textcolor=color.new(color.lime, 0), size=info_label_size) 
     label.delete(info_panellongbuy[1])
 
-    
-
+//BURADA BITTI
