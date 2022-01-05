@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator('Gün Sonu Fibo Al SAT Talimatları V1.1.9', overlay=true)
+indicator('Gün Sonu Fibo Al SAT Talimatları V1.1.91', overlay=true)
 src = close
 srcY = high
 srcD = low
@@ -34,7 +34,7 @@ e23 = ta.ema(e22, length2)
 tema50 = 3 * (e21 - e22) + e23  //tema50 
 myTema50= plot(tema50 and acTema ? tema50 : na, 'Tema 50', color=color.new(color.yellow, 0), linewidth=2)
 
-fill(myTema20, myTema50, title = 'Tema 20/50 Bölgesi', color=tema20 >= tema50 ? color.new(color.lime, 50) : color.new(color.red, 50))
+fill(myTema20, myTema50, title = 'Tema 20/50 Bölgesi', color=tema20 >= tema50 ? color.new(color.lime, 80) : color.new(color.red, 80))
 tema20YukariKesTema50 = ta.crossover(tema20, tema50)
 plotshape(tema20YukariKesTema50 and acT20T50AlSat ? tema20YukariKesTema50 : na ,title ='Tema 20/50 AL', text='T20/50', style=shape.triangleup, location=location.belowbar, color=color.new(color.lime, 0), offset=0, size=size.small)
 alertcondition(tema20YukariKesTema50, title="Tema 20/50 AL", message='Tema 20/50 AL {{ticker}}, FİYAT={{close}}')
@@ -401,8 +401,8 @@ myRsi1S = ta.rsi(myClose1S,myRsiD)
 myEmaD =12 // input.int(12, title='Ema Değeri')
 myEma121S = ta.ema(myRsi1S, myEmaD)
 
-myRsiColorY = myRsi1S <= 60 ? color.yellow : color.lime    
-myRsiColorD = myRsi1S <= 40 ? color.red : color.blue   
+myRsiColorY = myRsi1S <= 60 ? color.green : #00897B      
+myRsiColorD = myRsi1S <= 40 ? #880E4F : color.red    
 
 //rs1 =  plot(myRsi1S, title="Rsi 1S", color=color.new(color.yellow,0), offset=0, linewidth=2)
 //ema1 = plot(myEma121S, title="EMA12 1S", color=color.new(color.white,0), offset=0, linewidth=2)
@@ -438,7 +438,7 @@ color_1 = col1 ? color.lime : col3 ? color.red : color.yellow
 
 
 //Tillson Plot
-myPlotT3 = plot(T3 and acT3 ? T3 : na, color=color_1, linewidth=3, title='T3')
+myPlotT3 = plot(T3 and acT3 ? T3 : na, color=color_1, linewidth=2, title='T3')
 //myPlotRsi
 //myT3RsiColor = str.tostring(myPlotRsi) >= myPlotT3 ? color.lime : color.red
 
@@ -447,7 +447,7 @@ myPlotT3 = plot(T3 and acT3 ? T3 : na, color=color_1, linewidth=3, title='T3')
 //plotshape(ta.crossover(myRsi1S, T3) and acT3 ,title ='T3 AL', text='T3', style=shape.triangleup, location=location.belowbar, color=color.new(color.lime, 0), offset=-1, size=size.small)
 //plotshape(ta.crossunder(myRsi1S, T3) and acT3 ,title ='T3 SAT', text='T3', style=shape.triangledown, location=location.abovebar, color=color.new(color.red, 0), offset=-1, size=size.small)
 
-fill(myPlotRsi, myPlotT3, title = 'T3 Trend Bölgesi', color=color.new(color.lime, 66))
+fill(myPlotRsi, myPlotT3, title = 'T3 Trend Bölgesi', color=color.new(color.lime, 80))
 
 
 //plot(myPlotRsi == myPlotT3  , color = color.white ,  linewidth=3 )
