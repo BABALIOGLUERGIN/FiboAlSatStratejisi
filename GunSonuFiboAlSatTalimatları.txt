@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator('Gün Sonu Fibo Al SAT Talimatları V1.1.91', overlay=true)
+indicator('Gün Sonu Fibo Al SAT Talimatları V1.1.92', overlay=true)
 src = close
 srcY = high
 srcD = low
@@ -11,12 +11,18 @@ acFiboUA = input(defval = false, title = 'Fibo Üst Alt Fiyatları Gözüksün m
 acFiboLines = input(defval = false, title = 'Fibo Yatay Çizgileri Gözüksün mü?')   
 acAlSatIsaret = false //input(defval = false, title = 'Fibo Kırım İşaretleri Gözüksün mü?')  
 acFiboUAisaret = input(defval = false, title = 'Fibo Üst Alt Fiyatl İşaretleri Gözüksün mü?')   
+
 acTema = input(defval = true, title = 'Tema Çizgileri Gözüksün mü?')   
+
 acRsiEma = input(defval = false, title = 'Rsi/Ema Çizgisi Gösterilsin mi?') 
 acMaSistem = input(defval = false, title = 'MA Sistemi Çizgileri Gözüksün mü?')   
-acT3 = input(defval = false, title = 'Tillson Çizgisi Gösterilsin mi?')   
-acT20T50AlSat = input(defval = false, title = 'Tema 20/50 Al Sat İşaretleri Gösterilsin mi?')   
 
+acT3 = input(defval = false, title = 'Tillson Çizgisi Gösterilsin mi?')   
+acT3Boyama = input(defval = false, title = 'Tillson ile Rsi/Ema Arası Boyama Gösterilsin mi?')   
+acT20T50AlSat = input(defval = false, title = 'Tema 20/50 Al Sat İşaretleri Gösterilsin mi?')   
+acT20T50Boyama = input(defval = false, title = 'Tema 20/50 Aarası Boyama Gösterilsin mi?')   
+acT100T200AlSat= input(defval = false, title = 'Tema 100/200 Al Sat İşaretleri Gösterilsin mi?')   
+acT100T200Boyama = input(defval = false, title = 'Tema 100/200 Aarası Boyama Gösterilsin mi?') 
 
 
 // Tema 20
@@ -34,7 +40,9 @@ e23 = ta.ema(e22, length2)
 tema50 = 3 * (e21 - e22) + e23  //tema50 
 myTema50= plot(tema50 and acTema ? tema50 : na, 'Tema 50', color=color.new(color.yellow, 0), linewidth=2)
 
-fill(myTema20, myTema50, title = 'Tema 20/50 Bölgesi', color=tema20 >= tema50 ? color.new(color.lime, 80) : color.new(color.red, 80))
+acT20T50BoyamaRenk = acT20T50Boyama ? 70 : 100
+fill(myTema20, myTema50, title = 'Tema 20/50 Bölgesi', color=tema20 >= tema50 ? color.new(color.lime, acT20T50BoyamaRenk) : color.new(color.red, acT20T50BoyamaRenk))
+
 tema20YukariKesTema50 = ta.crossover(tema20, tema50)
 plotshape(tema20YukariKesTema50 and acT20T50AlSat ? tema20YukariKesTema50 : na ,title ='Tema 20/50 AL', text='T20/50', style=shape.triangleup, location=location.belowbar, color=color.new(color.lime, 0), offset=0, size=size.small)
 alertcondition(tema20YukariKesTema50, title="Tema 20/50 AL", message='Tema 20/50 AL {{ticker}}, FİYAT={{close}}')
@@ -49,14 +57,26 @@ e31 = ta.ema(src, length3)
 e32 = ta.ema(e31, length3)
 e33 = ta.ema(e32, length3)
 dema3 = 3 * (e31 - e32) + e33    //tema100
-plot(dema3 and acTema ? dema3 : na, 'Tema 100', color=color.new(color.blue, 0), linewidth=3)
+myTema100 = plot(dema3 and acTema ? dema3 : na, 'Tema 100', color=color.new(color.blue, 0), linewidth=3)
 
 length4 = 200 //input.int(200, minval=1)
 e41 = ta.ema(src, length4)
 e42 = ta.ema(e41, length4)
 e43 = ta.ema(e42, length4)
 dema4 = 3 * (e41 - e42) + e43    //tema200
-plot(dema4 and acTema ? dema4 : na, 'Tema 200', color=color.new(#be660b, 0), linewidth=4)
+myTema200 = plot(dema4 and acTema ? dema4 : na, 'Tema 200', color=color.new(#be660b, 0), linewidth=4)
+
+
+acT100T200BoyamaRenk = acT100T200Boyama ? 70 : 100
+fill(myTema100, myTema200, title = 'Tema 100/200 Bölgesi', color=dema3 >= dema4 ? color.new(color.lime, acT100T200BoyamaRenk) : color.new(color.red, acT100T200BoyamaRenk))
+
+tema100YukariKesTema200 = ta.crossover(dema3, dema4)
+plotshape(tema100YukariKesTema200 and acT100T200AlSat ? tema100YukariKesTema200 : na ,title ='Tema 100/200 AL', text='T100/200', style=shape.triangleup, location=location.belowbar, color=color.new(color.lime, 0), offset=0, size=size.small)
+alertcondition(tema100YukariKesTema200, title="Tema 100/200 AL", message='Tema 100/200 AL {{ticker}}, FİYAT={{close}}')
+
+tema100AsagiKesTema200 = ta.crossunder(dema3, dema4)
+plotshape(tema100AsagiKesTema200  and acT100T200AlSat ? tema100AsagiKesTema200 : na ,title ='Tema 100/200 SAT', text='T100/200', style=shape.triangledown, location=location.abovebar, color=color.new(color.red, 0), offset=0, size=size.small)
+alertcondition(tema100AsagiKesTema200, title="Tema 100/200 SAT", message='Tema 100/200 SAT {{ticker}}, FİYAT={{close}}')
 
 
 //Fiblines
@@ -447,7 +467,8 @@ myPlotT3 = plot(T3 and acT3 ? T3 : na, color=color_1, linewidth=2, title='T3')
 //plotshape(ta.crossover(myRsi1S, T3) and acT3 ,title ='T3 AL', text='T3', style=shape.triangleup, location=location.belowbar, color=color.new(color.lime, 0), offset=-1, size=size.small)
 //plotshape(ta.crossunder(myRsi1S, T3) and acT3 ,title ='T3 SAT', text='T3', style=shape.triangledown, location=location.abovebar, color=color.new(color.red, 0), offset=-1, size=size.small)
 
-fill(myPlotRsi, myPlotT3, title = 'T3 Trend Bölgesi', color=color.new(color.lime, 80))
+acT3BoyamaRenk = acT3Boyama ? 70 : 100
+fill(myPlotRsi, myPlotT3, title = 'T3 Trend Bölgesi', color=color.new(color.lime, acT3BoyamaRenk))
 
 
 //plot(myPlotRsi == myPlotT3  , color = color.white ,  linewidth=3 )
