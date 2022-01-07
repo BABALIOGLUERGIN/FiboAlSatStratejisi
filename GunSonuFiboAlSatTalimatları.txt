@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator('Gün Sonu Fibo Al SAT Talimatları V1.1.92', overlay=true)
+indicator('Gün Sonu Fibo Al SAT Talimatları V1.1.93', overlay=true)
 src = close
 srcY = high
 srcD = low
@@ -139,12 +139,16 @@ myFiboSize = size.small
 afiboY1 = ta.crossunder(srcD , fiboY1)
 yfiboY1 = ta.crossover(srcY , fiboY1)
 plotshape(afiboY1 and (acAlSatIsaret or acFiboUAisaret) ? afiboY1 : na ,title ='Alım İşareti', text='', style=myStyle , location=location.belowbar, color=color.new(myColor, 0), offset=0, size=myFiboSize)
-alertcondition(afiboY1, title="Fib -3", message='Fib -3 AL {{ticker}}, FİYAT={{low}}')
-
-plotshape(yfiboY1 and acAlSatIsaret ? yfiboY1 : na ,title ='Satış İşareti', text='', style=myStyle, location=location.abovebar, color=color.new(color.lime, 0), offset=0, size=mySize)
+alertcondition(afiboY1, title="Fib -3", message='Fib -3 Alt {{ticker}}, FİYAT={{low}}')
+//plotshape(yfiboY1 and acAlSatIsaret ? yfiboY1 : na ,title ='Satış İşareti', text='', style=myStyle, location=location.abovebar, color=color.new(color.lime, 0), offset=0, size=mySize)
 
 afiboY2 = ta.crossunder(srcD , fiboY2)
 yfiboY2 = ta.crossover(srcY , fiboY2)
+plotshape(afiboY2 and (acAlSatIsaret or acFiboUAisaret) ? afiboY2 : na ,title ='Alım İşareti', text='', style=myStyle , location=location.belowbar, color=color.new(myColor, 0), offset=0, size=myFiboSize)
+alertcondition(afiboY2, title="Fib -4", message='Fib -4 Alt {{ticker}}, FİYAT={{low}}')
+//plotshape(yfiboY2 and acAlSatIsaret ? yfiboY2 : na ,title ='Satış İşareti', text='', style=myStyle, location=location.abovebar, color=color.new(color.lime, 0), offset=0, size=mySize)
+
+
 //plotshape(afiboY2 and acAlSatIsaret ? afiboY2 : na ,title ='Alım İşareti', text='', style=myStyle, location=location.belowbar, color=color.new(color.red, 0), offset=0, size=mySize)
 //plotshape(yfiboY2 and acAlSatIsaret ? yfiboY2 : na ,title ='Satış İşareti', text='', style=myStyle, location=location.abovebar, color=color.new(color.lime, 0), offset=0, size=mySize)
 
@@ -180,13 +184,13 @@ yfiboN5 = ta.crossover(srcY , fiboN5)
 yfiboN6 = ta.crossover(srcY , fiboN6)
 yfiboN7 = ta.crossover(srcY , fiboN7)
 
-plotshape(afiboN1 and acAlSatIsaret ? afiboN1 : na ,title ='Alım İşareti', text='', style=myStyle, location=location.belowbar, color=color.new(color.red, 0), offset=0, size=mySize)
+//plotshape(afiboN1 and acAlSatIsaret ? afiboN1 : na ,title ='Alım İşareti', text='', style=myStyle, location=location.belowbar, color=color.new(color.red, 0), offset=0, size=mySize)
 plotshape(yfiboN1 and (acAlSatIsaret or acFiboUAisaret) ? yfiboN1 : na ,title ='Satış İşareti', text='', style=myStyle, location=location.abovebar, color=color.new(myColor, 0), offset=0, size=myFiboSize)
-alertcondition(yfiboN1, title="Fib +2", message='Fib +2 SAT {{ticker}}, FİYAT={{high}}')
+alertcondition(yfiboN1, title="Fib +2", message='Fib +2 Üst {{ticker}}, FİYAT={{high}}')
 
-plotshape(afiboN2 and acAlSatIsaret ? afiboN2 : na ,title ='Alım İşareti', text='', style=myStyle, location=location.belowbar, color=color.new(color.red, 0), offset=0, size=mySize)
+//plotshape(afiboN2 and acAlSatIsaret ? afiboN2 : na ,title ='Alım İşareti', text='', style=myStyle, location=location.belowbar, color=color.new(color.red, 0), offset=0, size=mySize)
 plotshape(yfiboN2 and (acAlSatIsaret or acFiboUAisaret) ? yfiboN2 : na ,title ='Satış İşareti', text='', style=myStyle, location=location.abovebar, color=color.new(myColor, 0), offset=0, size=myFiboSize)
-alertcondition(yfiboN2, title="Fib +1", message='Fib +1 SAT {{ticker}}, FİYAT={{high}}')
+alertcondition(yfiboN2, title="Fib +1", message='Fib +1 Üst {{ticker}}, FİYAT={{high}}')
 
 //plotshape(afiboN3 and acAlSatIsaret ? afiboN3 : na ,title ='Alım İşareti', text='', style=myStyle, location=location.belowbar, color=color.new(color.red, 0), offset=0, size=mySize)
 //plotshape(yfiboN3 and acAlSatIsaret ? yfiboN3 : na ,title ='Satış İşareti', text='', style=myStyle, location=location.abovebar, color=color.new(color.lime, 0), offset=0, size=mySize)
@@ -198,12 +202,12 @@ alertcondition(yfiboN2, title="Fib +1", message='Fib +1 SAT {{ticker}}, FİYAT={
 //plotshape(yfiboN5 and acAlSatIsaret ? yfiboN5 : na ,title ='Satış İşareti', text='', style=myStyle, location=location.abovebar, color=color.new(color.lime, 0), offset=0, size=mySize)
 
 plotshape(afiboN6 and (acAlSatIsaret or acFiboUAisaret) ? afiboN6 : na ,title ='Alım İşareti', text='', style=myStyle, location=location.belowbar, color=color.new(myColor, 0), offset=0, size=myFiboSize)
-alertcondition(afiboN6, title="Fib -1", message='Fib -1 AL {{ticker}}, FİYAT={{low}}')
-plotshape(yfiboN6 and acAlSatIsaret ? yfiboN6 : na ,title ='Satış İşareti', text='', style=myStyle, location=location.abovebar, color=color.new(color.lime, 0), offset=0, size=mySize)
+alertcondition(afiboN6, title="Fib -1", message='Fib -1 Alt {{ticker}}, FİYAT={{low}}')
+//plotshape(yfiboN6 and acAlSatIsaret ? yfiboN6 : na ,title ='Satış İşareti', text='', style=myStyle, location=location.abovebar, color=color.new(color.lime, 0), offset=0, size=mySize)
 
 plotshape(afiboN7 and (acAlSatIsaret or acFiboUAisaret) ? afiboN7 : na ,title ='Alım İşareti', text='', style=myStyle, location=location.belowbar, color=color.new(myColor, 0), offset=0, size=myFiboSize)
-alertcondition(afiboN7, title="Fib -2", message='Fib -2 AL {{ticker}}, FİYAT={{low}}')
-plotshape(yfiboN7 and acAlSatIsaret ? yfiboN7 : na ,title ='Satış İşareti', text='', style=myStyle, location=location.abovebar, color=color.new(color.lime, 0), offset=0, size=mySize)
+alertcondition(afiboN7, title="Fib -2", message='Fib -2 Alt {{ticker}}, FİYAT={{low}}')
+//plotshape(yfiboN7 and acAlSatIsaret ? yfiboN7 : na ,title ='Satış İşareti', text='', style=myStyle, location=location.abovebar, color=color.new(color.lime, 0), offset=0, size=mySize)
 
         
 afiboA1 = ta.crossunder(srcD , fiboA1)
@@ -224,13 +228,14 @@ yfiboA3 = ta.crossover(srcY , fiboA3)
 afiboA4 = ta.crossunder(srcD , fiboA4)
 yfiboA4 = ta.crossover(srcY , fiboA4)
 //plotshape(afiboA4 and acAlSatIsaret ? afiboA4 : na ,title ='Alım İşareti', text='', style=myStyle, location=location.belowbar, color=color.new(color.red, 0), offset=0, size=mySize)
-//plotshape(yfiboA4 and acAlSatIsaret ? yfiboA4 : na ,title ='Satış İşareti', text='', style=myStyle, location=location.abovebar, color=color.new(color.lime, 0), offset=0, size=mySize)
+plotshape(yfiboA4 and (acAlSatIsaret or acFiboUAisaret) ? yfiboA4 : na ,title ='Satış İşareti', text='', style=myStyle, location=location.abovebar, color=color.new(myColor, 0), offset=0, size=myFiboSize)
+alertcondition(yfiboA4, title="Fib +4", message='Fib +4 Üst {{ticker}}, FİYAT={{high}}')
 
 afiboA5 = ta.crossunder(srcD , fiboA5)
 yfiboA5 = ta.crossover(srcY , fiboA5)
-plotshape(afiboA5 and acAlSatIsaret ? afiboA5 : na ,title ='Alım İşareti', text='', style=myStyle, location=location.belowbar, color=color.new(color.red, 0), offset=0, size=mySize)
+//plotshape(afiboA5 and acAlSatIsaret ? afiboA5 : na ,title ='Alım İşareti', text='', style=myStyle, location=location.belowbar, color=color.new(color.red, 0), offset=0, size=mySize)
 plotshape(yfiboA5 and (acAlSatIsaret or acFiboUAisaret) ? yfiboA5 : na ,title ='Satış İşareti', text='', style=myStyle, location=location.abovebar, color=color.new(myColor, 0), offset=0, size=myFiboSize)
-alertcondition(yfiboA5, title="Fib +3", message='Fib +3 SAT {{ticker}}, FİYAT={{high}}')
+alertcondition(yfiboA5, title="Fib +3", message='Fib +3 Üst {{ticker}}, FİYAT={{high}}')
 
 
 //sat yfiboA5 or yfiboN1 or yfiboN2
@@ -352,32 +357,40 @@ if acEtiket
     info_panellongbuy =  label.new(x=info_panel_x, y=info_panel_y, text=info_textlongbuy, xloc=xloc.bar_time, yloc=yloc.price, color=color.new(color.black, 0), style=label.style_label_left, textcolor=color.new(color.lime, 0), size=info_label_size) 
     label.delete(info_panellongbuy[1])
 
+
+//line1414
+
 araUA = "----------------"
-myFiyat = "* Fiyat: " + str.tostring(close) 
-myF1 = src >  line1272 ? myFiyat + "\n" + araUA + "\n" : na
-s3 = "Satış 3: " + str.tostring(line1272, '##.00') + "\n"
+myFiyat = "<< Fiyat: " + str.tostring(close, '##.00') + " >>" 
+myF0 = src >  line1414 ? myFiyat + "\n" + araUA + "\n" : na
+s4 = "Üst 4: " + str.tostring(line1414, '##.00') + "\n"
+myF1 = src <= line1414 and src > line1272 ? myFiyat + "\n" : na
+s3 = "Üst 3: " + str.tostring(line1272, '##.00') + "\n"
 myF2 = src <= line1272 and src > line1000 ? myFiyat + "\n" : na
-s2 = "Satış 2: " + str.tostring(line1000, '##.00') + "\n"
+s2 = "Üst 2: " + str.tostring(line1000, '##.00') + "\n"
 myF3 = src <= line1000 and src > line0786 ? myFiyat + "\n" : na
-s1 = "Satış 1: " + str.tostring(line0786, '##.00') + "\n"
+s1 = "Üst 1: " + str.tostring(line0786, '##.00') + "\n"
 myF4 = src <= line0786 and src > line0236 ? araUA + "\n" + myFiyat + "\n"  : na
-a1 = "\n" + "Alış 1: " + str.tostring(line0236, '##.00') + "\n"
+a1 = "\n" + "Alt 1: " + str.tostring(line0236, '##.00') + "\n"
 myF5 = src <= line0236 and src > line0000 ? myFiyat + "\n" : na
-a2 = "Alış 2: " + str.tostring(line0000, '##.00') + "\n"
+a2 = "Alt 2: " + str.tostring(line0000, '##.00') + "\n"
 myF6 = src <= line0000 and src > line1272_2 ? myFiyat + "\n"  : na
-a3 = "Alış 3: " + str.tostring(line1272_2, '##.00') //+ "\n"
-myF7 = src <= line1272_2 ? "\n" + araUA + "\n" + myFiyat : na
+a3 = "Alt 3: " + str.tostring(line1272_2, '##.00') + "\n"
+myF7 = src <= line1272_2 and src > line1414_2 ? myFiyat + "\n" : na
+a4 = "Alt 4: " + str.tostring(line1414_2, '##.00') //+ "\n"
+myF8 = src <= line1414_2 ? "\n" + araUA + "\n" + myFiyat : na
 
+//line1414_2
 
-
-toplaUA = myF1 + s3 + myF2 + s2 + myF3 + s1 + myF4 + araUA + a1 + myF5 + a2 + myF6 + a3 + myF7 //+ araUA
+toplaUA = myF0 + s4 + myF1 + s3 + myF2 + s2 + myF3 + s1 + myF4 + araUA + a1 + myF5 + a2 + myF6 + a3 + myF7 + a4 + myF8 //+ araUA
 info_textUA = toplaUA //+ myFiyat = "Fiyat: " + str.tostring(close)
 
+
 positionUA = 10
-info_label_offUA = 10
+info_label_offUA = 0 //10
 //info_label_size = input.string(size.normal, options=[size.tiny, size.small, size.normal, size.large, size.huge], title='Liste Panel Büyüklüğü')
-info_panel_xUA = timenow + math.round(ta.change(time) * info_label_offUA) //+10
-info_panel_yUA = (ta.highest(positionUA) + ta.lowest(positionUA))  /2
+info_panel_xUA = (timenow + math.round(ta.change(time) * info_label_offUA)) - 5  //+10
+info_panel_yUA = (ta.highest(positionUA) + ta.lowest(positionUA))/2
 
 
 if acFiboUA
@@ -429,6 +442,11 @@ myRsiColorD = myRsi1S <= 40 ? #880E4F : color.red
 
 //fill(rs1, ema1, title = 'Trend Bölgesi', color=myRsi1S >= myEma121S ? color.new(color.lime, 50) : color.new(color.red, 50))
 myPlotRsi = plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=myRsi1S >= myEma121S ? color.new(myRsiColorY, 0) : color.new(myRsiColorD, 0), title="RsiEma", linewidth=4)
+
+//plotshape(ta.crossover(myRsi1S, 30), title ='RSI AL', text='Rsi Al', style=shape.triangleup, location=location.belowbar, color=color.new(color.lime, 0), offset=-1, size=size.small)
+//plotshape(ta.crossunder(myRsi1S, 75) or ta.crossunder(myRsi1S, 65), title ='RSI SAT', text='Rsi Sat', style=shape.triangledown, location=location.abovebar, color=color.new(color.red, 0), offset=-1, size=size.small)
+
+
 
 //Tillson
 length1 = 3 //input(3, 'T3 Length')
