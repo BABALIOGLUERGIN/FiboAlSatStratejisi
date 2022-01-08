@@ -232,10 +232,10 @@ myRsiColorTek = myRsi1S >= myEma121S ? myRsiColorY : myRsiColorD
 rsiSartAl = (myRsiColorTek[1]==myAcikRenkD or myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkY or myRsiColorTek == myKoyuRenkY) 
 rsiSartSat = (myRsiColorTek[1]==myAcikRenkY or myRsiColorTek[1]==myKoyuRenkY) and (myRsiColorTek == myAcikRenkD or myRsiColorTek == myKoyuRenkD) 
 
-plotshape(rsiSartAl and acRsiEmaAlSat ,title ='Rsi/Ema', text='Rsi/Ema\nAL', style=shape.triangleup, location=location.belowbar, color=color.new(color.lime, 0), offset=-1, size=size.tiny)
+//plotshape(rsiSartAl and acRsiEmaAlSat ,title ='Rsi/Ema', text='Rsi/Ema\nAL', style=shape.triangleup, location=location.belowbar, color=color.new(color.lime, 0), offset=-1, size=size.tiny)
 alertcondition(rsiSartAl, title="Rsi/Ema AL", message='Rsi/Ema AL {{ticker}}, FİYAT={{close}}')
 
-plotshape(rsiSartSat and acRsiEmaAlSat,title ='Rsi/Ema', text='Rsi/Ema\nSAT', style=shape.triangledown, location=location.abovebar, color=color.new(color.red, 0), offset=-1, size=size.tiny)
+//plotshape(rsiSartSat and acRsiEmaAlSat,title ='Rsi/Ema', text='Rsi/Ema\nSAT', style=shape.triangledown, location=location.abovebar, color=color.new(color.red, 0), offset=-1, size=size.tiny)
 alertcondition(rsiSartSat, title="Rsi/Ema SAT", message='Rsi/Ema SAT {{ticker}}, FİYAT={{close}}')
 
 myPlotRsi = plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=color.new(myRsiColorTek, 0), title="RsiEma", linewidth=4)
