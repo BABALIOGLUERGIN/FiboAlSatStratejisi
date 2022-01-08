@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-strategy(title='Sadece Rsi/Ema Al Sat Sistemi - V1.0.1 Stratejisi', overlay=true, pyramiding=2, commission_type=strategy.commission.percent, commission_value=0, default_qty_type=strategy.cash, default_qty_value=100, initial_capital=1000, currency=currency.TRY)
+strategy(title='Sadece Rsi/Ema Al Sat Sistemi - V1.0.1 Stratejisi', overlay=true, pyramiding=0, commission_type=strategy.commission.percent, commission_value=0, default_qty_type=strategy.cash, default_qty_value=100, initial_capital=1000, currency=currency.TRY)
 src = close
 srcY = high
 srcD = low
