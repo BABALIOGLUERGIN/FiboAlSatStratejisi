@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator('Gün Sonu Fibo Al SAT Talimatları V1.1.93', overlay=true)
+indicator('Gün Sonu Fibo Al SAT Talimatları V1.2.0', overlay=true)
 src = close
 srcY = high
 srcD = low
@@ -15,6 +15,7 @@ acFiboUAisaret = input(defval = false, title = 'Fibo Üst Alt Fiyatl İşaretler
 acTema = input(defval = true, title = 'Tema Çizgileri Gözüksün mü?')   
 
 acRsiEma = input(defval = false, title = 'Rsi/Ema Çizgisi Gösterilsin mi?') 
+acRsiEmaAlSat = input(defval = false, title = 'Rsi/Ema Al Sat İşaretleri Gösterilsin mi?') 
 acMaSistem = input(defval = false, title = 'MA Sistemi Çizgileri Gözüksün mü?')   
 
 acT3 = input(defval = false, title = 'Tillson Çizgisi Gösterilsin mi?')   
@@ -434,19 +435,52 @@ myRsi1S = ta.rsi(myClose1S,myRsiD)
 myEmaD =12 // input.int(12, title='Ema Değeri')
 myEma121S = ta.ema(myRsi1S, myEmaD)
 
-myRsiColorY = myRsi1S <= 60 ? color.green : #00897B      
-myRsiColorD = myRsi1S <= 40 ? #880E4F : color.red    
+myAcikRenkY = color.green
+myKoyuRenkY = #00897B 
+
+myAcikRenkD = color.red 
+myKoyuRenkD = #880E4F 
+
+myRsiColorY = myRsi1S <= 60 ? myAcikRenkY : myKoyuRenkY     
+myRsiColorD = myRsi1S <= 40 ? myKoyuRenkD : myAcikRenkD   
+
+myRsiColorTek = myRsi1S >= myEma121S ? myRsiColorY : myRsiColorD
+
+//rsiSartAl = ((myRsi1S[1] < myEma121S[1]) and (myAcikRenkY[1]==myAcikRenkD or myAcikRenkY[1]==myKoyuRenkD)) and ((myRsi1S >= myEma121S) and (myRsiColorD == myAcikRenkD or myRsiColorD == myKoyuRenkD)) 
+rsiSartAl = (myRsiColorTek[1]==myAcikRenkD or myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkY or myRsiColorTek == myKoyuRenkY) 
+rsiSartSat = (myRsiColorTek[1]==myAcikRenkY or myRsiColorTek[1]==myKoyuRenkY) and (myRsiColorTek == myAcikRenkD or myRsiColorTek == myKoyuRenkD) 
+
+plotshape(rsiSartAl and acRsiEmaAlSat ,title ='Rsi/Ema', text='Rsi/Ema\nAL', style=shape.triangleup, location=location.belowbar, color=color.new(color.lime, 0), offset=-1, size=size.tiny)
+alertcondition(rsiSartAl, title="Rsi/Ema AL", message='Rsi/Ema AL {{ticker}}, FİYAT={{close}}')
+
+plotshape(rsiSartSat and acRsiEmaAlSat,title ='Rsi/Ema', text='Rsi/Ema\nSAT', style=shape.triangledown, location=location.abovebar, color=color.new(color.red, 0), offset=-1, size=size.tiny)
+alertcondition(rsiSartSat, title="Rsi/Ema SAT", message='Rsi/Ema SAT {{ticker}}, FİYAT={{close}}')
+
+
+//myRsiColorY = myRsi1S <= 60 ? color.green : #00897B      
+//myRsiColorD = myRsi1S <= 40 ? #880E4F : color.red    
 
 //rs1 =  plot(myRsi1S, title="Rsi 1S", color=color.new(color.yellow,0), offset=0, linewidth=2)
 //ema1 = plot(myEma121S, title="EMA12 1S", color=color.new(color.white,0), offset=0, linewidth=2)
 
 //fill(rs1, ema1, title = 'Trend Bölgesi', color=myRsi1S >= myEma121S ? color.new(color.lime, 50) : color.new(color.red, 50))
-myPlotRsi = plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=myRsi1S >= myEma121S ? color.new(myRsiColorY, 0) : color.new(myRsiColorD, 0), title="RsiEma", linewidth=4)
+
+//myPlotRsi = plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=myRsi1S >= myEma121S ? color.new(myRsiColorY, 0) : color.new(myRsiColorD, 0), title="RsiEma", linewidth=4)
+myPlotRsi = plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=color.new(myRsiColorTek, 0), title="RsiEma", linewidth=4)
 
 //plotshape(ta.crossover(myRsi1S, 30), title ='RSI AL', text='Rsi Al', style=shape.triangleup, location=location.belowbar, color=color.new(color.lime, 0), offset=-1, size=size.small)
 //plotshape(ta.crossunder(myRsi1S, 75) or ta.crossunder(myRsi1S, 65), title ='RSI SAT', text='Rsi Sat', style=shape.triangledown, location=location.abovebar, color=color.new(color.red, 0), offset=-1, size=size.small)
 
+////
 
+//col1 = T3 > T3[1]
+//col3 = T3 < T3[1]
+//color_1 = col1 ? color.lime : col3 ? color.red : color.yellow
+
+///plotshape(ta.cross(T3, T3[1]) and col1,title ='T3 AL', text='T3\nAL', style=shape.triangleup, location=location.belowbar, color=color.new(color.lime, 0), offset=-1, size=size.tiny)
+///plotshape(ta.cross(T3, T3[1]) and col3,title ='T3 SAT', text='T3\nSAT', style=shape.triangledown, location=location.abovebar, color=color.new(color.red, 0), offset=-1, size=size.tiny)
+
+////
 
 //Tillson
 length1 = 3 //input(3, 'T3 Length')
