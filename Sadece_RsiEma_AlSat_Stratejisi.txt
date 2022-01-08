@@ -1,14 +1,14 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-strategy(title='Sadece Rsi/Ema Al Sat Sistemi - V1.0.1 Stratejisi', overlay=true, pyramiding=0, commission_type=strategy.commission.percent, commission_value=0, default_qty_type=strategy.cash, default_qty_value=100, initial_capital=1000, currency=currency.TRY)
+strategy(title='Sadece Rsi/Ema Al Sat Sistemi - V1.0.1 Stratejisi', overlay=true, pyramiding=0, commission_type=strategy.commission.percent, commission_value=0, default_qty_type=strategy.cash, default_qty_value=1000, initial_capital=1000, currency=currency.TRY)
 src = close
 srcY = high
 srcD = low
 
 // { Time Range
-FromMonth = input.int(defval=11, title='FromMonth', group='Time', minval=1, maxval=12)
+FromMonth = input.int(defval=1, title='FromMonth', group='Time', minval=1, maxval=12)
 FromDay = input.int(defval=1, title='FromDay', group='Time', minval=1, maxval=31)
-FromYear = input.int(defval=2021, title='FromYear', group='Time', minval=2020)
+FromYear = input.int(defval=2000, title='FromYear', group='Time', minval=2020)
 ToMonth = input.int(defval=1, title='ToMonth', group='Time', minval=1, maxval=12)
 ToDay = input.int(defval=1, title='ToDay', group='Time', minval=1, maxval=31)
 ToYear = input.int(defval=9999, title='ToYear', group='Time', minval=2020)
@@ -213,9 +213,9 @@ plot(line2272_2 and acFiboLines ? line2272_2 : na, title='-1.272', color=color.n
 //rsi ema
 tf1S = timeframe.period
 myClose1S = request.security(syminfo.tickerid, tf1S, hlc3)
-myRsiD =12 // input.int(12, title='RSI Değeri')
+myRsiD = input.int(12, title='RSI Değeri')
 myRsi1S = ta.rsi(myClose1S,myRsiD)
-myEmaD =12 // input.int(12, title='Ema Değeri')
+myEmaD = input.int(12, title='Ema Değeri')
 myEma121S = ta.ema(myRsi1S, myEmaD)
 
 myAcikRenkY = color.green
