@@ -430,9 +430,9 @@ plot(ta.ema(src, length8a) and acMaSistem ? ta.ema(src, length8a) : na, color=co
 //rsi ema
 tf1S = timeframe.period
 myClose1S = request.security(syminfo.tickerid, tf1S, hlc3)
-myRsiD =12 // input.int(12, title='RSI Değeri')
+myRsiD = input.int(14, title='RSI Değeri')
 myRsi1S = ta.rsi(myClose1S,myRsiD)
-myEmaD =12 // input.int(12, title='Ema Değeri')
+myEmaD = input.int(13, title='Ema Değeri')
 myEma121S = ta.ema(myRsi1S, myEmaD)
 
 myAcikRenkY = color.green
