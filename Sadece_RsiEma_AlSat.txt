@@ -198,7 +198,7 @@ tf1S = timeframe.period
 myClose1S = request.security(syminfo.tickerid, tf1S, hlc3)
 myRsiD = input.int(14, title='RSI Değeri')
 myRsi1S = ta.rsi(myClose1S,myRsiD)
-myEmaD = input.int(13, title='Ema Değeri')
+myEmaD = input.int(12, title='Ema Değeri')
 myEma121S = ta.ema(myRsi1S, myEmaD)
 
 myAcikRenkY = color.green
