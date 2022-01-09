@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator('Gün Sonu Fibo Al SAT Talimatları V1.2.01', overlay=true)
+indicator('Gün Sonu Fibo Al SAT Talimatları V1.2.11', overlay=true)
 src = close
 srcY = high
 srcD = low
@@ -8,16 +8,15 @@ srcD = low
 
 acEtiket = input(defval = false, title = 'Fibo Al Sat Talimatları Panosu')   
 acFiboUA = input(defval = false, title = 'Fibo Üst Alt Fiyatları Gözüksün mü?')   
-acFiboLines = input(defval = false, title = 'Fibo Yatay Çizgileri Gözüksün mü?')   
+acFiboLines = input(defval = true, title = 'Fibo Yatay Çizgileri Gözüksün mü?')   
 acAlSatIsaret = false //input(defval = false, title = 'Fibo Kırım İşaretleri Gözüksün mü?')  
 acFiboUAisaret = input(defval = false, title = 'Fibo Üst Alt Fiyatl İşaretleri Gözüksün mü?')   
 
 acTema = input(defval = true, title = 'Tema Çizgileri Gözüksün mü?')   
 
-acRsiEma = input(defval = false, title = 'Rsi/Ema Çizgisi Gösterilsin mi?') 
-acRsiEmaAlSat = input(defval = false, title = 'Rsi/Ema Al Sat İşaretleri Gösterilsin mi?') 
+acRsiEma = input(defval = true, title = 'Rsi/Ema Çizgisi Gösterilsin mi?') 
+acRsiEmaAlSat = input(defval = true, title = 'Rsi/Ema Al Sat İşaretleri Gösterilsin mi?') 
 acRsiEmaAlSatVisne = input(defval = false, title = 'Rsi/Ema Al(Vişne) Sat İşaretleri Gösterilsin mi?') 
-acMaSistem = input(defval = false, title = 'MA Sistemi Çizgileri Gözüksün mü?')   
 
 acT3 = input(defval = false, title = 'Tillson Çizgisi Gösterilsin mi?')   
 acT3Boyama = input(defval = false, title = 'Tillson ile Rsi/Ema Arası Boyama Gösterilsin mi?')   
@@ -401,33 +400,6 @@ if acFiboUA
 
 
 
-//MA Sistemi
-length1a = input(13, 'ma 13')
-plot(ta.ema(src, length1a) and acMaSistem ? ta.ema(src, length1a) : na, color=color.new(color.orange, 0), linewidth=2, title='ma13')
-
-length2a = input(21, 'ma 21')
-plot(ta.ema(src, length2a) and acMaSistem ? ta.ema(src, length2a) : na, color=color.new(color.green, 0), linewidth=2, title='ma21')
-
-length3a = input(34, 'ma 34')
-plot(ta.ema(src, length3a) and acMaSistem ? ta.ema(src, length3a) : na, color=color.new(color.maroon, 0), linewidth=2, title='ma34')
-
-length4a = input(50, 'ma 50')
-plot(ta.ema(src, length4a) and acMaSistem ? ta.ema(src, length4a) : na, color=color.new(color.purple, 0), linewidth=2, title='ma50')
-
-length5a = input(89, 'ma 89')
-plot(ta.ema(src, length5a) and acMaSistem ? ta.ema(src, length5a) : na, color=color.new(color.black, 0), linewidth=2, title='ma89')
-
-length6a = input(100, 'ma 100')
-plot(ta.ema(src, length6a) and acMaSistem ? ta.ema(src, length6a) : na, color=color.new(color.blue, 0), linewidth=2, title='ma100')
-
-//length7a = input(144, 'ma 144')
-//plot(ta.ema(src, length7a) and acMaSistem ? ta.ema(src, length7a) : na, color=color.new(color.gray, 0), linewidth=2, title='ma144')
-
-//length8a = input(200, 'ma 200')
-//plot(ta.ema(src, length8a) and acMaSistem ? ta.ema(src, length8a) : na, color=color.new(color.white, 0), linewidth=2, title='ma233')
-
-
-
 //rsi ema
 tf1S = timeframe.period
 myClose1S = request.security(syminfo.tickerid, tf1S, hlc3)
@@ -460,7 +432,7 @@ alertcondition(rsiSartSat, title="Rsi/Ema SAT", message='Rsi/Ema SAT {{ticker}},
 
 rsiSartAlVisne = (myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkY or myRsiColorTek == myKoyuRenkY) 
 plotshape(rsiSartAlVisne and acRsiEmaAlSatVisne ,title ='Rsi/Ema', text='Rsi/Ema(V)', style=shape.triangleup, location=location.belowbar, color=color.new(color.orange, 0), offset=-1, size=size.tiny)
-alertcondition(rsiSartAl, title="Rsi/Ema(V) AL", message='Rsi/Ema(V) AL {{ticker}}, FİYAT={{close}}')
+alertcondition(rsiSartAlVisne, title="Rsi/Ema(V) AL", message='Rsi/Ema(V) AL {{ticker}}, FİYAT={{close}}')
 
 
 
