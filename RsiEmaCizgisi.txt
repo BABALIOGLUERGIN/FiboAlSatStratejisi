@@ -7,14 +7,14 @@ srcY = high
 srcD = low
 
 
-acFiboLines = input(defval = true, title = 'Fibo Yatay Çizgileri Gözüksün mü?')   
+acFiboLines = input(defval = false, title = 'Fibo Yatay Çizgileri Gözüksün mü?')   
 acAlSatIsaret = false //input(defval = false, title = 'Fibo Kırım İşaretleri Gözüksün mü?')  
 acFiboUAisaret = input(defval = false, title = 'Fibo Üst Alt Fiyatl İşaretleri Gözüksün mü?')   
 
-acTema = input(defval = true, title = 'Tema Çizgileri Gözüksün mü?')   
+acTema = input(defval = false, title = 'Tema Çizgileri Gözüksün mü?')   
 
 acRsiEma = input(defval = true, title = 'Rsi/Ema Çizgisi Gösterilsin mi?') 
-acRsiEmaLW = input.int(defval = 3, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri') 
+acRsiEmaLW = input.int(defval = 1, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri') 
 acRsiEmaAl = input(defval = false, title = 'Rsi/Ema Al İşaretleri Gösterilsin mi?') 
 acRsiEmaSat = input(defval = false, title = 'Rsi/Ema Sat İşaretleri Gösterilsin mi?') 
 acRsiEmaAlVisne = input(defval = false, title = 'Rsi/Ema(V) Al İşaretleri Gösterilsin mi?') 
