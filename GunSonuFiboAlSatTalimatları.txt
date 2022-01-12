@@ -1,10 +1,9 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator('Gün Sonu Fibo Al SAT Talimatları V1.2.13', overlay=true)
+indicator(title = 'Gün Sonu Fibo Al SAT Talimatları V1.2.14', shorttitle = 'Gün Sonu Fibo Al SAT', overlay=true )
 src = close
 srcY = high
 srcD = low
-
 
 
 acEtiket = input(defval = false, title = 'Fibo Al Sat Talimatları Panosu')   
@@ -437,7 +436,7 @@ plotshape(rsiSartSat and acRsiEmaSat ,title ='Rsi/Ema SAT', text='Rsi/Ema', styl
 alertcondition(rsiSartSat, title="Rsi/Ema SAT", message='Rsi/Ema SAT {{ticker}}, FİYAT={{close}}')
 
 
-rsiSartAlVisne = (myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkY or myRsiColorTek == myKoyuRenkY) 
+rsiSartAlVisne = (myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkY or myRsiColorTek == myKoyuRenkY) //or (myRsiColorTek==myKoyuRenkD and dema4 >= src)
 plotshape(rsiSartAlVisne and acRsiEmaAlVisne ,title ='Rsi/Ema(V) AL', text='Rsi/Ema(V)', style=shape.triangleup, location=location.belowbar, color=color.new(myAcikRenkD, 0), offset=-1, size=size.small)
 alertcondition(rsiSartAlVisne, title="Rsi/Ema(V) AL", message='Rsi/Ema(V) AL {{ticker}}, FİYAT={{close}}')
 
@@ -462,12 +461,19 @@ rsiFibo = rsiFiboA or rsiFiboN or rsiFiboY
 //rsiFibod = rsiFiboAd or rsiFiboNd or rsiFiboYd
 
 
-rsiSartAlFibo = myRsiColorTek==myKoyuRenkD and rsiFibo
-plotshape(rsiSartAlFibo and acRsiEmaAlFibo ,title ='Rsi/Ema AF Fibo Kes', text='', style=shape.circle, location=location.belowbar, color=color.new(myKoyuRenkD, 0), offset=-1, size=size.small)
+//myAcikRenkY = color.green
+//myKoyuRenkY = #00897B 
+
+//myAcikRenkD = color.red 
+//myKoyuRenkD = #880E4F 
+
+
+rsiSartAlFibo = (myRsiColorTek==myKoyuRenkD and rsiFibo) or (myRsiColorTek[1]==myKoyuRenkD and (myRsiColorTek==myKoyuRenkY or myRsiColorTek==myAcikRenkY or myRsiColorTek==myAcikRenkD))
+plotshape(rsiSartAlFibo and acRsiEmaAlFibo ,title ='Rsi/Ema AF Fibo Kes', text='', style=shape.circle, location=location.belowbar, color=color.new(myKoyuRenkD, 0), offset=-1, size=size.tiny)
 alertcondition(rsiSartAlFibo, title="Rsi/Ema AF", message='Rsi/Ema AF {{ticker}}, FİYAT={{close}}')
 
 rsiSartSatFibo = myRsiColorTek==myKoyuRenkY and rsiFibo
-plotshape(rsiSartSatFibo and acRsiEmaSatFibo ,title ='Rsi/Ema SF Fibo Kes', text='', style=shape.circle, location=location.abovebar, color=color.new(myKoyuRenkY, 0), offset=-1, size=size.small)
+plotshape(rsiSartSatFibo and acRsiEmaSatFibo ,title ='Rsi/Ema SF Fibo Kes', text='', style=shape.circle, location=location.abovebar, color=color.new(myKoyuRenkY, 0), offset=-1, size=size.tiny)
 alertcondition(rsiSartSatFibo, title="Rsi/Ema SF", message='Rsi/Ema SF {{ticker}}, FİYAT={{close}}')
 
 
@@ -480,7 +486,7 @@ alertcondition(rsiSartSatFibo, title="Rsi/Ema SF", message='Rsi/Ema SF {{ticker}
 //fill(rs1, ema1, title = 'Trend Bölgesi', color=myRsi1S >= myEma121S ? color.new(color.lime, 50) : color.new(color.red, 50))
 
 //myPlotRsi = plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=myRsi1S >= myEma121S ? color.new(myRsiColorY, 0) : color.new(myRsiColorD, 0), title="RsiEma", linewidth=4)
-myPlotRsi = plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=color.new(myRsiColorTek, 0), title="RsiEma", linewidth=4)
+myPlotRsi = plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=color.new(myRsiColorTek, 0), title="RsiEma", linewidth=3)
 
 //plotshape(ta.crossover(myRsi1S, 30), title ='RSI AL', text='Rsi Al', style=shape.triangleup, location=location.belowbar, color=color.new(color.lime, 0), offset=-1, size=size.small)
 //plotshape(ta.crossunder(myRsi1S, 75) or ta.crossunder(myRsi1S, 65), title ='RSI SAT', text='Rsi Sat', style=shape.triangledown, location=location.abovebar, color=color.new(color.red, 0), offset=-1, size=size.small)
