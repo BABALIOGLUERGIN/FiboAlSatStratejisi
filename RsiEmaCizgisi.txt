@@ -329,11 +329,11 @@ rsiFibo = rsiFiboA or rsiFiboN or rsiFiboY
 
 
 rsiSartAlFibo = (myRsiColorTek==myKoyuRenkD and rsiFibo) or (myRsiColorTek[1]==myKoyuRenkD and (myRsiColorTek==myKoyuRenkY or myRsiColorTek==myAcikRenkY or myRsiColorTek==myAcikRenkD))
-plotshape(rsiSartAlFibo and acRsiEmaAlFibo ,title ='Rsi/Ema AF Fibo Kes', text='', style=shape.circle, location=location.belowbar, color=color.new(myKoyuRenkD, 0), offset=-1, size=size.tiny)
+plotshape(rsiSartAlFibo and acRsiEmaAlFibo ,title ='Rsi/Ema AF Fibo Kes', text='', style=shape.circle, location=location.belowbar, color=color.new(myKoyuRenkD, 0), offset=-1, size=size.small)
 alertcondition(rsiSartAlFibo, title="Rsi/Ema AF", message='Rsi/Ema AF {{ticker}}, FİYAT={{close}}')
 
 rsiSartSatFibo = myRsiColorTek==myKoyuRenkY and rsiFibo
-plotshape(rsiSartSatFibo and acRsiEmaSatFibo ,title ='Rsi/Ema SF Fibo Kes', text='', style=shape.circle, location=location.abovebar, color=color.new(myKoyuRenkY, 0), offset=-1, size=size.tiny)
+plotshape(rsiSartSatFibo and acRsiEmaSatFibo ,title ='Rsi/Ema SF Fibo Kes', text='', style=shape.circle, location=location.abovebar, color=color.new(myKoyuRenkY, 0), offset=-1, size=size.small)
 alertcondition(rsiSartSatFibo, title="Rsi/Ema SF", message='Rsi/Ema SF {{ticker}}, FİYAT={{close}}')
 
 myPlotRsi = plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=color.new(myRsiColorTek, 0), title="RsiEma", linewidth=acRsiEmaLW)
