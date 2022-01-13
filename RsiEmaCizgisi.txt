@@ -1,11 +1,13 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = 'Rsi/Ema Çizgisi V1.0.02', shorttitle = 'Rsi/Ema Çizgisi', overlay=true, timeframe="") 
+indicator(title = 'Rsi/Ema Çizgisi V1.0.03', shorttitle = 'Rsi/Ema Çizgisi', overlay=true, timeframe="") 
 
 src = close
 srcY = high
 srcD = low
 
+
+tf1S=timeframe.period
 
 
 acFiboLines = input(defval = false, title = 'Fibo Yatay Çizgileri Gözüksün mü?')   
@@ -267,7 +269,7 @@ plot(line2272_2 and acFiboLines ? line2272_2 : na, title='-1.272', color=color.n
 
 
 //rsi ema
-tf1S = timeframe.period
+//tf1S = timeframe.period
 myClose1S = request.security(syminfo.tickerid, tf1S, hlc3)
 myRsiD = input.int(14, title='RSI Değeri')
 myRsi1S = ta.rsi(myClose1S,myRsiD)
