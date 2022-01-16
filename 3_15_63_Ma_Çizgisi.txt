@@ -1,0 +1,48 @@
+//O2can O2bek (Özcan Özbek)
+//@version=5
+indicator(title = '3_15_63_Ma Çizgisi V1.0.01', shorttitle = '3_15_63_Ma Çizgisi', overlay=true, timeframe="") 
+src = close
+
+
+acTema = input(defval = false, title = 'Tema Çizgileri Gözüksün mü?')   
+acT100T200Boyama = input(defval = false, title = 'Tema 100/200 Arası Boyama Gösterilsin mi?') 
+acMa3Ma15Boyama = input(defval = false, title = 'Ma 3/15 Arası Boyama Gösterilsin mi?')
+acMa15Ma63Boyama = input(defval = false, title = 'Ma 15/63 Arası Boyama Gösterilsin mi?')
+
+
+length3 = 100 //input.int(100, minval=1)
+e31 = ta.ema(src, length3)
+e32 = ta.ema(e31, length3)
+e33 = ta.ema(e32, length3)
+dema3 = 3 * (e31 - e32) + e33    //tema100
+myTema100 = plot(dema3 and acTema ? dema3 : na, 'Tema 100', color=color.new(color.blue, 0), linewidth=3)
+
+length4 = 200 //input.int(200, minval=1)
+e41 = ta.ema(src, length4)
+e42 = ta.ema(e41, length4)
+e43 = ta.ema(e42, length4)
+dema4 = 3 * (e41 - e42) + e43    //tema200
+myTema200 = plot(dema4 and acTema ? dema4 : na, 'Tema 200', color=color.new(#be660b, 0), linewidth=4)
+
+acT100T200BoyamaRenk = acT100T200Boyama ? 70 : 100
+fill(myTema100, myTema200, title = 'Tema 100/200 Bölgesi', color=dema3 >= dema4 ? color.new(color.lime, acT100T200BoyamaRenk) : color.new(color.red, acT100T200BoyamaRenk))
+
+lengthMa3 = input(3, 'ma 3')
+ma3 = ta.ema(src, lengthMa3)
+pma3 = plot(ma3, color=color.new(color.white, 0), linewidth=2, title='ma 13')
+
+lengthMa15 = input(15, 'ma 15')
+ma15 = ta.ema(src, lengthMa15)
+pma15 = plot(ma15, color=color.new(color.purple, 0), linewidth=2, title='ma 21')
+
+lengthMa63 = input(63, 'ma 63')
+ma63 = ta.ema(src, lengthMa63)
+pma63 = plot(ma63, color=color.new(color.yellow, 0), linewidth=2, title='ma 63')
+
+acMa3Ma15BoyamaRenk = acMa3Ma15Boyama ? 70 : 100
+fill(pma3, pma15, title = 'Ma 3/15 Bölgesi', color=ma3 >= ma15 ? color.new(color.lime, acMa3Ma15BoyamaRenk) : color.new(color.red, acMa3Ma15BoyamaRenk))
+
+acMa15Ma63BoyamaRenk = acMa15Ma63Boyama ? 70 : 100
+fill(pma15, pma63, title = 'Ma 15/63 Bölgesi', color=ma15 >= ma63 ? color.new(color.lime, acMa15Ma63BoyamaRenk) : color.new(color.red, acMa15Ma63BoyamaRenk))
+
+//BURADA BITTI
