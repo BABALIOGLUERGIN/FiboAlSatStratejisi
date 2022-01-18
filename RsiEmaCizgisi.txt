@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = 'Rsi/Ema Çizgisi V1.0.03', shorttitle = 'Rsi/Ema Çizgisi', overlay=true, timeframe="") 
+indicator(title = 'Rsi/Ema Çizgisi V1.0.04', shorttitle = 'Rsi/Ema Çizgisi', overlay=true, timeframe="") 
 
 src = close
 srcY = high
@@ -20,6 +20,7 @@ acRsiEma = input(defval = true, title = 'Rsi/Ema Çizgisi Gösterilsin mi?')
 acRsiEmaLW = input.int(defval = 1, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri') 
 acRsiEmaAl = input(defval = false, title = 'Rsi/Ema Al İşaretleri Gösterilsin mi?') 
 acRsiEmaSat = input(defval = false, title = 'Rsi/Ema Sat İşaretleri Gösterilsin mi?') 
+
 acRsiEmaAlVisne = input(defval = false, title = 'Rsi/Ema(V) Al İşaretleri Gösterilsin mi?') 
 acRsiEmaSatVisne = input(defval = false, title = 'Rsi/Ema(V) Sat İşaretleri Gösterilsin mi?') 
 
@@ -291,10 +292,11 @@ myRsiColorTek = myRsi1S >= myEma121S ? myRsiColorY : myRsiColorD
 rsiSartAl = (myRsiColorTek[1]==myAcikRenkD or myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkY or myRsiColorTek == myKoyuRenkY) 
 rsiSartSat = (myRsiColorTek[1]==myAcikRenkY or myRsiColorTek[1]==myKoyuRenkY) and (myRsiColorTek == myAcikRenkD or myRsiColorTek == myKoyuRenkD) 
 
-plotshape(rsiSartAl and acRsiEmaAl ,title ='Rsi/Ema AL', text='Rsi/Ema', style=shape.triangleup, location=location.belowbar, color=color.new(color.lime, 0), offset=-1, size=size.tiny)
+
+plotshape(rsiSartAl and acRsiEmaAl ,title ='Rsi/Ema AL' , style=shape.triangleup, location=location.belowbar, color=color.new(color.lime, 0), offset=-1, size=size.small)
 alertcondition(rsiSartAl, title="Rsi/Ema AL", message='Rsi/Ema AL {{ticker}}, FİYAT={{close}}')
 
-plotshape(rsiSartSat and acRsiEmaSat ,title ='Rsi/Ema SAT', text='Rsi/Ema', style=shape.triangledown, location=location.abovebar, color=color.new(color.red, 0), offset=-1, size=size.tiny)
+plotshape(rsiSartSat and acRsiEmaSat ,title ='Rsi/Ema SAT', style=shape.triangledown, location=location.abovebar, color=color.new(color.red, 0), offset=-1, size=size.small)
 alertcondition(rsiSartSat, title="Rsi/Ema SAT", message='Rsi/Ema SAT {{ticker}}, FİYAT={{close}}')
 
 
@@ -368,7 +370,7 @@ color_1 = col1 ? color.lime : col3 ? color.red : color.yellow
 
 
 //Tillson Plot
-myPlotT3 = plot(T3 and acT3 ? T3 : na, color=color_1, linewidth=2, title='T3')
+myPlotT3 = plot(T3 and acT3 ? T3 : na, color=color_1, linewidth=3, title='T3')
 //myPlotRsi
 //myT3RsiColor = str.tostring(myPlotRsi) >= myPlotT3 ? color.lime : color.red
 
