@@ -6,8 +6,8 @@ src = close
 srcY = high
 srcD = low
 
-
 tf1S=timeframe.period
+
 
 
 acFiboLines = input(defval = false, title = 'Fibo Yatay Çizgileri Gözüksün mü?')   
@@ -304,11 +304,11 @@ alertcondition(rsiSartSat, title="Rsi/Ema SAT", message='Rsi/Ema SAT {{ticker}},
 
 
 rsiSartAlVisne = (myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkY or myRsiColorTek == myKoyuRenkY) //or (myRsiColorTek==myKoyuRenkD and dema4 >= src)
-plotshape(rsiSartAlVisne and acRsiEmaAlVisne ,title ='Rsi/Ema(V) AL', text='Rsi/Ema(V)', style=shape.triangleup, location=location.belowbar, color=color.new(myAcikRenkD, 0), offset=0, size=size.small)
+plotshape(rsiSartAlVisne and acRsiEmaAlVisne ,title ='Rsi/Ema(V) AL', text='Rsi/Ema(V)', style=shape.triangleup, location=location.belowbar, color=color.new(myAcikRenkY, 0), offset=0, size=size.small)
 alertcondition(rsiSartAlVisne, title="Rsi/Ema(V) AL", message='Rsi/Ema(V) AL {{ticker}}, FİYAT={{close}}')
 
 rsiSartSatVisne = (myRsiColorTek[1]==myKoyuRenkY) and (myRsiColorTek == myAcikRenkD or myRsiColorTek == myKoyuRenkD) 
-plotshape(rsiSartSatVisne and acRsiEmaSatVisne ,title ='Rsi/Ema(V) SAT', text='Rsi/Ema(V)', style=shape.triangledown, location=location.abovebar, color=color.new(myAcikRenkY, 0), offset=0, size=size.small)
+plotshape(rsiSartSatVisne and acRsiEmaSatVisne ,title ='Rsi/Ema(V) SAT', text='Rsi/Ema(V)', style=shape.triangledown, location=location.abovebar, color=color.new(myAcikRenkD, 0), offset=0, size=size.small)
 alertcondition(rsiSartSatVisne, title="Rsi/Ema(V) SAT", message='Rsi/Ema(V) SAT {{ticker}}, FİYAT={{close}}')
 
 
