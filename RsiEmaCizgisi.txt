@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = 'Rsi/Ema Çizgisi V1.0.06', shorttitle = 'Rsi/Ema Çizgisi', overlay=true, timeframe="") 
+indicator(title = 'Rsi/Ema Çizgisi V1.1.01', shorttitle = 'Rsi/Ema Çizgisi', overlay=true, timeframe="") 
 
 src = close
 srcY = high
@@ -9,22 +9,24 @@ srcD = low
 tf1S=timeframe.period
 
 
-
-acFiboLines = input(defval = false, title = 'Fibo Yatay Çizgileri Gözüksün mü?')   
+acFiboLines = input(defval = true, title = 'Fibo Yatay Çizgileri Gözüksün mü?')   
 acAlSatIsaret = false //input(defval = false, title = 'Fibo Kırım İşaretleri Gözüksün mü?')  
 //acFiboUAisaret = input(defval = false, title = 'Fibo Üst Alt Fiyatl İşaretleri Gözüksün mü?')   
 
-acTema = input(defval = false, title = 'Tema Çizgileri Gözüksün mü?')   
+acTema = input(defval = true, title = 'Tema Çizgileri Gözüksün mü?')   
+acHMA = input(defval = true, title = 'HMA Çizgisi Gözüksün mü?')   
+acT20HMAboyama = input(defval = true, title = 'Tema 20 ile HMA Arası Boyama Gösterilsin mi?')   
+
 
 acRsiEma = input(defval = true, title = 'Rsi/Ema Çizgisi Gösterilsin mi?') 
-acRsiEmaLW = input.int(defval = 1, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri') 
+acRsiEmaLW = input.int(defval = 4, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri') 
 acRsiEmaAl = input(defval = false, title = 'Rsi/Ema Al İşaretleri Gösterilsin mi?') 
 acRsiEmaSat = input(defval = false, title = 'Rsi/Ema Sat İşaretleri Gösterilsin mi?') 
 
 acRsiEmaAlVisne = input(defval = false, title = 'Rsi/Ema(V) Al İşaretleri Gösterilsin mi?') 
 acRsiEmaSatVisne = input(defval = false, title = 'Rsi/Ema(V) Sat İşaretleri Gösterilsin mi?') 
 
-acRsiEmaAlFibo = input(defval = false, title = 'Rsi/Ema AF (AL FIRSATI) Fibo Kes İşaretleri Gösterilsin mi?') 
+acRsiEmaAlFibo = input(defval = true, title = 'Rsi/Ema AF (AL FIRSATI) Fibo Kes İşaretleri Gösterilsin mi?') 
 acRsiEmaSatFibo = input(defval = false, title = 'Rsi/Ema SF (SAT FIRSATI) Fibo Kes İşaretleri Gösterilsin mi?') 
 
 
@@ -33,9 +35,15 @@ acT3AlSat = input(defval = false, title = 'T3 - Tillson AL-SAT Gösterilsin mi?'
 
 acT3Boyama = input(defval = false, title = 'Tillson ile Rsi/Ema Arası Boyama Gösterilsin mi?')   
 acT20T50AlSat = input(defval = false, title = 'Tema 20/50 Al Sat İşaretleri Gösterilsin mi?')   
-acT20T50Boyama = input(defval = false, title = 'Tema 20/50 Aarası Boyama Gösterilsin mi?')   
+acT20T50Boyama = input(defval = true, title = 'Tema 20/50 Arası Boyama Gösterilsin mi?')   
 acT100T200AlSat= input(defval = false, title = 'Tema 100/200 Al Sat İşaretleri Gösterilsin mi?')   
-acT100T200Boyama = input(defval = false, title = 'Tema 100/200 Aarası Boyama Gösterilsin mi?') 
+acT100T200Boyama = input(defval = false, title = 'Tema 100/200 Arası Boyama Gösterilsin mi?') 
+
+// HMA
+lengthHull = input.int(7, "HMA Uzunluk", minval=1)
+hullma = ta.wma(2*ta.wma(src, lengthHull/2)-ta.wma(src, lengthHull), math.floor(math.sqrt(lengthHull)))
+myHMA = plot(hullma and acHMA ? hullma : na, 'HMA', color=color.new(color.orange, 0), linewidth=4)
+
 
 // Tema 20
 length0 = 20 
@@ -54,6 +62,9 @@ myTema50= plot(tema50 and acTema ? tema50 : na, 'Tema 50', color=color.new(color
 
 acT20T50BoyamaRenk = acT20T50Boyama ? 70 : 100
 fill(myTema20, myTema50, title = 'Tema 20/50 Bölgesi', color=tema20 >= tema50 ? color.new(color.lime, acT20T50BoyamaRenk) : color.new(color.red, acT20T50BoyamaRenk))
+
+acT20HMAboyamaRenk = acT20HMAboyama ? 70 : 100
+fill(myTema20, myHMA, title = 'Tema 20/HMA Bölgesi', color=hullma >= tema20 ? color.new(color.lime, acT20HMAboyamaRenk) : color.new(color.red, acT20HMAboyamaRenk))
 
 tema20YukariKesTema50 = ta.crossover(tema20, tema50)
 plotshape(tema20YukariKesTema50 and acT20T50AlSat ? tema20YukariKesTema50 : na ,title ='Tema 20/50 AL', text='T20/50', style=shape.triangleup, location=location.belowbar, color=color.new(color.lime, 0), offset=0, size=size.small)
