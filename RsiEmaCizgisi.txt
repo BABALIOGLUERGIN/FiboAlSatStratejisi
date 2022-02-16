@@ -1,12 +1,13 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = 'Rsi/Ema Çizgisi V1.1.03', shorttitle = 'Rsi/Ema Çizgisi', overlay=true, timeframe="") 
+indicator(title = 'Rsi/Ema Çizgisi V1.1.04', shorttitle = 'Rsi/Ema Çizgisi', overlay=true, timeframe="") 
 
 src = close
 srcY = high
 srcD = low
 
 tf1S=timeframe.period
+
 
 //rsi ema
 //tf1S = timeframe.period
@@ -16,6 +17,10 @@ myRsi1S = ta.rsi(myClose1S,myRsiD)
 myEmaD = input.int(12, title='Ema Değeri')
 myEma121S = ta.ema(myRsi1S, myEmaD)
 
+//TSL
+resTsl = timeframe.period
+K1 = ta.valuewhen(low > low[1], low[1], 1)
+TSL = request.security(syminfo.tickerid, resTsl, K1)
 
 
 acFiboLines = input(defval = true, title = 'Fibo Yatay Çizgileri Gözüksün mü?')   
@@ -26,6 +31,7 @@ acTema = input(defval = true, title = 'Tema Çizgileri Gözüksün mü?')
 acHMA = input(defval = true, title = 'HMA Çizgisi Gözüksün mü?')   
 acT20HMAboyama = input(defval = false, title = 'Tema 20 ile HMA Arası Boyama Gösterilsin mi?')   
 acHmaT20Al = input(defval = true, title = 'HMA/(RsiEma-T20) AF (AL FIRSATI) İşaretleri Gösterilsin mi?') 
+acHmaT20Sat= input(defval = true, title = 'HMA/(RsiEma-T20) SF (SAT FIRSATI) İşaretleri Gösterilsin mi?') 
 
 acRsiEma = input(defval = true, title = 'Rsi/Ema Çizgisi Gösterilsin mi?') 
 acRsiEmaLW = input.int(defval = 4, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri') 
@@ -47,6 +53,9 @@ acT20T50AlSat = input(defval = false, title = 'Tema 20/50 Al Sat İşaretleri G�
 acT20T50Boyama = input(defval = true, title = 'Tema 20/50 Arası Boyama Gösterilsin mi?')   
 acT100T200AlSat= input(defval = false, title = 'Tema 100/200 Al Sat İşaretleri Gösterilsin mi?')   
 acT100T200Boyama = input(defval = false, title = 'Tema 100/200 Arası Boyama Gösterilsin mi?') 
+
+acTSL = input(defval = false, title = 'TSL')   
+
 
 // HMA
 lengthHull = input.int(7, "HMA Uzunluk", minval=1)
@@ -369,8 +378,15 @@ myPlotRsi = plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=color.
 myRsiEmaCiz =  myRsi1S >= myEma121S ? high : low
 hmaYukariKesRsiEma = ta.crossover(hullma, myRsiEmaCiz)
 hmaYukariKesTema20 = ta.crossover(hullma, tema20)
-plotshape(( hmaYukariKesRsiEma or hmaYukariKesTema20 ) and myRsi1S<=43 and hullma <= tema20 and acHmaT20Al ,title ='Hma/(RsiEma-T20) AF Kes', text='', style=shape.circle, location=location.belowbar, color=color.new(color.orange, 0), offset=0, size=size.small)
-alertcondition((hmaYukariKesRsiEma or hmaYukariKesTema20 ) and myRsi1S<=43 and hullma <= tema20, title="Hma/(RsiEma-T20) AF", message='Hma/(RsiEma-T20) AF {{ticker}}, FİYAT={{close}}')
+plotshape(( hmaYukariKesRsiEma or hmaYukariKesTema20 ) and myRsi1S<=43 and myRsiEmaCiz <= tema20 and acHmaT20Al ,title ='Hma/(RsiEma-T20) AF Kes', text='', style=shape.circle, location=location.belowbar, color=color.new(color.orange, 0), offset=0, size=size.small)
+alertcondition((hmaYukariKesRsiEma or hmaYukariKesTema20 ) and myRsi1S<=43 and myRsiEmaCiz <= tema20, title="Hma/(RsiEma-T20) AF", message='Hma/(RsiEma-T20) AF {{ticker}}, FİYAT={{close}}')
+
+hmaAsagiyaKesRsiEma = ta.crossunder(hullma, myRsiEmaCiz)
+hmaAsagiyaKesTema20 = ta.crossunder(hullma, tema20)
+plotshape((hmaAsagiyaKesRsiEma or hmaAsagiyaKesTema20 ) and myRsi1S>=60 and myRsiEmaCiz >= tema20 and tema20 >= tema50 and acHmaT20Sat ,title ='Hma/(RsiEma-T20) SF Kes', text='', style=shape.circle, location=location.abovebar, color=color.new(color.orange, 0), offset=0, size=size.normal)
+alertcondition((hmaAsagiyaKesRsiEma or hmaAsagiyaKesTema20 ) and myRsi1S>=60 and myRsiEmaCiz >= tema20 and tema20 >= tema50, title="Hma/(RsiEma-T20) SF", message='Hma/(RsiEma-T20) SF {{ticker}}, FİYAT={{close}}')
+
+
 
 
 //Tillson
@@ -416,6 +432,7 @@ acT3BoyamaRenk = acT3Boyama ? 70 : 100
 rsiEmaSrc = myRsi1S >= myEma121S ? high : low
 fill(myPlotRsi, myPlotT3, title = 'T3 Trend Bölgesi', color=rsiEmaSrc >= T3 ? color.new(color.lime, acT3BoyamaRenk) : color.new(color.red, acT3BoyamaRenk))
 
+plot(TSL and acTSL ? TSL : na, linewidth=3, color=color.new(color.yellow, 0), title='TSL',  style =plot.style_circles)
 
 
 //plot(myPlotRsi == myPlotT3  , color = color.white ,  linewidth=3 )
