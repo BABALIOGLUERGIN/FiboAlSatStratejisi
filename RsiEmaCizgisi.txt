@@ -1,12 +1,21 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = 'Rsi/Ema Çizgisi V1.1.01', shorttitle = 'Rsi/Ema Çizgisi', overlay=true, timeframe="") 
+indicator(title = 'Rsi/Ema Çizgisi V1.1.02', shorttitle = 'Rsi/Ema Çizgisi', overlay=true, timeframe="") 
 
 src = close
 srcY = high
 srcD = low
 
 tf1S=timeframe.period
+
+//rsi ema
+//tf1S = timeframe.period
+myClose1S = request.security(syminfo.tickerid, tf1S, hlc3)
+myRsiD = input.int(14, title='RSI Değeri')
+myRsi1S = ta.rsi(myClose1S,myRsiD)
+myEmaD = input.int(12, title='Ema Değeri')
+myEma121S = ta.ema(myRsi1S, myEmaD)
+
 
 
 acFiboLines = input(defval = true, title = 'Fibo Yatay Çizgileri Gözüksün mü?')   
@@ -15,8 +24,8 @@ acAlSatIsaret = false //input(defval = false, title = 'Fibo Kırım İşaretleri
 
 acTema = input(defval = true, title = 'Tema Çizgileri Gözüksün mü?')   
 acHMA = input(defval = true, title = 'HMA Çizgisi Gözüksün mü?')   
-acT20HMAboyama = input(defval = true, title = 'Tema 20 ile HMA Arası Boyama Gösterilsin mi?')   
-
+acT20HMAboyama = input(defval = false, title = 'Tema 20 ile HMA Arası Boyama Gösterilsin mi?')   
+acHmaT20Al = input(defval = true, title = 'HMA/(RsiEma-T20) AF (AL FIRSATI) İşaretleri Gösterilsin mi?') 
 
 acRsiEma = input(defval = true, title = 'Rsi/Ema Çizgisi Gösterilsin mi?') 
 acRsiEmaLW = input.int(defval = 4, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri') 
@@ -80,14 +89,14 @@ e31 = ta.ema(src, length3)
 e32 = ta.ema(e31, length3)
 e33 = ta.ema(e32, length3)
 dema3 = 3 * (e31 - e32) + e33    //tema100
-myTema100 = plot(dema3 and acTema ? dema3 : na, 'Tema 100', color=color.new(color.blue, 0), linewidth=3)
+myTema100 = plot(dema3 and acTema ? dema3 : na, 'Tema 100', color=color.new(color.blue, 100), linewidth=3)
 
 length4 = 200 //input.int(200, minval=1)
 e41 = ta.ema(src, length4)
 e42 = ta.ema(e41, length4)
 e43 = ta.ema(e42, length4)
 dema4 = 3 * (e41 - e42) + e43    //tema200
-myTema200 = plot(dema4 and acTema ? dema4 : na, 'Tema 200', color=color.new(#be660b, 0), linewidth=4)
+myTema200 = plot(dema4 and acTema ? dema4 : na, 'Tema 200', color=color.new(#be660b, 100), linewidth=4)
 
 
 acT100T200BoyamaRenk = acT100T200Boyama ? 70 : 100
@@ -283,12 +292,11 @@ plot(line2272_2 and acFiboLines ? line2272_2 : na, title='-1.272', color=color.n
 
 
 //rsi ema
-//tf1S = timeframe.period
-myClose1S = request.security(syminfo.tickerid, tf1S, hlc3)
-myRsiD = input.int(14, title='RSI Değeri')
-myRsi1S = ta.rsi(myClose1S,myRsiD)
-myEmaD = input.int(12, title='Ema Değeri')
-myEma121S = ta.ema(myRsi1S, myEmaD)
+//myClose1S = request.security(syminfo.tickerid, tf1S, hlc3)
+//myRsiD = input.int(14, title='RSI Değeri')
+//myRsi1S = ta.rsi(myClose1S,myRsiD)
+//myEmaD = input.int(12, title='Ema Değeri')
+//myEma121S = ta.ema(myRsi1S, myEmaD)
 
 
 myAcikRenkY = color.green
@@ -356,6 +364,14 @@ plotshape(rsiSartSatFibo and acRsiEmaSatFibo ,title ='Rsi/Ema SF Fibo Kes', text
 alertcondition(rsiSartSatFibo, title="Rsi/Ema SF", message='Rsi/Ema SF {{ticker}}, FİYAT={{close}}')
 
 myPlotRsi = plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=color.new(myRsiColorTek, 0), title="RsiEma", linewidth=acRsiEmaLW)
+
+
+myRsiEmaCiz =  myRsi1S >= myEma121S ? high : low
+hmaYukariKesRsiEma = ta.crossover(hullma, myRsiEmaCiz)
+hmaYukariKesTema20 = ta.crossover(hullma, tema20)
+plotshape(( hmaYukariKesRsiEma or hmaYukariKesTema20 ) and myRsi1S<=43 and hullma < tema20 and acHmaT20Al ,title ='Hma/(RsiEma-T20) AF Kes', text='', style=shape.circle, location=location.belowbar, color=color.new(color.orange, 0), offset=0, size=size.small)
+alertcondition((hmaYukariKesRsiEma or hmaYukariKesTema20 ) and myRsi1S<=43 and hullma < tema20, title="Hma/(RsiEma-T20) AF", message='Hma/(RsiEma-T20) AF {{ticker}}, FİYAT={{close}}')
+
 
 //Tillson
 length1 = 3 //input(3, 'T3 Length')
