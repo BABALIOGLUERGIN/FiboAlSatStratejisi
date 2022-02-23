@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = 'Rsi/Ema Çizgisi V1.1.04', shorttitle = 'Rsi/Ema Çizgisi', overlay=true, timeframe="") 
+indicator(title = 'Rsi/Ema Çizgisi V1.1.05', shorttitle = 'Rsi/Ema Çizgisi', overlay=true, timeframe="") 
 
 src = close
 srcY = high
@@ -31,7 +31,9 @@ acTema = input(defval = true, title = 'Tema Çizgileri Gözüksün mü?')
 acHMA = input(defval = true, title = 'HMA Çizgisi Gözüksün mü?')   
 acT20HMAboyama = input(defval = false, title = 'Tema 20 ile HMA Arası Boyama Gösterilsin mi?')   
 acHmaT20Al = input(defval = true, title = 'HMA/(RsiEma-T20) AF (AL FIRSATI) İşaretleri Gösterilsin mi?') 
-acHmaT20Sat= input(defval = true, title = 'HMA/(RsiEma-T20) SF (SAT FIRSATI) İşaretleri Gösterilsin mi?') 
+acHmaT20Sat = input(defval = true, title = 'HMA/(RsiEma-T20) SF (SAT FIRSATI) İşaretleri Gösterilsin mi?') 
+
+acRsiEmaKesHmaSat = input(defval = true, title = 'RsiEma/Hma SF (SAT FIRSATI) İşaretleri Gösterilsin mi?') 
 
 acRsiEma = input(defval = true, title = 'Rsi/Ema Çizgisi Gösterilsin mi?') 
 acRsiEmaLW = input.int(defval = 4, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri') 
@@ -385,6 +387,11 @@ hmaAsagiyaKesRsiEma = ta.crossunder(hullma, myRsiEmaCiz)
 hmaAsagiyaKesTema20 = ta.crossunder(hullma, tema20)
 plotshape((hmaAsagiyaKesRsiEma or hmaAsagiyaKesTema20 ) and myRsi1S>=60 and myRsiEmaCiz >= tema20 and tema20 >= tema50 and acHmaT20Sat ,title ='Hma/(RsiEma-T20) SF Kes', text='', style=shape.circle, location=location.abovebar, color=color.new(color.orange, 0), offset=0, size=size.normal)
 alertcondition((hmaAsagiyaKesRsiEma or hmaAsagiyaKesTema20 ) and myRsi1S>=60 and myRsiEmaCiz >= tema20 and tema20 >= tema50, title="Hma/(RsiEma-T20) SF", message='Hma/(RsiEma-T20) SF {{ticker}}, FİYAT={{close}}')
+
+//RsiEma -> Hull
+rsiEmaKesHull = ta.cross(myRsiEmaCiz,hullma)
+plotshape(rsiEmaKesHull and myRsi1S>=60 and myRsiEmaCiz > tema20 and hullma>=high and acRsiEmaKesHmaSat ,title ='RsiEma/Hma SF Kes', text='', style=shape.triangledown, location=location.abovebar, color=color.new(color.white, 0), offset=0, size=size.normal)
+alertcondition(rsiEmaKesHull and myRsi1S>=60 and myRsiEmaCiz > tema20 and hullma>=high, title="RsiEma/Hma SF", message='RsiEma/Hma SF {{ticker}}, FİYAT={{close}}')
 
 
 
