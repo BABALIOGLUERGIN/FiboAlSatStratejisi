@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = 'Rsi/Ema Çizgisi V1.1.05', shorttitle = 'Rsi/Ema Çizgisi', overlay=true, timeframe="") 
+indicator(title = 'Rsi/Ema Çizgisi V1.1.06', shorttitle = 'Rsi/Ema Çizgisi', overlay=true, timeframe="") 
 
 src = close
 srcY = high
@@ -28,14 +28,14 @@ acAlSatIsaret = false //input(defval = false, title = 'Fibo Kırım İşaretleri
 //acFiboUAisaret = input(defval = false, title = 'Fibo Üst Alt Fiyatl İşaretleri Gözüksün mü?')   
 
 acTema = input(defval = true, title = 'Tema Çizgileri Gözüksün mü?')   
-acHMA = input(defval = true, title = 'HMA Çizgisi Gözüksün mü?')   
+acHMA = input(defval = false, title = 'HMA Çizgisi Gözüksün mü?')   
 acT20HMAboyama = input(defval = false, title = 'Tema 20 ile HMA Arası Boyama Gösterilsin mi?')   
 acHmaT20Al = input(defval = true, title = 'HMA/(RsiEma-T20) AF (AL FIRSATI) İşaretleri Gösterilsin mi?') 
-acHmaT20Sat = input(defval = true, title = 'HMA/(RsiEma-T20) SF (SAT FIRSATI) İşaretleri Gösterilsin mi?') 
+acHmaT20Sat = input(defval = false, title = 'HMA/(RsiEma-T20) SF (SAT FIRSATI) İşaretleri Gösterilsin mi?') 
 
-acRsiEmaKesHmaSat = input(defval = true, title = 'RsiEma/Hma SF (SAT FIRSATI) İşaretleri Gösterilsin mi?') 
+acRsiEmaKesHmaSat = input(defval = false, title = 'RsiEma/Hma SF (SAT FIRSATI) İşaretleri Gösterilsin mi?') 
 
-acRsiEma = input(defval = true, title = 'Rsi/Ema Çizgisi Gösterilsin mi?') 
+acRsiEma = input(defval = false, title = 'Rsi/Ema Çizgisi Gösterilsin mi?') 
 acRsiEmaLW = input.int(defval = 4, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri') 
 acRsiEmaAl = input(defval = false, title = 'Rsi/Ema Al İşaretleri Gösterilsin mi?') 
 acRsiEmaSat = input(defval = false, title = 'Rsi/Ema Sat İşaretleri Gösterilsin mi?') 
@@ -46,8 +46,13 @@ acRsiEmaSatVisne = input(defval = false, title = 'Rsi/Ema(V) Sat İşaretleri G�
 acRsiEmaAlFibo = input(defval = true, title = 'Rsi/Ema AF (AL FIRSATI) Fibo Kes İşaretleri Gösterilsin mi?') 
 acRsiEmaSatFibo = input(defval = false, title = 'Rsi/Ema SF (SAT FIRSATI) Fibo Kes İşaretleri Gösterilsin mi?') 
 
+//acGannHL = input(defval = false, title = 'GannHL Çizgisi Gösterilsin mi?')   
 
-acT3 = input(defval = false, title = 'Tillson Çizgisi Gösterilsin mi?')   
+acTillT50 = input(defval = true, title = 'Tillson T50 Üstü Daireler Gösterilsin mi?')   
+acTillT50Sat = input(defval = true, title = 'Tillson T50 Üstü SF (SAT FIRSATI İşaretleri Gösterilsin mi?')   
+
+
+acT3 = input(defval = true, title = 'Tillson Çizgisi Gösterilsin mi?')   
 acT3AlSat = input(defval = false, title = 'T3 - Tillson AL-SAT Gösterilsin mi?')  
 
 acT3Boyama = input(defval = false, title = 'Tillson ile Rsi/Ema Arası Boyama Gösterilsin mi?')   
@@ -100,14 +105,14 @@ e31 = ta.ema(src, length3)
 e32 = ta.ema(e31, length3)
 e33 = ta.ema(e32, length3)
 dema3 = 3 * (e31 - e32) + e33    //tema100
-myTema100 = plot(dema3 and acTema ? dema3 : na, 'Tema 100', color=color.new(color.blue, 100), linewidth=3)
+myTema100 = plot(dema3 and acTema ? dema3 : na, 'Tema 100', color=color.new(color.blue, 0), linewidth=3)
 
 length4 = 200 //input.int(200, minval=1)
 e41 = ta.ema(src, length4)
 e42 = ta.ema(e41, length4)
 e43 = ta.ema(e42, length4)
 dema4 = 3 * (e41 - e42) + e43    //tema200
-myTema200 = plot(dema4 and acTema ? dema4 : na, 'Tema 200', color=color.new(#be660b, 100), linewidth=4)
+myTema200 = plot(dema4 and acTema ? dema4 : na, 'Tema 200', color=color.new(#be660b, 0), linewidth=4)
 
 
 acT100T200BoyamaRenk = acT100T200Boyama ? 70 : 100
@@ -443,6 +448,30 @@ plot(TSL and acTSL ? TSL : na, linewidth=3, color=color.new(color.yellow, 0), ti
 
 
 //plot(myPlotRsi == myPlotT3  , color = color.white ,  linewidth=3 )
+
+//GannHL
+//HPeriod = input(13, 'GannHL High Peryodu')
+//LPeriod = input(21, 'GannHL Low Peryodu')
+//iff_1 = close < nz(ta.sma(low, LPeriod))[1] ? -1 : 0
+//HLd = close > nz(ta.sma(high, HPeriod))[1] ? 1 : iff_1
+//HLv = ta.valuewhen(HLd != 0, HLd, 0)
+//sma_1 = ta.sma(high, HPeriod)
+//sma_2 = ta.sma(low, LPeriod)
+//HiLo = HLv == -1 ? sma_1 : sma_2
+//HLcolor = HLv == -1 ? color.white : color.lime
+//plot(HiLo and acGannHL ? HiLo : na, linewidth=4, color=HLcolor)
+
+
+//
+//tillson tema50
+tillSart = tema20 > tema50 and T3 > tema50 and myRsi1S>52
+plot(tillSart and acTillT50 ? high * 1.003  : na, linewidth=4, color=color.lime, style =plot.style_circles)
+
+
+tillsonAsagiKesTema50 = ta.crossunder(T3, tema50)
+tillSart2 = tillsonAsagiKesTema50 //and myRsi1S>52
+plotshape(tillSart2 and acTillT50Sat ? tillSart2 : na   ,title ='Till/T50 SAT', text='', style=shape.triangledown, location=location.abovebar, color=color.new(color.yellow, 0), offset=0, size=size.normal)
+alertcondition(tillSart2, title="Till/T50 SAT", message='Till/T50 SAT {{ticker}}, FİYAT={{close}}')
 
 
 //BURADA BITTI
