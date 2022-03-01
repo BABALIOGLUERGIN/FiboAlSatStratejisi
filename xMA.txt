@@ -32,7 +32,7 @@ xMaKontrol(xMaTip, src, len)=>
         => 0.0 
         
 
-acxMaCizgisi = input(defval = true, title = 'xMA Çizgileri Gözüksün mü?', group="xMA Çizgileri")  
+acxMaCizgisi = input(defval = false, title = 'xMA Çizgileri Gözüksün mü?', group="xMA Çizgileri")  
 
 acxMa9Cizgisi = input(defval = true, title = 'xMA9 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 acxMa13Cizgisi = input(defval = false, title = 'xMA13 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
