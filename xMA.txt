@@ -2,8 +2,17 @@
 // © ozcanozbek
 
 //@version=5
-indicator(title ="xMA - V1.0.02", shorttitle ="xMA" ,overlay=true)
+indicator(title ="xMA - V1.0.03", shorttitle ="xMA" ,overlay=true)
 src = input(title='source', defval=close, group="Kaynak Çeşitleri")
+srcY = high
+srcD = low
+
+//rsi ema
+myClose1S = request.security(syminfo.tickerid, timeframe.period, src)
+myRsiD = input.int(14, title='RSI Değeri')
+myRsi1S = ta.rsi(myClose1S,myRsiD)
+myEmaD = input.int(12, title='Ema Değeri')
+myEma121S = ta.ema(myRsi1S, myEmaD)
 
 
 string xMaTip   = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA tipi", group="xMA Değerleri")
@@ -33,7 +42,7 @@ xMaKontrol(xMaTip, src, len)=>
 
 acxMaCizgisi = input(defval = true, title = 'xMA Çizgileri Gözüksün mü?', group="xMA Çizgileri")  
 
-acxMa9Cizgisi = input(defval = true, title = 'xMA9 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
+acxMa9Cizgisi = input(defval = false, title = 'xMA9 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 acxMa13Cizgisi = input(defval = false, title = 'xMA13 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 acxMa21Cizgisi = input(defval = true, title = 'xMA21 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 acxMa34Cizgisi = input(defval = false, title = 'xMA34 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
@@ -352,8 +361,6 @@ acFiboY1AKesmeler = input(defval = true, title = '-0.272 Fibo Çizgisine Aşağ�
 acFiboY1YKesmeler = input(defval = true, title = '-0.272 Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
 
 
-
-
 plotshape(kesAFiboA5 and acFiboA5AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboA5 and acFiboLines ? kesAFiboA5 : na ,title ='1.272 Fibo Aşağıya Kes', text='', style=fiboAStyle , location=fiboALocation, color=color.new(fiboAColor, 0), offset=0, size=fiboASize)
 plotshape(kesAFiboN1 and acFiboN1AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboN1 and acFiboLines ? kesAFiboN1 : na ,title ='1.000 Fibo Aşağıya Kes', text='', style=fiboAStyle , location=fiboALocation, color=color.new(fiboAColor, 0), offset=0, size=fiboASize)
 plotshape(kesAFiboN2 and acFiboN2AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboN2 and acFiboLines ? kesAFiboN2 : na ,title ='0.786 Fibo Aşağıya Kes', text='', style=fiboAStyle , location=fiboALocation, color=color.new(fiboAColor, 0), offset=0, size=fiboASize)
@@ -373,5 +380,28 @@ plotshape(kesYFiboN5 and acFiboN5YKesmeler and acFiboKesmeler and acFiboYKesmele
 plotshape(kesYFiboN6 and acFiboN6YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboN6 and acFiboLines ? kesYFiboN6 : na ,title ='0.236 Fibo Yukarıya Kes', text='', style=fiboYStyle , location=fiboYLocation, color=color.new(fiboYColor, 0), offset=0, size=fiboYSize)
 plotshape(kesYFiboN7 and acFiboN7YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboN7 and acFiboLines ? kesYFiboN7 : na ,title ='0.000 Fibo Yukarıya Kes', text='', style=fiboYStyle , location=fiboYLocation, color=color.new(fiboYColor, 0), offset=0, size=fiboYSize)
 plotshape(kesYFiboY1 and acFiboY1YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboY1 and acFiboLines ? kesYFiboY1 : na ,title ='-0.272 Fibo Yukarıya Kes', text='', style=fiboYStyle , location=fiboYLocation, color=color.new(fiboYColor, 0), offset=0, size=fiboYSize)
+
+
+// RSI/EMA
+
+acRsiEma = input(defval = true, title = 'Rsi/Ema Çizgisi Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaLW = input.int(defval = 4, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri', group="Rsi/Ema Çizgisi") 
+
+myKoyuRenkY = input.color(#00897B , "Alım Bölgesinde (zirvede) Yükselirken", group="Rsi/Ema Çizgisi") 
+myAcikRenkY = input.color(color.green, "Satım Bölgesinden (dipte) Yükselirken", group="Rsi/Ema Çizgisi") 
+
+myAcikRenkD = input.color(color.red , "Alım Bölgesinden (zirvede) Düşerken", group="Rsi/Ema Çizgisi") 
+myKoyuRenkD = input.color(#880E4F  , "Satım Bölgesinde (dipte) Düşerken", group="Rsi/Ema Çizgisi") 
+
+myRsiColorY = myRsi1S <= 60 ? myAcikRenkY : myKoyuRenkY     
+myRsiColorD = myRsi1S <= 40 ? myKoyuRenkD : myAcikRenkD   
+
+myRsiColorTek = myRsi1S >= myEma121S ? myRsiColorY : myRsiColorD
+
+//plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=color.new(myRsiColorTek, 0), title="RsiEma", linewidth=acRsiEmaLW)
+plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=myRsiColorTek, title="RsiEma", linewidth=acRsiEmaLW)
+
+
+
 
 //BURADA BİTTİ
