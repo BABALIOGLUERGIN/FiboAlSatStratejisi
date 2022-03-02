@@ -2,7 +2,7 @@
 // © ozcanozbek
 
 //@version=5
-indicator(title ="xMA - V1.0.04", shorttitle ="xMA" ,overlay=true)
+indicator(title ="xMA - V1.0.05", shorttitle ="xMA" ,overlay=true)
 src = input(title='source', defval=close, group="Kaynak Çeşitleri")
 srcY = high
 srcD = low
