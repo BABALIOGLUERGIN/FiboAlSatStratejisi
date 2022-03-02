@@ -52,42 +52,52 @@ acxMa100Cizgisi = input(defval = true, title = 'xMA100 Çizgisi Gözüksün mü?
 acxMa144Cizgisi = input(defval = false, title = 'xMA144 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 acxMa200Cizgisi = input(defval = true, title = 'xMA200 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 
+xMA_9_Color = color.new(color.lime, 0)
+xMA_13_Color = color.new(color.purple, 0)
+xMA_21_Color = color.new(color.white, 0)
+xMA_34_Color = color.new(color.maroon, 0)
+xMA_50_Color = color.new(color.yellow, 0)
+xMA_89_Color = color.new(color.teal, 0)
+xMA_100_Color = color.new(color.blue, 0)
+xMA_144_Color = color.new(color.gray, 0)
+xMA_200_Color = color.new(#be660b, 0)
+
 
 length0a = input(9, 'xMA 9', group="xMA Değerleri")
 xMA_9 = xMaKontrol(xMaTip, src, length0a) 
-plot(xMA_9 and acxMaCizgisi and acxMa9Cizgisi ? xMA_9 : na , color=color.new(color.lime, 0), linewidth=3, title='xMa9 Çizgisi')
+plot(xMA_9 and acxMaCizgisi and acxMa9Cizgisi ? xMA_9 : na , color=xMA_9_Color, linewidth=3, title='xMa9 Çizgisi')
 
 length1a = input(13, 'xMA 13', group="xMA Değerleri")
 xMA_13 = xMaKontrol(xMaTip, src, length1a) 
-plot(xMA_13 and acxMaCizgisi and acxMa13Cizgisi ? xMA_13 : na , color=color.new(color.purple, 0), linewidth=2, title='xMa13 Çizgisi')
+plot(xMA_13 and acxMaCizgisi and acxMa13Cizgisi ? xMA_13 : na , color=xMA_13_Color, linewidth=2, title='xMa13 Çizgisi')
 
 length2a = input(21, 'xMA 21', group="xMA Değerleri")
 xMA_21 = xMaKontrol(xMaTip, src, length2a) 
-plot(xMA_21 and acxMaCizgisi and acxMa21Cizgisi ? xMA_21 : na , color=color.new(color.white, 0), linewidth=3, title='xMa21 Çizgisi')
+plot(xMA_21 and acxMaCizgisi and acxMa21Cizgisi ? xMA_21 : na , color=xMA_21_Color , linewidth=3, title='xMa21 Çizgisi')
 
 length3a = input(34, 'xMA 34', group="xMA Değerleri")
 xMA_34 = xMaKontrol(xMaTip, src, length3a)
-plot(xMA_34 and acxMaCizgisi and acxMa34Cizgisi ? xMA_34 : na , color=color.new(color.maroon, 0), linewidth=3, title='xMa34 Çizgisi')
+plot(xMA_34 and acxMaCizgisi and acxMa34Cizgisi ? xMA_34 : na , color=xMA_34_Color, linewidth=3, title='xMa34 Çizgisi')
 
 length4a = input(50, 'xMA 50', group="xMA Değerleri")
 xMA_50 = xMaKontrol(xMaTip, src, length4a) 
-plot(xMA_50 and acxMaCizgisi and acxMa50Cizgisi ? xMA_50 : na , color=color.new(color.yellow, 0), linewidth=3, title='xMa50 Çizgisi')
+plot(xMA_50 and acxMaCizgisi and acxMa50Cizgisi ? xMA_50 : na , color=xMA_50_Color, linewidth=3, title='xMa50 Çizgisi')
 
 length5a = input(89, 'xMA 89', group="xMA Değerleri")
 xMA_89 = xMaKontrol(xMaTip, src, length5a) 
-plot(xMA_89 and acxMaCizgisi and acxMa89Cizgisi ? xMA_89 : na , color=color.new(color.teal, 0), linewidth=3, title='xMa89 Çizgisi')
+plot(xMA_89 and acxMaCizgisi and acxMa89Cizgisi ? xMA_89 : na , color=xMA_89_Color, linewidth=3, title='xMa89 Çizgisi')
 
 length6a = input(100, 'xMA 100', group="xMA Değerleri")
 xMA_100 = xMaKontrol(xMaTip, src, length6a) 
-plot(xMA_100 and acxMaCizgisi and acxMa100Cizgisi ? xMA_100 : na , color=color.new(color.blue, 0), linewidth=3, title='xMa100 Çizgisi')
+plot(xMA_100 and acxMaCizgisi and acxMa100Cizgisi ? xMA_100 : na , color=xMA_100_Color, linewidth=3, title='xMa100 Çizgisi')
 
 length7a = input(144, 'xMA 144', group="xMA Değerleri")
 xMA_144 = xMaKontrol(xMaTip, src, length7a) 
-plot(xMA_144 and acxMaCizgisi and acxMa144Cizgisi ? xMA_144 : na , color=color.new(color.gray, 0), linewidth=3, title='xMa144 Çizgisi')
+plot(xMA_144 and acxMaCizgisi and acxMa144Cizgisi ? xMA_144 : na , color=xMA_144_Color, linewidth=3, title='xMa144 Çizgisi')
 
 length8a = input(200, 'xMA 200', group="xMA Değerleri")
 xMA_200 = xMaKontrol(xMaTip, src, length8a) 
-plot(xMA_200 and acxMaCizgisi and acxMa200Cizgisi ? xMA_200 : na , color=color.new(#be660b, 0), linewidth=3, title='xMa200 Çizgisi')
+plot(xMA_200 and acxMaCizgisi and acxMa200Cizgisi ? xMA_200 : na , color=xMA_200_Color, linewidth=3, title='xMa200 Çizgisi')
 
 
 
@@ -158,26 +168,26 @@ acxMa200YKesmeler = input(defval = true, title = 'xMA200 Yukarı Kesme İşareti
 
 
 
-plotshape(kesAxMA_9 and acxMa9Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa9AKesmeler ? kesAxMA_9 : na , title = 'xMa9 Aşağı Kes', text='xMa9', style=xMaAStyle , location=xMaALocation, color=color.new(xMaAColor, 0), offset=0, size=xMaASize)
-plotshape(kesAxMA_13 and acxMa13Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa13AKesmeler ? kesAxMA_13 : na ,title ='xMa13 Aşağı Kes', text='xMa13', style=xMaAStyle , location=xMaALocation, color=color.new(xMaAColor, 0), offset=0, size=xMaASize)
-plotshape(kesAxMA_21 and acxMa21Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa21AKesmeler ? kesAxMA_21 : na ,title ='xMa21 Aşağı Kes', text='xMa21', style=xMaAStyle , location=xMaALocation, color=color.new(xMaAColor, 0), offset=0, size=xMaASize)
-plotshape(kesAxMA_34 and acxMa34Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa34AKesmeler ? kesAxMA_34 : na ,title ='xMa34 Aşağı Kes', text='xMa34', style=xMaAStyle , location=xMaALocation, color=color.new(xMaAColor, 0), offset=0, size=xMaASize)
-plotshape(kesAxMA_50 and acxMa50Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa50AKesmeler ? kesAxMA_50 : na ,title ='xMa50 Aşağı Kes', text='xMa50', style=xMaAStyle , location=xMaALocation, color=color.new(xMaAColor, 0), offset=0, size=xMaASize)
-plotshape(kesAxMA_89 and acxMa89Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa89AKesmeler ? kesAxMA_89 : na ,title ='xMa89 Aşağı Kes', text='xMa89', style=xMaAStyle , location=xMaALocation, color=color.new(xMaAColor, 0), offset=0, size=xMaASize)
-plotshape(kesAxMA_100 and acxMa100Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa100AKesmeler ? kesAxMA_100 : na ,title ='xMa100 Aşağı Kes', text='xMa100', style=xMaAStyle , location=xMaALocation, color=color.new(xMaAColor, 0), offset=0, size=xMaASize)
-plotshape(kesAxMA_144 and acxMa144Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa144AKesmeler ? kesAxMA_144 : na ,title ='xMa144 Aşağı Kes', text='xMa144', style=xMaAStyle , location=xMaALocation, color=color.new(xMaAColor, 0), offset=0, size=xMaASize)
-plotshape(kesAxMA_200 and acxMa200Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa200AKesmeler ? kesAxMA_200 : na ,title ='xMa200 Aşağı Kes', text='xMa200', style=xMaAStyle , location=xMaALocation, color=color.new(xMaAColor, 0), offset=0, size=xMaASize)
+plotshape(kesAxMA_9 and acxMa9Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa9AKesmeler ? kesAxMA_9 : na , title = 'xMa9 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_9_Color, offset=0, size=xMaASize)
+plotshape(kesAxMA_13 and acxMa13Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa13AKesmeler ? kesAxMA_13 : na ,title ='xMa13 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_13_Color, offset=0, size=xMaASize)
+plotshape(kesAxMA_21 and acxMa21Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa21AKesmeler ? kesAxMA_21 : na ,title ='xMa21 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_21_Color, offset=0, size=xMaASize)
+plotshape(kesAxMA_34 and acxMa34Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa34AKesmeler ? kesAxMA_34 : na ,title ='xMa34 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_34_Color, offset=0, size=xMaASize)
+plotshape(kesAxMA_50 and acxMa50Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa50AKesmeler ? kesAxMA_50 : na ,title ='xMa50 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_50_Color, offset=0, size=xMaASize)
+plotshape(kesAxMA_89 and acxMa89Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa89AKesmeler ? kesAxMA_89 : na ,title ='xMa89 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_89_Color, offset=0, size=xMaASize)
+plotshape(kesAxMA_100 and acxMa100Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa100AKesmeler ? kesAxMA_100 : na ,title ='xMa100 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_100_Color, offset=0, size=xMaASize)
+plotshape(kesAxMA_144 and acxMa144Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa144AKesmeler ? kesAxMA_144 : na ,title ='xMa144 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_144_Color, offset=0, size=xMaASize)
+plotshape(kesAxMA_200 and acxMa200Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa200AKesmeler ? kesAxMA_200 : na ,title ='xMa200 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_200_Color, offset=0, size=xMaASize)
 
 
-plotshape(kesYxMA_9 and acxMa9Cizgisi  and acxMaKesmeler and acxMaYKesmeler and acxMa9YKesmeler ? kesYxMA_9 : na ,title ='xMa9 Yukarı Kes', text='xMa9', style=xMaYStyle , location=xMaYLocation, color=color.new(xMaYColor, 0), offset=0, size=xMaYSize)
-plotshape(kesYxMA_13 and acxMa13Cizgisi and acxMaKesmeler and acxMaYKesmeler and acxMa13YKesmeler ? kesYxMA_13 : na ,title ='xMa13 Yukarı Kes', text='xMa13', style=xMaYStyle , location=xMaYLocation, color=color.new(xMaYColor, 0), offset=0, size=xMaYSize)
-plotshape(kesYxMA_21 and acxMa21Cizgisi and acxMaKesmeler and acxMaYKesmeler and acxMa21YKesmeler ? kesYxMA_21 : na ,title ='xMa21 Yukarı Kes', text='xMa21', style=xMaYStyle , location=xMaYLocation, color=color.new(xMaYColor, 0), offset=0, size=xMaYSize)
-plotshape(kesYxMA_34 and acxMa34Cizgisi and acxMaKesmeler and acxMaYKesmeler and acxMa34YKesmeler ? kesYxMA_34 : na ,title ='xMa34 Yukarı Kes', text='xMa34', style=xMaYStyle , location=xMaYLocation, color=color.new(xMaYColor, 0), offset=0, size=xMaYSize)
-plotshape(kesYxMA_50 and acxMa50Cizgisi  and acxMaKesmeler and acxMaYKesmeler and acxMa50YKesmeler ? kesYxMA_50 : na ,title ='xMa50 Yukarı Kes', text='xMa50', style=xMaYStyle , location=xMaYLocation, color=color.new(xMaYColor, 0), offset=0, size=xMaYSize)
-plotshape(kesYxMA_89 and acxMa89Cizgisi  and acxMaKesmeler and acxMaYKesmeler and acxMa89YKesmeler ? kesYxMA_89 : na ,title ='xMa89 Yukarı Kes', text='xMa89', style=xMaYStyle , location=xMaYLocation, color=color.new(xMaYColor, 0), offset=0, size=xMaYSize)
-plotshape(kesYxMA_100 and acxMa100Cizgisi  and acxMaKesmeler and acxMaYKesmeler and acxMa100YKesmeler ? kesYxMA_100 : na ,title ='xMa100 Yukarı Kes', text='xMa100', style=xMaYStyle , location=xMaYLocation, color=color.new(xMaYColor, 0), offset=0, size=xMaYSize)
-plotshape(kesYxMA_144 and acxMa144Cizgisi and acxMaKesmeler and acxMaYKesmeler and acxMa144YKesmeler ? kesYxMA_144  : na ,title ='xMa144 Yukarı Kes', text='xMa144', style=xMaYStyle , location=xMaYLocation, color=color.new(xMaYColor, 0), offset=0, size=xMaYSize)
-plotshape(kesYxMA_200 and acxMa200Cizgisi and acxMaKesmeler and acxMaYKesmeler and acxMa200YKesmeler ? kesYxMA_200 : na ,title ='xMa200 Yukarı Kes', text='xMa200', style=xMaYStyle , location=xMaYLocation, color=color.new(xMaYColor, 0), offset=0, size=xMaYSize)
+plotshape(kesYxMA_9 and acxMa9Cizgisi  and acxMaKesmeler and acxMaYKesmeler and acxMa9YKesmeler ? kesYxMA_9 : na ,title ='xMa9 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_9_Color, offset=0, size=xMaYSize)
+plotshape(kesYxMA_13 and acxMa13Cizgisi and acxMaKesmeler and acxMaYKesmeler and acxMa13YKesmeler ? kesYxMA_13 : na ,title ='xMa13 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_13_Color, offset=0, size=xMaYSize)
+plotshape(kesYxMA_21 and acxMa21Cizgisi and acxMaKesmeler and acxMaYKesmeler and acxMa21YKesmeler ? kesYxMA_21 : na ,title ='xMa21 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_21_Color, offset=0, size=xMaYSize)
+plotshape(kesYxMA_34 and acxMa34Cizgisi and acxMaKesmeler and acxMaYKesmeler and acxMa34YKesmeler ? kesYxMA_34 : na ,title ='xMa34 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_34_Color, offset=0, size=xMaYSize)
+plotshape(kesYxMA_50 and acxMa50Cizgisi  and acxMaKesmeler and acxMaYKesmeler and acxMa50YKesmeler ? kesYxMA_50 : na ,title ='xMa50 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_50_Color, offset=0, size=xMaYSize)
+plotshape(kesYxMA_89 and acxMa89Cizgisi  and acxMaKesmeler and acxMaYKesmeler and acxMa89YKesmeler ? kesYxMA_89 : na ,title ='xMa89 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_89_Color, offset=0, size=xMaYSize)
+plotshape(kesYxMA_100 and acxMa100Cizgisi  and acxMaKesmeler and acxMaYKesmeler and acxMa100YKesmeler ? kesYxMA_100 : na ,title ='xMa100 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_100_Color, offset=0, size=xMaYSize)
+plotshape(kesYxMA_144 and acxMa144Cizgisi and acxMaKesmeler and acxMaYKesmeler and acxMa144YKesmeler ? kesYxMA_144  : na ,title ='xMa144 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_144_Color, offset=0, size=xMaYSize)
+plotshape(kesYxMA_200 and acxMa200Cizgisi and acxMaKesmeler and acxMaYKesmeler and acxMa200YKesmeler ? kesYxMA_200 : na ,title ='xMa200 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_200_Color, offset=0, size=xMaYSize)
 
 
 
