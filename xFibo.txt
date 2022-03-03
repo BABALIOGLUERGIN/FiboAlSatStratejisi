@@ -1,0 +1,332 @@
+//@version=5
+indicator(title ="xFibo - V1.0.01", shorttitle ="xFibo" ,overlay=true)
+src = input(title='source', defval=close, group="Kaynak Çeşitleri")
+
+//Fiblines
+acFiboLines = input(defval = true, title = 'Fib Yatay Çizgileri Gözüksün mü?', group="Fibo Çizgileri")   
+
+acFiboA1 = input(defval = true, title = '2.272 Fibo Yatay Çizgisi Gözüksün mü?', group="Fibo Çizgileri")   //line2272 
+acFiboA2 = input(defval = true, title = '2.000 Fibo Yatay Çizgisi Gözüksün mü?', group="Fibo Çizgileri")   //line2000
+acFiboA3 = input(defval = true, title = '1.618 Fibo Yatay Çizgisi Gözüksün mü?', group="Fibo Çizgileri")   //line1618
+acFiboA4 = input(defval = true, title = '1.414 Fibo Yatay Çizgisi Gözüksün mü?', group="Fibo Çizgileri")   //line1414
+acFiboA5 = input(defval = true, title = '1.272 Fibo Yatay Çizgisi Gözüksün mü?', group="Fibo Çizgileri")   //line1272
+
+acFiboN1 = input(defval = true, title = '1.000 Fibo Yatay Çizgisi Gözüksün mü?', group="Fibo Çizgileri")   //line1000
+acFiboN2 = input(defval = true, title = '0.786 Fibo Yatay Çizgisi Gözüksün mü?', group="Fibo Çizgileri")   //line0786
+acFiboN3 = input(defval = true, title = '0.618 Fibo Yatay Çizgisi Gözüksün mü?', group="Fibo Çizgileri")   //line0618
+acFiboN4 = input(defval = true, title = '0.500 Fibo Yatay Çizgisi Gözüksün mü?', group="Fibo Çizgileri")   //line0500
+acFiboN5 = input(defval = true, title = '0.382 Fibo Yatay Çizgisi Gözüksün mü?', group="Fibo Çizgileri")   //line0382
+acFiboN6 = input(defval = true, title = '0.236 Fibo Yatay Çizgisi Gözüksün mü?', group="Fibo Çizgileri")   //line0236
+acFiboN7 = input(defval = true, title = '0.000 Fibo Yatay Çizgisi Gözüksün mü?', group="Fibo Çizgileri")   //line0000
+
+acFiboY1 = input(defval = true, title = '-0.272 Fibo Yatay Çizgisi Gözüksün mü?', group="Fibo Çizgileri")   //line1272_2
+acFiboY2 = input(defval = true, title = '-0.414 Fibo Yatay Çizgisi Gözüksün mü?', group="Fibo Çizgileri")   //line1414_2
+acFiboY3 = input(defval = true, title = '-0.618 Fibo Yatay Çizgisi Gözüksün mü?', group="Fibo Çizgileri")   //line1618_2
+acFiboY4 = input(defval = true, title = '-1.000 Fibo Yatay Çizgisi Gözüksün mü?', group="Fibo Çizgileri")   //line2000_2
+acFiboY5 = input(defval = true, title = '-1.272 Fibo Yatay Çizgisi Gözüksün mü?', group="Fibo Çizgileri")   //line2272_2
+
+
+fiboLen = input.int(150, "Fibo Çizgileri Peryodu", step=1, group="Fibo Çizgileri")
+
+fractal_top = 0.0
+fractal_top := high < high[2] and high[1] < high[2] and high[3] < high[2] and high[4] < high[2] ? high[2] : fractal_top[1]
+fractal_bottom = 0.0
+fractal_bottom := low > low[2] and low[1] > low[2] and low[3] > low[2] and low[4] > low[2] ? low[2] : fractal_bottom[1]
+
+srcHigh = ta.highest(fractal_top, fiboLen)
+srcLow = ta.lowest(fractal_bottom, fiboLen)
+diff = srcHigh - srcLow
+line0000 = srcLow
+line0236 = srcLow + diff * 0.236
+line0382 = srcLow + diff * 0.382
+line0500 = srcLow + diff * 0.500
+line0618 = srcLow + diff * 0.618
+line0786 = srcLow + diff * 0.786
+line1000 = srcHigh
+line1272 = srcLow + diff * 1.272
+line1414 = srcLow + diff * 1.414
+line1618 = srcLow + diff * 1.618
+line2000 = srcLow + diff * 2.000
+line2272 = srcLow + diff * 2.272
+line1272_2 = srcHigh - diff * 1.272
+line1414_2 = srcHigh - diff * 1.414
+line1618_2 = srcHigh - diff * 1.618
+line2000_2 = srcHigh - diff * 2.000
+line2272_2 = srcHigh - diff * 2.272
+
+
+
+fiboUstKademeRenk = input.color(color.green, "Fibo Üst Kademe Renk", group="Fibo Kademe Renkler")
+fiboOrtaKademeRenk = input.color(#2E9AFE, "Fibo Orta Kademe Renk", group="Fibo Kademe Renkler")
+fiboAltKademeRenk = input.color(color.red, "Fibo Alt Kademe Renk", group="Fibo Kademe Renkler")
+
+pilotStyle = plot.style_cross
+
+pilotLine2272 = line2272 and acFiboA1 and acFiboLines ? line2272 : na
+pilotLine2000 = line2000 and acFiboA2 and acFiboLines ? line2000 : na
+pilotLine1618 = line1618 and acFiboA3 and acFiboLines ? line1618 : na
+pilotLine1414 = line1414 and acFiboA4 and acFiboLines ? line1414 : na
+pilotLine1272 = line1272 and acFiboA5 and acFiboLines ? line1272 : na
+pilotLine1000 = line1000 and acFiboN1 and acFiboLines ? line1000 : na
+pilotLine0786 = line0786 and acFiboN2 and acFiboLines ? line0786 : na
+pilotLine0618 = line0618 and acFiboN3 and acFiboLines ? line0618 : na
+pilotLine0500 = line0500 and acFiboN4 and acFiboLines ? line0500 : na
+pilotLine0382 = line0382 and acFiboN5 and acFiboLines ? line0382 : na
+pilotLine0236 = line0236 and acFiboN6 and acFiboLines ? line0236 : na
+pilotLine0000 = line0000 and acFiboN7 and acFiboLines ? line0000 : na
+pilotLine1272_2 = line1272_2 and acFiboY1 and acFiboLines ? line1272_2 : na
+pilotLine1414_2 = line1414_2 and acFiboY2 and acFiboLines ? line1414_2 : na
+pilotLine1618_2 = line1618_2 and acFiboY3 and acFiboLines ? line1618_2 : na
+pilotLine2000_2 = line2000_2 and acFiboY4 and acFiboLines ? line2000_2 : na
+pilotLine2272_2 = line2272_2 and acFiboY5 and acFiboLines ? line2272_2 : na
+
+
+plot(pilotLine2272, title='2.272 Fibo Çizgisi', color=fiboUstKademeRenk, style=pilotStyle, trackprice=true, offset=-9999, linewidth=1)
+plot(pilotLine2000, title='2.000 Fibo Çizgisi', color=fiboUstKademeRenk, style=pilotStyle, trackprice=true, offset=-9999, linewidth=1)
+plot(pilotLine1618, title='1.618 Fibo Çizgisi', color=fiboUstKademeRenk, style=pilotStyle, trackprice=true, offset=-9999, linewidth=1)
+plot(pilotLine1414, title='1.414 Fibo Çizgisi', color=fiboUstKademeRenk, style=pilotStyle, trackprice=true, offset=-9999, linewidth=1)
+plot(pilotLine1272, title='1.272 Fibo Çizgisi', color=fiboUstKademeRenk, style=pilotStyle, trackprice=true, offset=-9999, linewidth=1)
+plot(pilotLine1000, title='1.000 Fibo Çizgisi', color=fiboOrtaKademeRenk, style=pilotStyle, trackprice=true, offset=-9999, linewidth=1)
+plot(pilotLine0786, title='0.786 Fibo Çizgisi', color=fiboOrtaKademeRenk, style=pilotStyle, trackprice=true, offset=-9999, linewidth=1)
+plot(pilotLine0618, title='0.618 Fibo Çizgisi', color=fiboOrtaKademeRenk, style=pilotStyle, trackprice=true, offset=-9999, linewidth=1)
+plot(pilotLine0500, title='0.500 Fibo Çizgisi', color=fiboOrtaKademeRenk, style=pilotStyle, trackprice=true, offset=-9999, linewidth=1)
+plot(pilotLine0382, title='0.382 Fibo Çizgisi', color=fiboOrtaKademeRenk, style=pilotStyle, trackprice=true, offset=-9999, linewidth=1)
+plot(pilotLine0236, title='0.236 Fibo Çizgisi', color=fiboOrtaKademeRenk, style=pilotStyle, trackprice=true, offset=-9999, linewidth=1)
+plot(pilotLine0000, title='0.000 Fibo Çizgisi', color=fiboOrtaKademeRenk, style=pilotStyle, trackprice=true, offset=-9999, linewidth=1)
+plot(pilotLine1272_2, title='-0.272 Fibo Çizgisi', color=fiboAltKademeRenk, style=pilotStyle, trackprice=true, offset=-9999, linewidth=1)
+plot(pilotLine1414_2, title='-0.414 Fibo Çizgisi', color=fiboAltKademeRenk, style=pilotStyle, trackprice=true, offset=-9999, linewidth=1)
+plot(pilotLine1618_2, title='-0.618 Fibo Çizgisi', color=fiboAltKademeRenk, style=pilotStyle, trackprice=true, offset=-9999, linewidth=1)
+plot(pilotLine2000_2, title='-1.000 Fibo Çizgisi', color=fiboAltKademeRenk, style=pilotStyle, trackprice=true, offset=-9999, linewidth=1)
+plot(pilotLine2272_2, title='-1.272 Fibo Çizgisi', color=fiboAltKademeRenk, style=pilotStyle, trackprice=true, offset=-9999, linewidth=1)
+
+
+fiboA1 = line2272 
+fiboA2 = line2000
+fiboA3 = line1618
+fiboA4 = line1414
+fiboA5 = line1272
+
+fiboN1 = line1000
+fiboN2 = line0786
+fiboN3 = line0618
+fiboN4 = line0500
+fiboN5 = line0382
+fiboN6 = line0236
+fiboN7 = line0000
+
+fiboY1 = line1272_2
+fiboY2 = line1414_2
+fiboY3 = line1618_2
+fiboY4 = line2000_2
+fiboY5 = line2272_2
+
+
+kesAFiboA1 = ta.cross(fiboA1, src) 
+kesAFiboA2 = ta.cross(fiboA2, src) 
+kesAFiboA3 = ta.cross(fiboA3, src) 
+kesAFiboA4 = ta.cross(fiboA4, src) 
+kesAFiboA5 = ta.cross(fiboA5, src) 
+
+kesAFiboN1 = ta.cross(fiboN1, src) 
+kesAFiboN2 = ta.cross(fiboN2, src) 
+kesAFiboN3 = ta.cross(fiboN3, src) 
+kesAFiboN4 = ta.cross(fiboN4, src) 
+kesAFiboN5 = ta.cross(fiboN5, src) 
+kesAFiboN6 = ta.cross(fiboN6, src) 
+kesAFiboN7 = ta.cross(fiboN7, src) 
+
+kesAFiboY1 = ta.cross(fiboY1, src) 
+kesAFiboY2 = ta.cross(fiboY2, src) 
+kesAFiboY3 = ta.cross(fiboY3, src) 
+kesAFiboY4 = ta.cross(fiboY4, src) 
+kesAFiboY5 = ta.cross(fiboY5, src) 
+
+
+
+//kesAFiboA1 = ta.crossunder(src , fiboA1) 
+//kesAFiboA2 = ta.crossunder(src , fiboA2) 
+//kesAFiboA3 = ta.crossunder(src , fiboA3) 
+//kesAFiboA4 = ta.crossunder(src , fiboA4) 
+//kesAFiboA5 = ta.crossunder(src , fiboA5) 
+
+//kesAFiboN1 = ta.crossunder(src , fiboN1) 
+//kesAFiboN2 = ta.crossunder(src , fiboN2) 
+//kesAFiboN3 = ta.crossunder(src , fiboN3) 
+//kesAFiboN4 = ta.crossunder(src , fiboN4) 
+//kesAFiboN5 = ta.crossunder(src , fiboN5) 
+//kesAFiboN6 = ta.crossunder(src , fiboN6) 
+//kesAFiboN7 = ta.crossunder(src , fiboN7) 
+
+//kesAFiboY1 = ta.crossunder(src , fiboY1) 
+//kesAFiboY2 = ta.crossunder(src , fiboY2) 
+//kesAFiboY3 = ta.crossunder(src , fiboY3) 
+//kesAFiboY4 = ta.crossunder(src , fiboY4) 
+//kesAFiboY5 = ta.crossunder(src , fiboY5) 
+
+
+//kesYFiboA1 = ta.crossover(src , fiboA1) 
+//kesYFiboA2 = ta.crossover(src , fiboA2) 
+//kesYFiboA3 = ta.crossover(src , fiboA3) 
+//kesYFiboA4 = ta.crossover(src , fiboA4) 
+//kesYFiboA5 = ta.crossover(src , fiboA5) 
+
+//kesYFiboN1 = ta.crossover(src , fiboN1) 
+//kesYFiboN2 = ta.crossover(src , fiboN2) 
+//kesYFiboN3 = ta.crossover(src , fiboN3) 
+//kesYFiboN4 = ta.crossover(src , fiboN4) 
+//kesYFiboN5 = ta.crossover(src , fiboN5) 
+//kesYFiboN6 = ta.crossover(src , fiboN6) 
+//kesYFiboN7 = ta.crossover(src , fiboN7) 
+
+//kesYFiboY1 = ta.crossover(src , fiboY1) 
+//kesYFiboY2 = ta.crossover(src , fiboY2) 
+//kesYFiboY3 = ta.crossover(src , fiboY3) 
+//kesYFiboY4 = ta.crossover(src , fiboY4) 
+//kesYFiboY5 = ta.crossover(src , fiboY5) 
+
+
+fiboKademeRenk = color.lime
+
+fiboAStyle = shape.xcross
+fiboASize = size.tiny
+fiboAColor = color.lime
+fiboALocation = location.belowbar
+
+fiboYStyle = shape.circle
+fiboYSize = size.small
+fiboYColor = color.lime
+fiboYLocation = location.abovebar
+
+
+acFiboKesmeler = input(defval = false, title = 'Fibo Çizgilerine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+acFiboAKesmeler = input(defval = true, title = 'Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+//acFiboYKesmeler = input(defval = true, title = 'Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+
+
+
+acFiboA1AKesmeler = input(defval = true, title = '2.272 Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+//acFiboA1YKesmeler = input(defval = true, title = '2.272 Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+
+acFiboA2AKesmeler = input(defval = true, title = '2.000 Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+//acFiboA2YKesmeler = input(defval = true, title = '2.000 Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+
+acFiboA3AKesmeler = input(defval = true, title = '1.618 Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+//acFiboA3YKesmeler = input(defval = true, title = '1.618 Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+
+acFiboA4AKesmeler = input(defval = true, title = '1.414 Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+//acFiboA4YKesmeler = input(defval = true, title = '1.414 Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+
+acFiboA5AKesmeler = input(defval = true, title = '1.272 Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+//acFiboA5YKesmeler = input(defval = true, title = '1.272 Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+
+acFiboN1AKesmeler = input(defval = true, title = '1.000 Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+//acFiboN1YKesmeler = input(defval = true, title = '1.000 Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+
+acFiboN2AKesmeler = input(defval = true, title = '0.786 Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+//acFiboN2YKesmeler = input(defval = true, title = '0.786 Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+
+acFiboN3AKesmeler = input(defval = true, title = '0.618 Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+//acFiboN3YKesmeler = input(defval = true, title = '0.618 Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+
+acFiboN4AKesmeler = input(defval = true, title = '0.500 Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+//acFiboN4YKesmeler = input(defval = true, title = '0.500 Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+
+acFiboN5AKesmeler = input(defval = true, title = '0.382 Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+//acFiboN5YKesmeler = input(defval = true, title = '0.382 Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+
+acFiboN6AKesmeler = input(defval = true, title = '0.236 Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+//acFiboN6YKesmeler = input(defval = true, title = '0.236 Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+
+acFiboN7AKesmeler = input(defval = true, title = '0.000 Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+//acFiboN7YKesmeler = input(defval = true, title = '0.000 Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+
+acFiboY1AKesmeler = input(defval = true, title = '-0.272 Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+//acFiboY1YKesmeler = input(defval = true, title = '-0.272 Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+
+acFiboY2AKesmeler = input(defval = true, title = '-0.414 Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+//acFiboY2YKesmeler = input(defval = true, title = '-0.414 Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+
+acFiboY3AKesmeler = input(defval = true, title = '-0.618 Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+//acFiboY3YKesmeler = input(defval = true, title = '-0.618 Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+
+acFiboY4AKesmeler = input(defval = true, title = '-1.000 Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+//acFiboY4YKesmeler = input(defval = true, title = '-1.000 Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+
+acFiboY5AKesmeler = input(defval = true, title = '-1.272 Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+//acFiboY5YKesmeler = input(defval = true, title = '-1.272 Fibo Çizgisine Yukarı Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
+
+isaretKesAFiboA1 = kesAFiboA1 and acFiboA1AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboA1 and acFiboLines ? kesAFiboA1 : na
+isaretKesAFiboA2 = kesAFiboA2 and acFiboA2AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboA2 and acFiboLines ? kesAFiboA2 : na
+isaretKesAFiboA3 = kesAFiboA3 and acFiboA3AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboA3 and acFiboLines ? kesAFiboA3 : na
+isaretKesAFiboA4 = kesAFiboA4 and acFiboA4AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboA4 and acFiboLines ? kesAFiboA4 : na
+isaretKesAFiboA5 = kesAFiboA5 and acFiboA5AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboA5 and acFiboLines ? kesAFiboA5 : na
+isaretKesAFiboN1 = kesAFiboN1 and acFiboN1AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboN1 and acFiboLines ? kesAFiboN1 : na
+isaretKesAFiboN2 = kesAFiboN2 and acFiboN2AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboN2 and acFiboLines ? kesAFiboN2 : na
+isaretKesAFiboN3 = kesAFiboN3 and acFiboN3AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboN3 and acFiboLines ? kesAFiboN3 : na
+isaretKesAFiboN4 = kesAFiboN4 and acFiboN4AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboN4 and acFiboLines ? kesAFiboN4 : na
+isaretKesAFiboN5 = kesAFiboN5 and acFiboN5AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboN5 and acFiboLines ? kesAFiboN5 : na
+isaretKesAFiboN6 = kesAFiboN6 and acFiboN6AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboN6 and acFiboLines ? kesAFiboN6 : na
+isaretKesAFiboN7 = kesAFiboN7 and acFiboN7AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboN7 and acFiboLines ? kesAFiboN7 : na
+isaretKesAFiboY1 = kesAFiboY1 and acFiboY1AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboY1 and acFiboLines ? kesAFiboY1 : na
+isaretKesAFiboY2 = kesAFiboY2 and acFiboY2AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboY2 and acFiboLines ? kesAFiboY2 : na
+isaretKesAFiboY3 = kesAFiboY3 and acFiboY3AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboY3 and acFiboLines ? kesAFiboY3 : na
+isaretKesAFiboY4 = kesAFiboY4 and acFiboY4AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboY4 and acFiboLines ? kesAFiboY4 : na
+isaretKesAFiboY5 = kesAFiboY5 and acFiboY5AKesmeler and acFiboKesmeler and acFiboAKesmeler and acFiboY5 and acFiboLines ? kesAFiboY5 : na
+
+//isaretKesYFiboA1 = kesYFiboA1 and acFiboA1YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboA1 and acFiboLines ? kesYFiboA1 : na
+//isaretKesYFiboA2 = kesYFiboA2 and acFiboA2YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboA2 and acFiboLines ? kesYFiboA2 : na
+//isaretKesYFiboA3 = kesYFiboA3 and acFiboA3YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboA3 and acFiboLines ? kesYFiboA3 : na
+//isaretKesYFiboA4 = kesYFiboA4 and acFiboA4YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboA4 and acFiboLines ? kesYFiboA4 : na
+//isaretKesYFiboA5 = kesYFiboA5 and acFiboA5YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboA5 and acFiboLines ? kesYFiboA5 : na
+//isaretKesYFiboN1 = kesYFiboN1 and acFiboN1YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboN1 and acFiboLines ? kesYFiboN1 : na
+//isaretKesYFiboN2 = kesYFiboN2 and acFiboN2YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboN2 and acFiboLines ? kesYFiboN2 : na
+//isaretKesYFiboN3 = kesYFiboN3 and acFiboN3YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboN3 and acFiboLines ? kesYFiboN3 : na
+//isaretKesYFiboN4 = kesYFiboN4 and acFiboN4YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboN4 and acFiboLines ? kesYFiboN4 : na
+//isaretKesYFiboN5 = kesYFiboN5 and acFiboN5YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboN5 and acFiboLines ? kesYFiboN5 : na
+//isaretKesYFiboN6 = kesYFiboN6 and acFiboN6YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboN6 and acFiboLines ? kesYFiboN6 : na
+//isaretKesYFiboN7 = kesYFiboN7 and acFiboN7YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboN7 and acFiboLines ? kesYFiboN7 : na
+//isaretKesYFiboY1 = kesYFiboY1 and acFiboY1YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboY1 and acFiboLines ? kesYFiboY1 : na
+//isaretKesYFiboY2 = kesYFiboY2 and acFiboY2YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboY2 and acFiboLines ? kesYFiboY2 : na
+//isaretKesYFiboY3 = kesYFiboY3 and acFiboY3YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboY3 and acFiboLines ? kesYFiboY3 : na
+//isaretKesYFiboY4 = kesYFiboY4 and acFiboY4YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboY4 and acFiboLines ? kesYFiboY4 : na
+//isaretKesYFiboY5 = kesYFiboY5 and acFiboY5YKesmeler and acFiboKesmeler and acFiboYKesmeler and acFiboY5 and acFiboLines ? kesYFiboY5 : na
+
+
+
+plotshape(isaretKesAFiboA1, textcolor = fiboKademeRenk , text = '2.272',  title ='2.272 Fibo Kes', style=fiboAStyle , location=fiboALocation, color=fiboAColor, offset=0, size=fiboASize)
+plotshape(isaretKesAFiboA2, textcolor = fiboKademeRenk , text = '2.000',  title ='2.000 Fibo Kes', style=fiboAStyle , location=fiboALocation, color=fiboAColor, offset=0, size=fiboASize)
+plotshape(isaretKesAFiboA3, textcolor = fiboKademeRenk , text = '1.618',  title ='1.618 Fibo Kes', style=fiboAStyle , location=fiboALocation, color=fiboAColor, offset=0, size=fiboASize)
+plotshape(isaretKesAFiboA4, textcolor = fiboKademeRenk , text = '1.414',  title ='1.414 Fibo Kes', style=fiboAStyle , location=fiboALocation, color=fiboAColor, offset=0, size=fiboASize)
+plotshape(isaretKesAFiboA5, textcolor = fiboKademeRenk , text = '1.272',  title ='1.272 Fibo Kes', style=fiboAStyle , location=fiboALocation, color=fiboAColor, offset=0, size=fiboASize)
+plotshape(isaretKesAFiboN1, textcolor = fiboKademeRenk , text = '1.000',  title ='1.000 Fibo Kes', style=fiboAStyle , location=fiboALocation, color=fiboAColor, offset=0, size=fiboASize)
+plotshape(isaretKesAFiboN2, textcolor = fiboKademeRenk , text = '0.786',  title ='0.786 Fibo Kes', style=fiboAStyle , location=fiboALocation, color=fiboAColor, offset=0, size=fiboASize)
+plotshape(isaretKesAFiboN3, textcolor = fiboKademeRenk , text = '0.618',  title ='0.618 Fibo Kes', style=fiboAStyle , location=fiboALocation, color=fiboAColor, offset=0, size=fiboASize)
+plotshape(isaretKesAFiboN4, textcolor = fiboKademeRenk , text = '0.500',  title ='0.500 Fibo Kes', style=fiboAStyle , location=fiboALocation, color=fiboAColor, offset=0, size=fiboASize)
+plotshape(isaretKesAFiboN5, textcolor = fiboKademeRenk , text = '0.382',  title ='0.382 Fibo Kes', style=fiboAStyle , location=fiboALocation, color=fiboAColor, offset=0, size=fiboASize)
+plotshape(isaretKesAFiboN6, textcolor = fiboKademeRenk , text = '0.236',  title ='0.236 Fibo Kes', style=fiboAStyle , location=fiboALocation, color=fiboAColor, offset=0, size=fiboASize)
+plotshape(isaretKesAFiboN7, textcolor = fiboKademeRenk , text = '0.000',  title ='0.000 Fibo Kes', style=fiboAStyle , location=fiboALocation, color=fiboAColor, offset=0, size=fiboASize)
+plotshape(isaretKesAFiboY1, textcolor = fiboKademeRenk , text = '--0.272',  title ='-0.272 Fibo Kes', style=fiboAStyle , location=fiboALocation, color=fiboAColor, offset=0, size=fiboASize)
+plotshape(isaretKesAFiboY2, textcolor = fiboKademeRenk , text = '--0.414',  title ='-0.414 Fibo Kes', style=fiboAStyle , location=fiboALocation, color=fiboAColor, offset=0, size=fiboASize)
+plotshape(isaretKesAFiboY3, textcolor = fiboKademeRenk , text = '--0.618',  title ='-0.618 Fibo Kes', style=fiboAStyle , location=fiboALocation, color=fiboAColor, offset=0, size=fiboASize)
+plotshape(isaretKesAFiboY4, textcolor = fiboKademeRenk , text = '--1.000',  title ='-1.000 Fibo Kes', style=fiboAStyle , location=fiboALocation, color=fiboAColor, offset=0, size=fiboASize)
+plotshape(isaretKesAFiboY5, textcolor = fiboKademeRenk , text = '--2.272',  title ='-2.272 Fibo Kes', style=fiboAStyle , location=fiboALocation, color=fiboAColor, offset=0, size=fiboASize)
+
+//plotshape(isaretKesYFiboA1, textcolor = fiboUstKademeRenk , text = '+12',  title ='2.272 Fibo Yukarıya Kes', style=fiboYStyle , location=fiboYLocation, color=fiboYColor, offset=0, size=fiboYSize)
+//plotshape(isaretKesYFiboA2, textcolor = fiboUstKademeRenk , text = '+11',  title ='2.000 Fibo Yukarıya Kes', style=fiboYStyle , location=fiboYLocation, color=fiboYColor, offset=0, size=fiboYSize)
+//plotshape(isaretKesYFiboA3, textcolor = fiboUstKademeRenk , text = '+10',  title ='1.618 Fibo Yukarıya Kes', style=fiboYStyle , location=fiboYLocation, color=fiboYColor, offset=0, size=fiboYSize)
+//plotshape(isaretKesYFiboA4, textcolor = fiboUstKademeRenk , text = '9',  title ='1.414 Fibo Yukarıya Kes', style=fiboYStyle , location=fiboYLocation, color=fiboYColor, offset=0, size=fiboYSize)
+//plotshape(isaretKesYFiboA5, textcolor = fiboUstKademeRenk , text = '8',  title ='1.272 Fibo Yukarıya Kes', style=fiboYStyle , location=fiboYLocation, color=fiboYColor, offset=0, size=fiboYSize)
+//plotshape(isaretKesYFiboN1, textcolor = fiboOrtaKademeRenk , text = '7',  title ='1.000 Fibo Yukarıya Kes', style=fiboYStyle , location=fiboYLocation, color=fiboYColor, offset=0, size=fiboYSize)
+//plotshape(isaretKesYFiboN2, textcolor = fiboOrtaKademeRenk , text = '6',  title ='0.786 Fibo Yukarıya Kes', style=fiboYStyle , location=fiboYLocation, color=fiboYColor, offset=0, size=fiboYSize)
+//plotshape(isaretKesYFiboN3, textcolor = fiboOrtaKademeRenk , text = '5',  title ='0.618 Fibo Yukarıya Kes', style=fiboYStyle , location=fiboYLocation, color=fiboYColor, offset=0, size=fiboYSize)
+//plotshape(isaretKesYFiboN4, textcolor = fiboOrtaKademeRenk , text = '4',  title ='0.500 Fibo Yukarıya Kes', style=fiboYStyle , location=fiboYLocation, color=fiboYColor, offset=0, size=fiboYSize)
+//plotshape(isaretKesYFiboN5, textcolor = fiboOrtaKademeRenk , text = '3',  title ='0.382 Fibo Yukarıya Kes', style=fiboYStyle , location=fiboYLocation, color=fiboYColor, offset=0, size=fiboYSize)
+//plotshape(isaretKesYFiboN6, textcolor = fiboOrtaKademeRenk , text = '2',  title ='0.236 Fibo Yukarıya Kes', style=fiboYStyle , location=fiboYLocation, color=fiboYColor, offset=0, size=fiboYSize)
+//plotshape(isaretKesYFiboN7, textcolor = fiboOrtaKademeRenk , text = '1',  title ='0.000 Fibo Yukarıya Kes', style=fiboYStyle , location=fiboYLocation, color=fiboYColor, offset=0, size=fiboYSize)
+//plotshape(isaretKesYFiboY1, textcolor = fiboAltKademeRenk , text = '-1',  title ='-0.272 Fibo Yukarıya Kes', style=fiboYStyle , location=fiboYLocation, color=fiboYColor, offset=0, size=fiboYSize)
+//plotshape(isaretKesYFiboY2, textcolor = fiboAltKademeRenk , text = '-2',  title ='-0.414 Fibo Yukarıya Kes', style=fiboYStyle , location=fiboYLocation, color=fiboYColor, offset=0, size=fiboYSize)
+//plotshape(isaretKesYFiboY3, textcolor = fiboAltKademeRenk , text = '-3',  title ='-0.618 Fibo Yukarıya Kes', style=fiboYStyle , location=fiboYLocation, color=fiboYColor, offset=0, size=fiboYSize)
+//plotshape(isaretKesYFiboY4, textcolor = fiboAltKademeRenk , text = '-2',  title ='-1.000 Fibo Yukarıya Kes', style=fiboYStyle , location=fiboYLocation, color=fiboYColor, offset=0, size=fiboYSize)
+//plotshape(isaretKesYFiboY5, textcolor = fiboAltKademeRenk , text = '-1',  title ='-1.272 Fibo Yukarıya Kes', style=fiboYStyle , location=fiboYLocation, color=fiboYColor, offset=0, size=fiboYSize)
+
+//BURADA BİTTİ
