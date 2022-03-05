@@ -190,21 +190,19 @@ acxMa200AKesmeler = input(defval = true, title = 'xMA200 Aşağı Kesme İşaret
 acxMa200YKesmeler = input(defval = true, title = 'xMA200 Yukarı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
 
 
-
 plotshape(kesAxMA_9 and acxMa9Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa9AKesmeler ? kesAxMA_9 : na , title = 'xMa9 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_9_Color, offset=0, size=xMaASize)
 plotshape(kesAxMA_13 and acxMa13Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa13AKesmeler ? kesAxMA_13 : na ,title ='xMa13 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_13_Color, offset=0, size=xMaASize)
 plotshape(kesAxMA_21 and acxMa21Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa21AKesmeler ? kesAxMA_21 : na ,title ='xMa21 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_21_Color, offset=0, size=xMaASize)
 plotshape(kesAxMA_34 and acxMa34Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa34AKesmeler ? kesAxMA_34 : na ,title ='xMa34 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_34_Color, offset=0, size=xMaASize)
 plotshape(kesAxMA_50 and acxMa50Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa50AKesmeler ? kesAxMA_50 : na ,title ='xMa50 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_50_Color, offset=0, size=xMaASize)
-
-plotshape(kesAxMA_50 and acxMa50Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa50AKesmeler ? kesAxMA_50 : na ,title ='xMa50 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_50_Color, offset=0, size=xMaASize)
-alertcondition(kesAxMA_50, title="xMA50 SSF", message='xMA50 SSF (son SATIŞ fırsatı olabilir) {{ticker}}, FİYAT={{close}}')
-
-
+//plotshape(kesAxMA_50 and acxMa50Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa50AKesmeler ? kesAxMA_50 : na ,title ='xMa50 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_50_Color, offset=0, size=xMaASize)
 plotshape(kesAxMA_89 and acxMa89Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa89AKesmeler ? kesAxMA_89 : na ,title ='xMa89 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_89_Color, offset=0, size=xMaASize)
 plotshape(kesAxMA_100 and acxMa100Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa100AKesmeler ? kesAxMA_100 : na ,title ='xMa100 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_100_Color, offset=0, size=xMaASize)
 plotshape(kesAxMA_144 and acxMa144Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa144AKesmeler ? kesAxMA_144 : na ,title ='xMa144 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_144_Color, offset=0, size=xMaASize)
 plotshape(kesAxMA_200 and acxMa200Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa200AKesmeler ? kesAxMA_200 : na ,title ='xMa200 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_200_Color, offset=0, size=xMaASize)
+
+plotshape(kesAxMA_50 and acxMa50Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa50AKesmeler ? kesAxMA_50 : na ,title ='xMa50 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_50_Color, offset=0, size=xMaASize)
+alertcondition(kesAxMA_50, title="xMA50 SSF", message='xMA50 SSF (son SATIŞ fırsatı olabilir) {{ticker}}, FİYAT={{close}}')
 
 
 plotshape(kesYxMA_9 and acxMa9Cizgisi  and acxMaKesmeler and acxMaYKesmeler and acxMa9YKesmeler ? kesYxMA_9 : na ,title ='xMa9 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_9_Color, offset=0, size=xMaYSize)
@@ -216,4 +214,5 @@ plotshape(kesYxMA_89 and acxMa89Cizgisi  and acxMaKesmeler and acxMaYKesmeler an
 plotshape(kesYxMA_100 and acxMa100Cizgisi  and acxMaKesmeler and acxMaYKesmeler and acxMa100YKesmeler ? kesYxMA_100 : na ,title ='xMa100 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_100_Color, offset=0, size=xMaYSize)
 plotshape(kesYxMA_144 and acxMa144Cizgisi and acxMaKesmeler and acxMaYKesmeler and acxMa144YKesmeler ? kesYxMA_144  : na ,title ='xMa144 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_144_Color, offset=0, size=xMaYSize)
 plotshape(kesYxMA_200 and acxMa200Cizgisi and acxMaKesmeler and acxMaYKesmeler and acxMa200YKesmeler ? kesYxMA_200 : na ,title ='xMa200 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_200_Color, offset=0, size=xMaYSize)
+
 //BURADA BİTTİ
