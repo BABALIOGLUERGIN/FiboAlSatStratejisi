@@ -190,12 +190,12 @@ kesAFiboY5 = ta.cross(fiboY5, src)
 fiboKademeRenk = color.lime
 
 fiboAStyle = shape.diamond
-fiboASize = size.small
+fiboASize = size.tiny
 fiboAColor = color.lime
 fiboALocation = location.belowbar
 
 fiboYStyle = shape.circle
-fiboYSize = size.small
+fiboYSize = size.tiny
 fiboYColor = color.lime
 fiboYLocation = location.abovebar
 
