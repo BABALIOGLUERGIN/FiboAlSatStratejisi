@@ -5,12 +5,7 @@
 indicator(title ="xMA - V1.1.01", shorttitle ="xMA" ,overlay=true)
 src = input(title='source', defval=close, group="Kaynak Çeşitleri")
 
-
-
-
-
 // RSI/EMA
-
 myClose1S = request.security(syminfo.tickerid, timeframe.period, src)
 myRsiD = input.int(14, title='RSI Değeri', group="Rsi/Ema Çizgisi Değerleri")
 myRsi1S = ta.rsi(myClose1S,myRsiD)
@@ -19,10 +14,8 @@ myEma121S = ta.ema(myRsi1S, myEmaD)
 acRsiEmaLW = input.int(defval = 4, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri', group="Rsi/Ema Çizgisi Değerleri") 
 
 acRsiEma = input(defval = true, title = 'Rsi/Ema Çizgisi Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
-
 acRsiEmaAl = input(defval = true, title = 'Rsi/Ema Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 acRsiEmaSat = input(defval = true, title = 'Rsi/Ema Sat İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
-
 
 myKoyuRenkY = input.color(#00897B , "Alım Bölgesinde (zirvede) Yükselirken", group="Rsi/Ema Çizgisi") 
 myAcikRenkY = input.color(color.green, "Satım Bölgesinden (dipte) Yükselirken", group="Rsi/Ema Çizgisi") 
@@ -40,14 +33,13 @@ rsiSartAl = (myRsiColorTek[1]==myAcikRenkD or myRsiColorTek[1]==myKoyuRenkD) and
 rsiSartSat = (myRsiColorTek[1]==myAcikRenkY or myRsiColorTek[1]==myKoyuRenkY) and (myRsiColorTek == myAcikRenkD or myRsiColorTek == myKoyuRenkD) 
 
 plotshape(rsiSartAl and acRsiEmaAl ,title ='Rsi/Ema AL' , style=shape.triangleup, location=location.belowbar, color=color.new(#00bcd4, 0), offset=0, size=size.normal)
-alertcondition(rsiSartAl, title="Rsi/Ema AL", message='Rsi/Ema AL {{ticker}}, FİYAT={{close}}')
+alertcondition(rsiSartAl, title="Rsi/Ema AL", message='Rsi/Ema AL fırsatı olabilir (xMA100 ve xMA200 konumunu kontrol et) {{ticker}}, FİYAT={{close}}')
 
 plotshape(rsiSartSat and acRsiEmaSat ,title ='Rsi/Ema SAT', style=shape.triangledown, location=location.abovebar, color=color.new(#00bcd4, 0), offset=0, size=size.normal)
-alertcondition(rsiSartSat, title="Rsi/Ema SAT", message='Rsi/Ema SAT {{ticker}}, FİYAT={{close}}')
+alertcondition(rsiSartSat, title="Rsi/Ema SAT", message='Rsi/Ema SAT fırsatı olabilir (xMA50 konumunu kontrol et) {{ticker}}, FİYAT={{close}}')
 
 
 // xMA Çizgi ve Kesişmeleri
-
 string xMaTip   = input.string(defval="(T)EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA tipi", group="xMA Değerleri")
 
 demaHesapla(src,len)=>
@@ -133,8 +125,6 @@ xMA_200 = xMaKontrol(xMaTip, src, length8a)
 plot(xMA_200 and acxMaCizgisi and acxMa200Cizgisi ? xMA_200 : na , color=xMA_200_Color, linewidth=3, title='xMa200 Çizgisi')
 
 
-
-
 kesAxMA_9 = ta.crossunder(src , xMA_9) 
 kesAxMA_13 = ta.crossunder(src , xMA_13) 
 kesAxMA_21 = ta.crossunder(src , xMA_21) 
@@ -206,6 +196,11 @@ plotshape(kesAxMA_13 and acxMa13Cizgisi and acxMaKesmeler and acxMaAKesmeler and
 plotshape(kesAxMA_21 and acxMa21Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa21AKesmeler ? kesAxMA_21 : na ,title ='xMa21 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_21_Color, offset=0, size=xMaASize)
 plotshape(kesAxMA_34 and acxMa34Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa34AKesmeler ? kesAxMA_34 : na ,title ='xMa34 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_34_Color, offset=0, size=xMaASize)
 plotshape(kesAxMA_50 and acxMa50Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa50AKesmeler ? kesAxMA_50 : na ,title ='xMa50 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_50_Color, offset=0, size=xMaASize)
+
+plotshape(kesAxMA_50 and acxMa50Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa50AKesmeler ? kesAxMA_50 : na ,title ='xMa50 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_50_Color, offset=0, size=xMaASize)
+alertcondition(kesAxMA_50, title="xMA50 SSF", message='xMA50 SSF (son SATIŞ fırsatı olabilir) {{ticker}}, FİYAT={{close}}')
+
+
 plotshape(kesAxMA_89 and acxMa89Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa89AKesmeler ? kesAxMA_89 : na ,title ='xMa89 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_89_Color, offset=0, size=xMaASize)
 plotshape(kesAxMA_100 and acxMa100Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa100AKesmeler ? kesAxMA_100 : na ,title ='xMa100 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_100_Color, offset=0, size=xMaASize)
 plotshape(kesAxMA_144 and acxMa144Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa144AKesmeler ? kesAxMA_144 : na ,title ='xMa144 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_144_Color, offset=0, size=xMaASize)
@@ -221,6 +216,4 @@ plotshape(kesYxMA_89 and acxMa89Cizgisi  and acxMaKesmeler and acxMaYKesmeler an
 plotshape(kesYxMA_100 and acxMa100Cizgisi  and acxMaKesmeler and acxMaYKesmeler and acxMa100YKesmeler ? kesYxMA_100 : na ,title ='xMa100 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_100_Color, offset=0, size=xMaYSize)
 plotshape(kesYxMA_144 and acxMa144Cizgisi and acxMaKesmeler and acxMaYKesmeler and acxMa144YKesmeler ? kesYxMA_144  : na ,title ='xMa144 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_144_Color, offset=0, size=xMaYSize)
 plotshape(kesYxMA_200 and acxMa200Cizgisi and acxMaKesmeler and acxMaYKesmeler and acxMa200YKesmeler ? kesYxMA_200 : na ,title ='xMa200 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_200_Color, offset=0, size=xMaYSize)
-
-
 //BURADA BİTTİ
