@@ -7,6 +7,9 @@
 "xMA" Kaynak Kodu  ➤ 
 https://github.com/ozcanozbek/FiboAlSatStratejisi/blob/main/xMA.txt
 
+"xFibo" Kaynak Kodu  ➤ 
+https://github.com/ozcanozbek/FiboAlSatStratejisi/blob/main/xFibo.txt
+
 "Rsi/Ema Bölgesi" Videosu ➤ https://youtu.be/Q7OJCx2d1Fs
 "Rsi/Ema Bölgesi" Kaynak Kodu ➤ 
 https://github.com/ozcanozbek/DEMA-4x-with-Fib-Div-and-Tillson/blob/main/MyEma12_1S_2S_V1.txt
