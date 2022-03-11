@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = '3_15_63_Ma Çizgisi V1.0.03', shorttitle = '3_15_63_Ma Çizgisi', overlay=true, timeframe="") 
+indicator(title = '3_15_63_Ma Çizgisi V1.0.04', shorttitle = '3_15_63_Ma Çizgisi', overlay=true, timeframe="") 
 src = close
 
 acTema = input(defval = false, title = 'Tema Çizgileri Gözüksün mü?')   
@@ -85,6 +85,7 @@ plot(lower and acBb ? lower : na, "Bolinger Alt", color=bb_Color, offset = 0, li
 
 plotshape(kesAbb and acBbSat ? kesAbb : na , title = 'Bolinger Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=bb_Color, offset=0, size=bb_Size)
 plotshape(kesYbb and acBbAl ? kesYbb : na ,title ='Bolinger Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=bb_Color, offset=0, size=bb_Size)
+alertcondition(kesYbb, title="BB AL", message='2S BB AL {{ticker}}, FİYAT={{close}}')
 
 //EMA 3 KES
 kesYxMA_3 = ta.crossover(src , ma3) and ma3 < ma15 
