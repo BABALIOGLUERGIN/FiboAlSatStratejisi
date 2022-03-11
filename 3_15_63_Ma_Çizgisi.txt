@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = '3_15_63_Ma Çizgisi V1.0.02', shorttitle = '3_15_63_Ma Çizgisi', overlay=true, timeframe="") 
+indicator(title = '3_15_63_Ma Çizgisi V1.0.03', shorttitle = '3_15_63_Ma Çizgisi', overlay=true, timeframe="") 
 src = close
 
 acTema = input(defval = false, title = 'Tema Çizgileri Gözüksün mü?')   
@@ -9,6 +9,8 @@ acMa3Ma15Boyama = input(defval = true, title = 'Ma 3/15 Arası Boyama Gösterils
 acMa15Ma63Boyama = input(defval = false, title = 'Ma 15/63 Arası Boyama Gösterilsin mi?')
 acxMa3Al = input(defval = false, title = 'EMA 3 Al İşareti Gözüksün mü?')   
 acxMa3Sat = input(defval = true, title = 'EMA 3 Sat İşareti Gözüksün mü?')   
+acBbAl = input(defval = true, title = 'Bolinger Al İşareti Gözüksün mü?')   
+acBbSat = input(defval = true, title = 'Bolinger Sat İşareti Gözüksün mü?')   
 
 
 xMaAStyle = shape.triangledown
@@ -59,14 +61,35 @@ acMa15Ma63BoyamaRenk = acMa15Ma63Boyama ? 70 : 100
 acMa15Ma63Rengim = ma15 >= ma63 ? color.new(color.lime, acMa15Ma63BoyamaRenk) : color.new(color.red, acMa15Ma63BoyamaRenk)
 fill(pma15, pma63, title = 'Ma 15/63 Bölgesi', color=acMa15Ma63Rengim)
 
+//BB
+bbLength = 20
+bbMult = 2.0
+bbBasis = ta.sma(src, bbLength)
+bbDev = bbMult * ta.stdev(src, bbLength)
+upper = bbBasis + bbDev
+lower = bbBasis - bbDev
 
+bbSrcUst = close
+bbSrcAlt = low
+kesYbb = ta.crossover(bbSrcAlt , lower) 
+kesAbb = ta.crossunder(bbSrcUst , upper) 
+
+bb_Color = color.new(#00bcd4, 0)
+bb_Size = size.normal
+
+plot(upper, "Bolinger Üst", color=bb_Color, offset = 0, linewidth=2)
+plot(lower, "Bolinger Alt", color=bb_Color, offset = 0, linewidth=2)
+
+
+plotshape(kesAbb and acBbAl ? kesAbb : na , title = 'Bolinger Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=bb_Color, offset=0, size=bb_Size)
+plotshape(kesYbb and acBbAl ? kesYbb : na ,title ='Bolinger Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=bb_Color, offset=0, size=bb_Size)
+
+//EMA 3 KES
 kesYxMA_3 = ta.crossover(src , ma3) 
 kesAxMA_3 = ta.crossunder(src , ma3) 
 xMA_3_Color = color.new(color.white, 0)
 
-plotshape(kesAxMA_3 and acxMa3Sat ? kesAxMA_3 : na , title = 'xMa9 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_3_Color, offset=0, size=xMaASize)
-plotshape(kesYxMA_3 and acxMa3Al ? kesYxMA_3 : na ,title ='xMa9 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_3_Color, offset=0, size=xMaYSize)
-
-
+plotshape(kesAxMA_3 and acxMa3Sat ? kesAxMA_3 : na , title = 'EMA 3 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_3_Color, offset=0, size=xMaASize)
+plotshape(kesYxMA_3 and acxMa3Al ? kesYxMA_3 : na ,title ='EMA 3 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_3_Color, offset=0, size=xMaYSize)
 
 //BURADA BITTI
