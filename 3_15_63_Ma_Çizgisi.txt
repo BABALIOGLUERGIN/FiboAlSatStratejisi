@@ -87,8 +87,8 @@ plotshape(kesAbb and acBbSat ? kesAbb : na , title = 'Bolinger Aşağı Kes', te
 plotshape(kesYbb and acBbAl ? kesYbb : na ,title ='Bolinger Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=bb_Color, offset=0, size=bb_Size)
 
 //EMA 3 KES
-kesYxMA_3 = ta.crossover(src , ma3) 
-kesAxMA_3 = ta.crossunder(src , ma3) 
+kesYxMA_3 = ta.crossover(src , ma3) and ma3 < ma15 
+kesAxMA_3 = ta.crossunder(src , ma3) and ma3 > ma15 
 xMA_3_Color = color.new(color.white, 0)
 
 plotshape(kesAxMA_3 and acxMa3Sat ? kesAxMA_3 : na , title = 'EMA 3 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_3_Color, offset=0, size=xMaASize)
