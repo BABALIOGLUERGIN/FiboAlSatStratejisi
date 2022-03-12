@@ -27,3 +27,7 @@ https://github.com/ozcanozbek/DEMA-4x-with-Fib-Div-and-Tillson/blob/main/MyEma12
 "Rsi/Ema Çizgisi" Kaynak Kodu ➤ 
 https://github.com/ozcanozbek/FiboAlSatStratejisi/blob/main/RsiEmaCizgisi.txt
 
+6)
+"3_15_63_Ma Çizgisi" Kaynak Kodu ➤ 
+https://github.com/ozcanozbek/FiboAlSatStratejisi/blob/main/3_15_63_Ma_%C3%87izgisi.txt
+
