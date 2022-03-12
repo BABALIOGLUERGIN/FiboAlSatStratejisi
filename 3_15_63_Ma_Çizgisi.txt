@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = '3_15_63_Ma Çizgisi V1.0.04', shorttitle = '3_15_63_Ma Çizgisi', overlay=true, timeframe="") 
+indicator(title = '3_15_63_Ma Çizgisi V1.0.05', shorttitle = '3_15_63_Ma Çizgisi', overlay=true, timeframe="") 
 src = close
 
 acTema = input(defval = false, title = 'Tema Çizgileri Gözüksün mü?')   
@@ -45,11 +45,11 @@ fill(myTema100, myTema200, title = 'Tema 100/200 Bölgesi', color=acT100T200Reng
 
 lengthMa3 = input(3, 'ma 3')
 ma3 = ta.ema(src, lengthMa3)
-pma3 = plot(ma3, color=color.new(color.white, 0), linewidth=2, title='ma 13')
+pma3 = plot(ma3, color=color.new(color.white, 0), linewidth=2, title='ma 3')
 
 lengthMa15 = input(15, 'ma 15')
 ma15 = ta.ema(src, lengthMa15)
-pma15 = plot(ma15, color=color.new(color.purple, 0), linewidth=2, title='ma 21')
+pma15 = plot(ma15, color=color.new(color.purple, 0), linewidth=2, title='ma 15')
 
 lengthMa63 = input(63, 'ma 63')
 ma63 = ta.ema(src, lengthMa63)
@@ -94,5 +94,55 @@ xMA_3_Color = color.new(color.white, 0)
 
 plotshape(kesAxMA_3 and acxMa3Sat ? kesAxMA_3 : na , title = 'EMA 3 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_3_Color, offset=0, size=xMaASize)
 plotshape(kesYxMA_3 and acxMa3Al ? kesYxMA_3 : na ,title ='EMA 3 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_3_Color, offset=0, size=xMaYSize)
+
+
+// RSI/EMA
+myClose1S = request.security(syminfo.tickerid, timeframe.period, src)
+myRsiD = input.int(14, title='RSI Değeri', group="Rsi/Ema Çizgisi Değerleri")
+myRsi1S = ta.rsi(myClose1S,myRsiD)
+myEmaD = input.int(12, title='Ema Değeri', group="Rsi/Ema Çizgisi Değerleri")
+myEma121S = ta.ema(myRsi1S, myEmaD)
+acRsiEmaLW = input.int(defval = 4, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri', group="Rsi/Ema Çizgisi Değerleri") 
+
+acRsiEma = input(defval = false, title = 'Rsi/Ema Çizgisi Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaAl = input(defval = false, title = 'Rsi/Ema Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaSat = input(defval = false, title = 'Rsi/Ema Sat İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaYatay = input(defval = false, title = 'Rsi/Ema Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaCifteYatay = input(defval = false, title = 'Rsi/Ema Çift Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+
+myKoyuRenkY = input.color(#00897B , "Alım Bölgesinde (zirvede) Yükselirken", group="Rsi/Ema Çizgisi") 
+myAcikRenkY = input.color(color.green, "Satım Bölgesinden (dipte) Yükselirken", group="Rsi/Ema Çizgisi") 
+
+myAcikRenkD = input.color(color.red , "Alım Bölgesinden (zirvede) Düşerken", group="Rsi/Ema Çizgisi") 
+myKoyuRenkD = input.color(#880E4F  , "Satım Bölgesinde (dipte) Düşerken", group="Rsi/Ema Çizgisi") 
+
+myRsiColorY = myRsi1S <= 60 ? myAcikRenkY : myKoyuRenkY     
+myRsiColorD = myRsi1S <= 40 ? myKoyuRenkD : myAcikRenkD   
+myRsiColorTek = myRsi1S >= myEma121S ? myRsiColorY : myRsiColorD
+
+plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=myRsiColorTek, title="RsiEma", linewidth=acRsiEmaLW)
+
+
+rsiSartAl = (myRsiColorTek[1]==myAcikRenkD or myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkY or myRsiColorTek == myKoyuRenkY) 
+plotshape(rsiSartAl and acRsiEmaAl ,title ='Rsi/Ema AL' , style=shape.triangleup, location=location.belowbar, color=color.new(#00bcd4, 0), offset=0, size=size.normal)
+alertcondition(rsiSartAl, title="Rsi/Ema AL", message='Rsi/Ema AL fırsatı olabilir (xMA100 ve xMA200 konumunu kontrol et) {{ticker}}, FİYAT={{close}}')
+
+rsiSartSat = (myRsiColorTek[1]==myAcikRenkY or myRsiColorTek[1]==myKoyuRenkY) and (myRsiColorTek == myAcikRenkD or myRsiColorTek == myKoyuRenkD) 
+plotshape(rsiSartSat and acRsiEmaSat ,title ='Rsi/Ema SAT', style=shape.triangledown, location=location.abovebar, color=color.new(#00bcd4, 0), offset=0, size=size.normal)
+alertcondition(rsiSartSat, title="Rsi/Ema SAT", message='Rsi/Ema SAT fırsatı olabilir (xMA50 konumunu kontrol et) {{ticker}}, FİYAT={{close}}')
+
+rsiSartCiftYatay1 = (myKoyuRenkD==myRsiColorTek[1] and myKoyuRenkD==myRsiColorTek[2] and myKoyuRenkD==myRsiColorTek[3]) 
+//or (myAcikRenkD==myRsiColorTek[1] and myAcikRenkD==myRsiColorTek[2] and myAcikRenkD==myRsiColorTek[3])
+rsiSartCiftYatay2 = (low==low[1] or close==close[1] or high==high[1] or open==open[1]) and (low==low[2] or close==close[2] or high==high[2] or open==open[2])
+rsiSartCiftYatay = rsiSartCiftYatay1 and rsiSartCiftYatay2
+plotshape(rsiSartCiftYatay and acRsiEmaCifteYatay ,title ='Rsi/Ema Çift Yatay AL' , style=shape.square, location=location.belowbar, color=myKoyuRenkD, offset=0, size=size.large)
+alertcondition(rsiSartCiftYatay, title="Rsi/Ema Çift Yatay AL", message='2S Rsi/Ema Çift Yatay AL fırsatı olabilir {{ticker}}, FİYAT={{close}}')
+
+
+rsiSartYatay = ((myKoyuRenkD==myRsiColorTek[1] and myKoyuRenkD==myRsiColorTek[2]) or (myAcikRenkD==myRsiColorTek[1] and myAcikRenkD==myRsiColorTek[2])) and (low==low[1])
+rsiSartYatayE = rsiSartYatay /// and (low <= xMA_100 and low <= xMA_200)
+plotshape(rsiSartYatayE and acRsiEmaYatay ,title ='Rsi/Ema Yatay AL' , style=shape.square, location=location.belowbar, color=myAcikRenkD, offset=0, size=size.normal)
+alertcondition(rsiSartYatayE, title="Rsi/Ema Yatay AL", message='2S Rsi/Ema Yatay AL fırsatı olabilir {{ticker}}, FİYAT={{close}}')
+
 
 //BURADA BITTI
