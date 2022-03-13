@@ -1,5 +1,5 @@
 //@version=5
-indicator(shorttitle='xFiboBolinger V1.0.1', title='xFiboBolinger', overlay=true)
+indicator(title='xFiboBolinger V1.0.1', shorttitle='xFiboBolinger', overlay=true)
 length = input.int(150, minval=1)
 src = input(hlc3, title='Source')
 mult = input.float(3.0, minval=0.001, maxval=50)
