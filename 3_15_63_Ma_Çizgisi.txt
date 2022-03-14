@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = '3_15_63_Ma Çizgisi V1.0.05', shorttitle = '3_15_63_Ma Çizgisi', overlay=true, timeframe="") 
+indicator(title = '3_15_63_Ma Çizgisi V1.0.07', shorttitle = '3_15_63_Ma Çizgisi', overlay=true, timeframe="") 
 src = close
 
 acTema = input(defval = false, title = 'Tema Çizgileri Gözüksün mü?')   
@@ -9,6 +9,10 @@ acMa3Ma15Boyama = input(defval = true, title = 'Ma 3/15 Arası Boyama Gösterils
 acMa15Ma63Boyama = input(defval = false, title = 'Ma 15/63 Arası Boyama Gösterilsin mi?')
 acxMa3Al = input(defval = false, title = 'EMA 3 Al İşareti Gözüksün mü?')   
 acxMa3Sat = input(defval = true, title = 'EMA 3 Sat İşareti Gözüksün mü?')   
+
+acxMa3x15Al = input(defval = true, title = 'EMA 3x15 (sma200 baraj) Yukarı Kes İşareti Gözüksün mü?')   
+acxMa3x15Sat = input(defval = true , title = 'EMA 3x15 (sma200 baraj) Aşağı Kes İşareti Gözüksün mü?')   
+
 
 acBb = input(defval = true, title = 'Bolinger Çizgisi Gözüksün mü?')   
 acBbAl = input(defval = true, title = 'Bolinger Al İşareti Gözüksün mü?')   
@@ -94,6 +98,18 @@ xMA_3_Color = color.new(color.white, 0)
 
 plotshape(kesAxMA_3 and acxMa3Sat ? kesAxMA_3 : na , title = 'EMA 3 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_3_Color, offset=0, size=xMaASize)
 plotshape(kesYxMA_3 and acxMa3Al ? kesYxMA_3 : na ,title ='EMA 3 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_3_Color, offset=0, size=xMaYSize)
+
+
+//ema3 & ema15 kes
+
+//kesYema3x15 = ta.crossover(ma3 , ma15) and src <= ta.sma(src, 200)
+//kesAema3x15 = ta.crossunder(ma3 , ma15) and src >= ta.sma(src, 200)
+kesYema3x15 = ta.cross(ma3 , ma15) and src <= ma63 //ta.sma(src, 200)
+kesAema3x15 = ta.cross(ma3 , ma15) and src >= ma63 //ta.sma(src, 200)
+xMA_3x15_Color = color.new(color.yellow, 0)
+plotshape(kesAema3x15 and acxMa3x15Sat ? kesAema3x15 : na  , title = 'EMA 3x15 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_3x15_Color, offset=0, size=xMaASize)
+plotshape(kesYema3x15 and acxMa3x15Al ? kesYema3x15 : na ,title ='EMA 3x15 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_3x15_Color, offset=0, size=xMaYSize)
+
 
 
 // RSI/EMA
