@@ -8,7 +8,7 @@ src = input(title='Mum', defval=close, group="Kaynak Çeşitleri")
 // { Time Range
 FromMonth = input.int(defval=1, title='FromMonth', group='Time', minval=1, maxval=12)
 FromDay = input.int(defval=1, title='FromDay', group='Time', minval=1, maxval=31)
-FromYear = input.int(defval=2020, title='FromYear', group='Time', minval=2000)
+FromYear = input.int(defval=2000, title='FromYear', group='Time', minval=2000)
 ToMonth = input.int(defval=1, title='ToMonth', group='Time', minval=1, maxval=12)
 ToDay = input.int(defval=1, title='ToDay', group='Time', minval=1, maxval=31)
 ToYear = input.int(defval=9999, title='ToYear', group='Time', minval=2010)
@@ -57,12 +57,12 @@ xMaKontrol(xMaTip, src, len)=>
 
 
 
-xMA_Birinci_Color = color.new(color.red, 0)
+xMA_Birinci_Color = color.new(color.lime, 0)
 lengthBirinci = input(20, 'xMA Birinci', group="xMA Birinci Değerleri")
 xMA_Birinci = xMaKontrol(xMaTipBirinci, src, lengthBirinci) 
 plot(xMA_Birinci, color=xMA_Birinci_Color, linewidth=3, title='xMa Birinci Çizgisi')
 
-xMA_Ikinci_Color = color.new(color.lime, 0)
+xMA_Ikinci_Color = color.new(color.red, 0)
 lengthIkinci = input(50, 'xMA Ikinci', group="xMA İkinci Değerleri")
 xMA_Ikinci = xMaKontrol(xMaTipIkinci, src, lengthIkinci) 
 plot(xMA_Ikinci, color=xMA_Ikinci_Color, linewidth=2, title='xMa Ikinci Çizgisi')
@@ -86,15 +86,15 @@ if acKaynak
     kesYukari := ta.crossover(src , xMA_Birinci) 
 
 
-xMaAStyle = shape.triangledown
-xMaASize = size.small
-xMaAColor = color.red
-xMaALocation = location.abovebar
+//xMaAStyle = shape.triangledown
+//xMaASize = size.small
+//xMaAColor = color.lime
+//xMaALocation = location.abovebar
 
-xMaYStyle = shape.triangleup
-xMaYSize = size.small
-xMaYColor = color.lime
-xMaYLocation = location.belowbar
+//xMaYStyle = shape.triangleup
+//xMaYSize = size.small
+//xMaYColor = color.red
+//xMaYLocation = location.belowbar
 
 rsiSartAl = kesYukari
 if acBaraj
@@ -105,10 +105,6 @@ rsiSartSat = kesAsagi
 if acBaraj
     if xMA_Baraj > src
         rsiSartSat := false 
-
-//plotshape(kesAsagi,title ='SAT', text='', style=xMaAStyle , location=xMaALocation, color=xMA_Ikinci_Color, offset=0, size=xMaASize)
-//plotshape(kesYukari,title ='AL', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_Birinci_Color, offset=0, size=xMaYSize)
-
 
 
 
