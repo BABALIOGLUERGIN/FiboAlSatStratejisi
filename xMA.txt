@@ -2,46 +2,19 @@
 // © ozcanozbek
 
 //@version=5
-indicator(title ="xMA - V1.1.02", shorttitle ="xMA" ,overlay=true)
+indicator(title ="xMA - V1.2.01", shorttitle ="xMA" ,overlay=true)
 src = input(title='source', defval=close, group="Kaynak Çeşitleri")
 
-// RSI/EMA
-myClose1S = request.security(syminfo.tickerid, timeframe.period, src)
-myRsiD = input.int(14, title='RSI Değeri', group="Rsi/Ema Çizgisi Değerleri")
-myRsi1S = ta.rsi(myClose1S,myRsiD)
-myEmaD = input.int(12, title='Ema Değeri', group="Rsi/Ema Çizgisi Değerleri")
-myEma121S = ta.ema(myRsi1S, myEmaD)
-acRsiEmaLW = input.int(defval = 4, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri', group="Rsi/Ema Çizgisi Değerleri") 
-
-acRsiEma = input(defval = true, title = 'Rsi/Ema Çizgisi Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
-acRsiEmaAl = input(defval = true, title = 'Rsi/Ema Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
-acRsiEmaSat = input(defval = true, title = 'Rsi/Ema Sat İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
-acRsiEmaYatay = input(defval = true, title = 'Rsi/Ema Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
-
-myKoyuRenkY = input.color(#00897B , "Alım Bölgesinde (zirvede) Yükselirken", group="Rsi/Ema Çizgisi") 
-myAcikRenkY = input.color(color.green, "Satım Bölgesinden (dipte) Yükselirken", group="Rsi/Ema Çizgisi") 
-
-myAcikRenkD = input.color(color.red , "Alım Bölgesinden (zirvede) Düşerken", group="Rsi/Ema Çizgisi") 
-myKoyuRenkD = input.color(#880E4F  , "Satım Bölgesinde (dipte) Düşerken", group="Rsi/Ema Çizgisi") 
-
-myRsiColorY = myRsi1S <= 60 ? myAcikRenkY : myKoyuRenkY     
-myRsiColorD = myRsi1S <= 40 ? myKoyuRenkD : myAcikRenkD   
-myRsiColorTek = myRsi1S >= myEma121S ? myRsiColorY : myRsiColorD
-
-plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=myRsiColorTek, title="RsiEma", linewidth=acRsiEmaLW)
-
-
-rsiSartAl = (myRsiColorTek[1]==myAcikRenkD or myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkY or myRsiColorTek == myKoyuRenkY) 
-plotshape(rsiSartAl and acRsiEmaAl ,title ='Rsi/Ema AL' , style=shape.triangleup, location=location.belowbar, color=color.new(#00bcd4, 0), offset=0, size=size.normal)
-alertcondition(rsiSartAl, title="Rsi/Ema AL", message='Rsi/Ema AL fırsatı olabilir (xMA100 ve xMA200 konumunu kontrol et) {{ticker}}, FİYAT={{close}}')
-
-rsiSartSat = (myRsiColorTek[1]==myAcikRenkY or myRsiColorTek[1]==myKoyuRenkY) and (myRsiColorTek == myAcikRenkD or myRsiColorTek == myKoyuRenkD) 
-plotshape(rsiSartSat and acRsiEmaSat ,title ='Rsi/Ema SAT', style=shape.triangledown, location=location.abovebar, color=color.new(#00bcd4, 0), offset=0, size=size.normal)
-alertcondition(rsiSartSat, title="Rsi/Ema SAT", message='Rsi/Ema SAT fırsatı olabilir (xMA50 konumunu kontrol et) {{ticker}}, FİYAT={{close}}')
-
-
 // xMA Çizgi ve Kesişmeleri
-string xMaTip   = input.string(defval="(T)EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA tipi", group="xMA Değerleri")
+string xMaTip9 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA9 tipi", group="xMA9 Değerleri")
+string xMaTip13 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA13 tipi", group="xMA13 Değerleri")
+string xMaTip21 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA21 tipi", group="xMA21 Değerleri")
+string xMaTip34 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA34 tipi", group="xMA34 Değerleri")
+string xMaTip50 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA50 tipi", group="xMA50 Değerleri")
+string xMaTip89 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA89 tipi", group="xMA89 Değerleri")
+string xMaTip100 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA100 tipi", group="xMA100 Değerleri")
+string xMaTip144 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA144 tipi", group="xMA144 Değerleri")
+string xMaTip200 = input.string(defval="SMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA200 tipi", group="xMA200 Değerleri")
 
 demaHesapla(src,len)=>
     ema1 = ta.ema(src, len)
@@ -65,16 +38,14 @@ xMaKontrol(xMaTip, src, len)=>
         "(T)EMA" => temaHesapla(src,len)
         => 0.0 
         
-
 acxMaCizgisi = input(defval = true, title = 'xMA Çizgileri Gözüksün mü?', group="xMA Çizgileri")  
-
 acxMa9Cizgisi = input(defval = false, title = 'xMA9 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 acxMa13Cizgisi = input(defval = false, title = 'xMA13 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 acxMa21Cizgisi = input(defval = false, title = 'xMA21 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
-acxMa34Cizgisi = input(defval = true, title = 'xMA34 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
-acxMa50Cizgisi = input(defval = true, title = 'xMA50 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
+acxMa34Cizgisi = input(defval = false, title = 'xMA34 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
+acxMa50Cizgisi = input(defval = false, title = 'xMA50 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 acxMa89Cizgisi = input(defval = false, title = 'xMA89 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
-acxMa100Cizgisi = input(defval = true, title = 'xMA100 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
+acxMa100Cizgisi = input(defval = false, title = 'xMA100 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 acxMa144Cizgisi = input(defval = false, title = 'xMA144 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 acxMa200Cizgisi = input(defval = true, title = 'xMA200 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 
@@ -89,55 +60,41 @@ xMA_144_Color = color.new(color.gray, 0)
 xMA_200_Color = color.new(#be660b, 0)
 
 
-length0a = input(9, 'xMA 9', group="xMA Değerleri")
-xMA_9 = xMaKontrol(xMaTip, src, length0a) 
+length0a = input(9, 'xMA 9', group="xMA9 Değerleri")
+xMA_9 = xMaKontrol(xMaTip9, src, length0a) 
 plot(xMA_9 and acxMaCizgisi and acxMa9Cizgisi ? xMA_9 : na , color=xMA_9_Color, linewidth=3, title='xMa9 Çizgisi')
 
-length1a = input(13, 'xMA 13', group="xMA Değerleri")
-xMA_13 = xMaKontrol(xMaTip, src, length1a) 
+length1a = input(13, 'xMA 13', group="xMA13 Değerleri")
+xMA_13 = xMaKontrol(xMaTip13, src, length1a) 
 plot(xMA_13 and acxMaCizgisi and acxMa13Cizgisi ? xMA_13 : na , color=xMA_13_Color, linewidth=2, title='xMa13 Çizgisi')
 
-length2a = input(21, 'xMA 21', group="xMA Değerleri")
-xMA_21 = xMaKontrol(xMaTip, src, length2a) 
+length2a = input(21, 'xMA 21', group="xMA21 Değerleri")
+xMA_21 = xMaKontrol(xMaTip21, src, length2a) 
 plot(xMA_21 and acxMaCizgisi and acxMa21Cizgisi ? xMA_21 : na , color=xMA_21_Color , linewidth=3, title='xMa21 Çizgisi')
 
-length3a = input(34, 'xMA 34', group="xMA Değerleri")
-xMA_34 = xMaKontrol(xMaTip, src, length3a)
+length3a = input(34, 'xMA 34', group="xMA34 Değerleri")
+xMA_34 = xMaKontrol(xMaTip34, src, length3a)
 plot(xMA_34 and acxMaCizgisi and acxMa34Cizgisi ? xMA_34 : na , color=xMA_34_Color, linewidth=3, title='xMa34 Çizgisi')
 
-length4a = input(50, 'xMA 50', group="xMA Değerleri")
-xMA_50 = xMaKontrol(xMaTip, src, length4a) 
+length4a = input(50, 'xMA 50', group="xMA50 Değerleri")
+xMA_50 = xMaKontrol(xMaTip50, src, length4a) 
 plot(xMA_50 and acxMaCizgisi and acxMa50Cizgisi ? xMA_50 : na , color=xMA_50_Color, linewidth=3, title='xMa50 Çizgisi')
 
-length5a = input(89, 'xMA 89', group="xMA Değerleri")
-xMA_89 = xMaKontrol(xMaTip, src, length5a) 
+length5a = input(89, 'xMA 89', group="xMA89 Değerleri")
+xMA_89 = xMaKontrol(xMaTip89, src, length5a) 
 plot(xMA_89 and acxMaCizgisi and acxMa89Cizgisi ? xMA_89 : na , color=xMA_89_Color, linewidth=3, title='xMa89 Çizgisi')
 
-length6a = input(100, 'xMA 100', group="xMA Değerleri")
-xMA_100 = xMaKontrol(xMaTip, src, length6a) 
+length6a = input(100, 'xMA 100', group="xMA100 Değerleri")
+xMA_100 = xMaKontrol(xMaTip100, src, length6a) 
 plot(xMA_100 and acxMaCizgisi and acxMa100Cizgisi ? xMA_100 : na , color=xMA_100_Color, linewidth=3, title='xMa100 Çizgisi')
 
-length7a = input(144, 'xMA 144', group="xMA Değerleri")
-xMA_144 = xMaKontrol(xMaTip, src, length7a) 
+length7a = input(144, 'xMA 144', group="xMA144 Değerleri")
+xMA_144 = xMaKontrol(xMaTip144, src, length7a) 
 plot(xMA_144 and acxMaCizgisi and acxMa144Cizgisi ? xMA_144 : na , color=xMA_144_Color, linewidth=3, title='xMa144 Çizgisi')
 
-length8a = input(200, 'xMA 200', group="xMA Değerleri")
-xMA_200 = xMaKontrol(xMaTip, src, length8a) 
+length8a = input(200, 'xMA 200', group="xMA200 Değerleri")
+xMA_200 = xMaKontrol(xMaTip200, src, length8a) 
 plot(xMA_200 and acxMaCizgisi and acxMa200Cizgisi ? xMA_200 : na , color=xMA_200_Color, linewidth=3, title='xMa200 Çizgisi')
-
-
-rsiSartCiftYatay1 = (myKoyuRenkD==myRsiColorTek[1] and myKoyuRenkD==myRsiColorTek[2] and myKoyuRenkD==myRsiColorTek[3]) or (myAcikRenkD==myRsiColorTek[1] and myAcikRenkD==myRsiColorTek[2] and myAcikRenkD==myRsiColorTek[3])
-rsiSartCiftYatay2 = (low==low[1] or close==close[1] or high==high[1] or open==open[1]) and (low==low[2] or close==close[2] or high==high[2] or open==open[2])
-rsiSartCiftYatay = rsiSartCiftYatay1 and rsiSartCiftYatay2
-plotshape(rsiSartCiftYatay and acRsiEmaYatay ,title ='Rsi/Ema Çift Yatay AL' , style=shape.square, location=location.belowbar, color=myKoyuRenkD, offset=0, size=size.large)
-alertcondition(rsiSartCiftYatay, title="Rsi/Ema Çift Yatay AL", message='2S Rsi/Ema Çift Yatay AL fırsatı olabilir {{ticker}}, FİYAT={{close}}')
-
-
-rsiSartYatay = ((myKoyuRenkD==myRsiColorTek[1] and myKoyuRenkD==myRsiColorTek[2]) or (myAcikRenkD==myRsiColorTek[1] and myAcikRenkD==myRsiColorTek[2])) and (low==low[1])
-rsiSartYatayE = rsiSartYatay and (low <= xMA_100 and low <= xMA_200)
-plotshape(rsiSartYatayE and acRsiEmaYatay ,title ='Rsi/Ema Yatay AL' , style=shape.square, location=location.belowbar, color=myAcikRenkD, offset=0, size=size.normal)
-alertcondition(rsiSartYatayE, title="Rsi/Ema Yatay AL", message='2S Rsi/Ema Yatay AL fırsatı olabilir {{ticker}}, FİYAT={{close}}')
-
 
 
 kesAxMA_9 = ta.crossunder(src , xMA_9) 
@@ -173,7 +130,7 @@ xMaYColor = color.lime
 xMaYLocation = location.belowbar
 
 
-acxMaKesmeler = input(defval = true, title = 'xMA Kesme İşaretleri Gözüksün mü?', group="xMA Kesme İşaretleri")   
+acxMaKesmeler = input(defval = false, title = 'xMA Kesme İşaretleri Gözüksün mü?', group="xMA Kesme İşaretleri")   
 acxMaAKesmeler = input(defval = true, title = 'xMA Aşağı Kesme İşaretleri Gözüksün mü?', group="xMA Kesme İşaretleri")   
 acxMaYKesmeler = input(defval = true, title = 'xMA Yukarı Kesme İşaretleri Gözüksün mü?', group="xMA Kesme İşaretleri")   
 
@@ -186,17 +143,17 @@ acxMa13YKesmeler = input(defval = false, title = 'xMA13 Yukarı Kesme İşareti 
 acxMa21AKesmeler = input(defval = false, title = 'xMA21 Aşağı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
 acxMa21YKesmeler = input(defval = false, title = 'xMA21 Yukarı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
 
-acxMa34AKesmeler = input(defval = true, title = 'xMA34 Aşağı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
-acxMa34YKesmeler = input(defval = true, title = 'xMA34 Yukarı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
+acxMa34AKesmeler = input(defval = false, title = 'xMA34 Aşağı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
+acxMa34YKesmeler = input(defval = false, title = 'xMA34 Yukarı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
 
-acxMa50AKesmeler = input(defval = true, title = 'xMA50 Aşağı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
-acxMa50YKesmeler = input(defval = true, title = 'xMA50 Yukarı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
+acxMa50AKesmeler = input(defval = false, title = 'xMA50 Aşağı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
+acxMa50YKesmeler = input(defval = false, title = 'xMA50 Yukarı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
 
 acxMa89AKesmeler = input(defval = false, title = 'xMA89 Aşağı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
 acxMa89YKesmeler = input(defval = false, title = 'xMA89 Yukarı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
 
-acxMa100AKesmeler = input(defval = true, title = 'xMA100 Aşağı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
-acxMa100YKesmeler = input(defval = true, title = 'xMA100 Yukarı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
+acxMa100AKesmeler = input(defval = false, title = 'xMA100 Aşağı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
+acxMa100YKesmeler = input(defval = false, title = 'xMA100 Yukarı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
 
 acxMa144AKesmeler = input(defval = false, title = 'xMA144 Aşağı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
 acxMa144YKesmeler = input(defval = false, title = 'xMA144 Yukarı Kesme İşareti Gözüksün mü?', group="xMA Kesme İşaretleri")   
@@ -244,5 +201,57 @@ plotshape(kesYxMA_144 and acxMa144Cizgisi and acxMaKesmeler and acxMaYKesmeler a
 
 plotshape(kesYxMA_200 and acxMa200Cizgisi and acxMaKesmeler and acxMaYKesmeler and acxMa200YKesmeler ? kesYxMA_200 : na ,title ='xMa200 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_200_Color, offset=0, size=xMaYSize)
 alertcondition(kesYxMA_200, title="xMA200 YK", message='2S xMA200 YK (200 ü yukarı kesti) {{ticker}}, FİYAT={{close}}')
+
+
+
+// RSI/EMA
+myClose1S = request.security(syminfo.tickerid, timeframe.period, src)
+myRsiD = input.int(14, title='RSI Değeri', group="Rsi/Ema Çizgisi Değerleri")
+myRsi1S = ta.rsi(myClose1S,myRsiD)
+myEmaD = input.int(12, title='Ema Değeri', group="Rsi/Ema Çizgisi Değerleri")
+myEma121S = ta.ema(myRsi1S, myEmaD)
+acRsiEmaLW = input.int(defval = 4, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri', group="Rsi/Ema Çizgisi Değerleri") 
+
+acRsiEma = input(defval = false, title = 'Rsi/Ema Çizgisi Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaAl = input(defval = false, title = 'Rsi/Ema Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaSat = input(defval = false, title = 'Rsi/Ema Sat İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaYatay = input(defval = false, title = 'Rsi/Ema Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaCifteYatay = input(defval = false, title = 'Rsi/Ema Çift Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+
+myKoyuRenkY = input.color(#00897B , "Alım Bölgesinde (zirvede) Yükselirken", group="Rsi/Ema Çizgisi") 
+myAcikRenkY = input.color(color.green, "Satım Bölgesinden (dipte) Yükselirken", group="Rsi/Ema Çizgisi") 
+
+myAcikRenkD = input.color(color.red , "Alım Bölgesinden (zirvede) Düşerken", group="Rsi/Ema Çizgisi") 
+myKoyuRenkD = input.color(#880E4F  , "Satım Bölgesinde (dipte) Düşerken", group="Rsi/Ema Çizgisi") 
+
+myRsiColorY = myRsi1S <= 60 ? myAcikRenkY : myKoyuRenkY     
+myRsiColorD = myRsi1S <= 40 ? myKoyuRenkD : myAcikRenkD   
+myRsiColorTek = myRsi1S >= myEma121S ? myRsiColorY : myRsiColorD
+
+plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=myRsiColorTek, title="RsiEma", linewidth=acRsiEmaLW)
+
+
+rsiSartAl = (myRsiColorTek[1]==myAcikRenkD or myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkY or myRsiColorTek == myKoyuRenkY) 
+plotshape(rsiSartAl and acRsiEmaAl ,title ='Rsi/Ema AL' , style=shape.triangleup, location=location.belowbar, color=color.new(#00bcd4, 0), offset=0, size=size.normal)
+alertcondition(rsiSartAl, title="Rsi/Ema AL", message='Rsi/Ema AL fırsatı olabilir (xMA100 ve xMA200 konumunu kontrol et) {{ticker}}, FİYAT={{close}}')
+
+rsiSartSat = (myRsiColorTek[1]==myAcikRenkY or myRsiColorTek[1]==myKoyuRenkY) and (myRsiColorTek == myAcikRenkD or myRsiColorTek == myKoyuRenkD) 
+plotshape(rsiSartSat and acRsiEmaSat ,title ='Rsi/Ema SAT', style=shape.triangledown, location=location.abovebar, color=color.new(#00bcd4, 0), offset=0, size=size.normal)
+alertcondition(rsiSartSat, title="Rsi/Ema SAT", message='Rsi/Ema SAT fırsatı olabilir (xMA50 konumunu kontrol et) {{ticker}}, FİYAT={{close}}')
+
+rsiSartCiftYatay1 = (myKoyuRenkD==myRsiColorTek[1] and myKoyuRenkD==myRsiColorTek[2] and myKoyuRenkD==myRsiColorTek[3]) 
+//or (myAcikRenkD==myRsiColorTek[1] and myAcikRenkD==myRsiColorTek[2] and myAcikRenkD==myRsiColorTek[3])
+rsiSartCiftYatay2 = (low==low[1] or close==close[1] or high==high[1] or open==open[1]) and (low==low[2] or close==close[2] or high==high[2] or open==open[2])
+rsiSartCiftYatay = rsiSartCiftYatay1 and rsiSartCiftYatay2
+plotshape(rsiSartCiftYatay and acRsiEmaCifteYatay ,title ='Rsi/Ema Çift Yatay AL' , style=shape.square, location=location.belowbar, color=myKoyuRenkD, offset=0, size=size.large)
+alertcondition(rsiSartCiftYatay, title="Rsi/Ema Çift Yatay AL", message='2S Rsi/Ema Çift Yatay AL fırsatı olabilir {{ticker}}, FİYAT={{close}}')
+
+
+rsiSartYatay = ((myKoyuRenkD==myRsiColorTek[1] and myKoyuRenkD==myRsiColorTek[2]) or (myAcikRenkD==myRsiColorTek[1] and myAcikRenkD==myRsiColorTek[2])) and (low==low[1])
+rsiSartYatayE = rsiSartYatay and (low <= xMA_100 and low <= xMA_200)
+plotshape(rsiSartYatayE and acRsiEmaYatay ,title ='Rsi/Ema Yatay AL' , style=shape.square, location=location.belowbar, color=myAcikRenkD, offset=0, size=size.normal)
+alertcondition(rsiSartYatayE, title="Rsi/Ema Yatay AL", message='2S Rsi/Ema Yatay AL fırsatı olabilir {{ticker}}, FİYAT={{close}}')
+
+
 
 //BURADA BİTTİ
