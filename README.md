@@ -1,7 +1,18 @@
-# FiboAlSatStratejisi
-
 İndikatör Kurulum Videosu ➤ https://bit.ly/3nG3oB7
 İndikatör Uygulama Videosu ➤ https://bit.ly/3GCVukv
+
+
+
+# xMA Sistemi (2 indikatör + 1 Strateji)
+------------------------------------------
+3) "xMA Strateji" Kaynak Kodu  ➤ https://github.com/ozcanozbek/FiboAlSatStratejisi/blob/main/xMA_Strateji.txt
+2) 'xMA (3,15,63) Çizgileri' Kaynak Kodu  ➤  https://github.com/ozcanozbek/FiboAlSatStratejisi/blob/main/3_15_63_Ma_%C3%87izgisi.txt
+1) "xMA" Kaynak Kodu  ➤ https://github.com/ozcanozbek/FiboAlSatStratejisi/blob/main/xMA.txt
+
+
+
+# FiboAlSatStratejisi
+----------------------
 
 11)
 "xFiboBolinger" Kaynak Kodu  ➤ 
