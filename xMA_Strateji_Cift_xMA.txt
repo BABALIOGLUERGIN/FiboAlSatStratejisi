@@ -1,0 +1,151 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © ozcanozbek
+
+//@version=5
+strategy("xMA Strateji (Çift xMA)", overlay=true, pyramiding=0, commission_type=strategy.commission.percent, commission_value=0, default_qty_type=strategy.cash, default_qty_value=10000, initial_capital=10000, currency=currency.TRY)
+src = input(title='Mum', defval=close, group="Kaynak Çeşitleri")
+
+// { Time Range
+FromMonth = input.int(defval=1, title='FromMonth', group='Time', minval=1, maxval=12)
+FromDay = input.int(defval=1, title='FromDay', group='Time', minval=1, maxval=31)
+FromYear = input.int(defval=2000, title='FromYear', group='Time', minval=2000)
+ToMonth = input.int(defval=1, title='ToMonth', group='Time', minval=1, maxval=12)
+ToDay = input.int(defval=1, title='ToDay', group='Time', minval=1, maxval=31)
+ToYear = input.int(defval=9999, title='ToYear', group='Time', minval=2010)
+start = timestamp(FromYear, FromMonth, FromDay, 00, 00)
+finish = timestamp(ToYear, ToMonth, ToDay, 23, 59)
+window() =>
+    time >= start and time <= finish ? true : false
+
+afterStartDate = time >= start and time <= finish ? true : false
+
+zeroline = 0
+
+// } Time Range
+
+// İŞLEMLER
+
+
+
+
+// xMA Çizgi ve Kesişmeleri
+
+demaHesapla(src,len)=>
+    ema1 = ta.ema(src, len)
+    ema2 = ta.ema(ema1, len)
+    (2 * ema1) - ema2  
+
+temaHesapla(src,len)=>
+    ema1 = ta.ema(src, len)
+    ema2 = ta.ema(ema1, len)
+    ema3 = ta.ema(ema2, len)
+    3 * (ema1 - ema2) + ema3  
+
+xMaKontrol(xMaTip, src, len)=>
+    float xMA = switch xMaTip
+        "EMA" => ta.ema(src, len) 
+        "SMA" => ta.sma(src, len) 
+        "HMA" => ta.hma(src, len) 
+        "RMA" => ta.rma(src, len) 
+        "WMA" => ta.wma(src, len) 
+        "(D)EMA" => demaHesapla(src,len)
+        "(T)EMA" => temaHesapla(src,len)
+        => 0.0 
+
+
+
+xMA_SatBirinci_Color = color.new(color.lime, 0)
+string xMaTipSatBirinci   = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "Sat Kesecek xMA Tipi", group="xMA SAT (Yukardan Aşağıya Kesecek) ⬇️🔻 Değerleri")
+lengthSatBirinci = input(20, 'Sat Kesecek xMA Değeri', group="xMA SAT (Yukardan Aşağıya Kesecek) ⬇️🔻 Değerleri") 
+xMA_SatBirinci = xMaKontrol(xMaTipSatBirinci, src, lengthSatBirinci) 
+plot(xMA_SatBirinci, color=xMA_SatBirinci_Color, linewidth=3, title='Sat Kesecek xMa Çizgisi')
+acSatMum = input.bool(defval = false, title = 'Sat (Aşağı Kesecek) MUM ile olsun mu?', group="xMA SAT (Yukardan Aşağıya Kesecek) ⬇️🔻 Değerleri") 
+
+xMA_SatIkinci_Color = color.new(color.red, 0)
+string xMaTipSatIkinci   = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "Sat Kesilecek xMA Tipi", group="xMA SAT (Yukardan Aşağıya Kesilecek) === Değerleri")
+lengthSatIkinci = input(20, 'Sat Kesilecek xMA Değeri', group="xMA SAT (Yukardan Aşağıya Kesilecek) === Değerleri")
+xMA_SatIkinci = xMaKontrol(xMaTipSatIkinci, src, lengthSatIkinci) 
+plot(xMA_SatIkinci, color=xMA_SatIkinci_Color, linewidth=3, title='Sat Kesilecek xMa Çizgisi')
+
+
+
+
+
+xMA_AlBirinci_Color = color.new(color.white, 0)
+string xMaTipAlBirinci   = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "Al Kesilecek xMA tipi", group="xMA AL (Aşağıdan Yukarıya Kesilecek) Değerleri")
+lengthAlBirinci = input(50, 'Al Kesilecek xMA Değeri', group="xMA AL (Aşağıdan Yukarıya Kesilecek) Değerleri")
+xMA_AlBirinci = xMaKontrol(xMaTipAlBirinci, src, lengthAlBirinci) 
+plot(xMA_AlBirinci, color=xMA_AlBirinci_Color, linewidth=2, title='Al Kesilecek xMa Çizgisi')
+
+
+
+xMA_AlIkinci_Color = color.new(color.yellow, 0)
+string xMaTipAlIkinci   = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "Al Kesecek xMA tipi", group="xMA AL (Aşağıdan Yukarıya Kesecek) ⬆️🔺 Değerleri")
+lengthAlIkinci = input(50, 'Al Kesecek xMA Değeri', group="xMA AL (Aşağıdan Yukarıya Kesecek) ⬆️🔺 Değerleri")
+xMA_AlIkinci = xMaKontrol(xMaTipAlIkinci, src, lengthAlIkinci) 
+plot(xMA_AlIkinci, color=xMA_AlIkinci_Color, linewidth=2, title='Al Kesecek xMa Çizgisi')
+acAlMum = input.bool(defval = false, title = 'Al (Yukarı Kesecek) MUM ile olsun mu?', group="xMA AL (Aşağıdan Yukarıya Kesecek) ⬆️🔺 Değerleri") 
+
+
+
+
+xMA_Baraj_Color = color.new(color.orange, 0)
+string xMaTipBaraj   = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "Baraj xMA tipi", group="xMA Baraj Değerleri")
+lengthBaraj = input(100, 'xMA Baraj', group="xMA Baraj Değerleri")
+xMA_Baraj = xMaKontrol(xMaTipBaraj, src, lengthBaraj) 
+acBaraj = input.bool(defval = false, title = 'Baraj Uygulansın mı?', group="xMA Baraj Değerleri") 
+acBarajCizgisi = input.bool(defval = true, title = 'Baraj Çizgisi Gösterilsin mi?', group="xMA Baraj Değerleri") 
+plot(xMA_Baraj and acBarajCizgisi ? xMA_Baraj : na, color=xMA_Baraj_Color, linewidth=2, title='xMa Baraj Çizgisi')
+
+
+//acKaynak = input.bool(defval = false, title = 'BirinciAL) ve İkinci(SAT) Çizgiler Mum ile Kesiştirilsin', group="xMA Hesaplama Yöntemi") 
+acKaynak = false
+
+kesAsagi =  ta.crossover(xMA_AlIkinci, xMA_AlBirinci) 
+if acAlMum
+    kesAsagi :=  ta.crossover(src, xMA_AlBirinci)
+
+kesYukari = ta.crossunder(xMA_SatBirinci , xMA_SatIkinci) 
+if acSatMum
+    kesYukari := ta.crossunder(src , xMA_SatIkinci) 
+
+
+///if acKaynak
+///    kesAsagi := ta.crossunder(src , xMA_SatIkinci) 
+///    kesYukari := ta.crossover(src , xMA_SatBirinci) 
+
+
+//xMaAStyle = shape.triangledown
+//xMaASize = size.small
+//xMaAColor = color.lime
+//xMaALocation = location.abovebar
+
+//xMaYStyle = shape.triangleup
+//xMaYSize = size.small
+//xMaYColor = color.red
+//xMaYLocation = location.belowbar
+
+rsiSartAl = kesAsagi 
+if acBaraj
+    if xMA_Baraj < src
+        rsiSartAl := false 
+
+rsiSartSat = kesYukari
+if acBaraj
+    if xMA_Baraj > src
+        rsiSartSat := false 
+
+
+
+//STRATEJİ SON BÖLÜM
+
+isLong = strategy.position_size > 0
+isShort = strategy.position_size < 0
+
+if afterStartDate
+    strategy.entry(id='xMA', direction=strategy.long, when=rsiSartAl)
+
+if afterStartDate and isLong
+    strategy.close(id='xMA', when=rsiSartSat)
+
+// BURADA BİTTİ
