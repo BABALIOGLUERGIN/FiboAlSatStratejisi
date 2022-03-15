@@ -78,8 +78,8 @@ acKaynak = input.bool(defval = false, title = 'BirinciAL) ve İkinci(SAT) Çizgi
 
 
 
-kesYukari = ta.crossunder(xMA_Birinci , xMA_Ikinci) 
-kesAsagi = ta.crossover(xMA_Birinci , xMA_Ikinci) 
+kesAsagi = ta.crossunder(xMA_Birinci , xMA_Ikinci) 
+kesYukari = ta.crossover(xMA_Birinci , xMA_Ikinci) 
 
 if acKaynak
     kesAsagi := ta.crossunder(src , xMA_Ikinci) 
