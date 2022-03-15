@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = '3_15_63_Ma Çizgisi V1.1.01', shorttitle = 'xMA (3,15,63) Çizgileri', overlay=true) 
+indicator(title = '3_15_63_Ma Çizgisi V1.1.02', shorttitle = 'xMA (3,15,63) Çizgileri', overlay=true) 
 src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
 
 // Fibo Ayarları
@@ -16,8 +16,8 @@ acMa3Ma15Boyama = input(defval = true, title = 'Ma 3/15 Arası Boyama Gösterils
 acMa15Ma63Boyama = input(defval = false, title = 'Ma 15/63 Arası Boyama Gösterilsin mi?', group="xMA Ayarları")
 acxMa3Al = input(defval = false, title = 'EMA 3 Al İşareti Gözüksün mü?', group="xMA Ayarları")   
 acxMa3Sat = input(defval = false, title = 'EMA 3 Sat İşareti Gözüksün mü?', group="xMA Ayarları")   
-acxMa3x15Al = input(defval = false, title = 'EMA 3x15 (barajlı) Kes İşareti Gözüksün mü?', group="xMA Ayarları")   
-acxMa3x15Sat = input(defval = false , title = 'EMA 3x15 (barajlı) Kes İşareti Gözüksün mü?', group="xMA Ayarları")   
+acxMa3x15Al = input(defval = false, title = 'EMA 3x15 (barajlı) Yukarı Kes İşareti Gözüksün mü?', group="xMA Ayarları")   
+acxMa3x15Sat = input(defval = false , title = 'EMA 3x15 (barajlı) Aşağı Kes İşareti Gözüksün mü?', group="xMA Ayarları")   
 
 // xMA Çizgi ve Kesişmeleri
 string xMaTip3 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA3 tipi", group="xMA3 Değerleri")
