@@ -2,8 +2,8 @@
 // © ozcanozbek
 
 //@version=5
-indicator(title ="xMA - V1.2.01", shorttitle ="xMA" ,overlay=true)
-src = input(title='source', defval=close, group="Kaynak Çeşitleri")
+indicator(title ="xMA - V1.2.02", shorttitle ="xMA" ,overlay=true)
+src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
 
 // xMA Çizgi ve Kesişmeleri
 string xMaTip9 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA9 tipi", group="xMA9 Değerleri")
@@ -14,7 +14,7 @@ string xMaTip50 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA
 string xMaTip89 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA89 tipi", group="xMA89 Değerleri")
 string xMaTip100 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA100 tipi", group="xMA100 Değerleri")
 string xMaTip144 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA144 tipi", group="xMA144 Değerleri")
-string xMaTip200 = input.string(defval="SMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA200 tipi", group="xMA200 Değerleri")
+string xMaTip200 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA200 tipi", group="xMA200 Değerleri")
 
 demaHesapla(src,len)=>
     ema1 = ta.ema(src, len)
@@ -42,8 +42,8 @@ acxMaCizgisi = input(defval = true, title = 'xMA Çizgileri Gözüksün mü?', g
 acxMa9Cizgisi = input(defval = false, title = 'xMA9 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 acxMa13Cizgisi = input(defval = false, title = 'xMA13 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 acxMa21Cizgisi = input(defval = false, title = 'xMA21 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
-acxMa34Cizgisi = input(defval = false, title = 'xMA34 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
-acxMa50Cizgisi = input(defval = false, title = 'xMA50 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
+acxMa34Cizgisi = input(defval = true, title = 'xMA34 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
+acxMa50Cizgisi = input(defval = true, title = 'xMA50 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 acxMa89Cizgisi = input(defval = false, title = 'xMA89 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 acxMa100Cizgisi = input(defval = false, title = 'xMA100 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 acxMa144Cizgisi = input(defval = false, title = 'xMA144 Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
