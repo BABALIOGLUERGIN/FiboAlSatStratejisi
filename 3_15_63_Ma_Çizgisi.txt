@@ -1,22 +1,53 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = '3_15_63_Ma Çizgisi V1.0.07', shorttitle = '3_15_63_Ma Çizgisi', overlay=true, timeframe="") 
-src = close
+indicator(title = '3_15_63_Ma Çizgisi V1.1.01', shorttitle = 'xMA (3,15,63) Çizgileri', overlay=true) 
+src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
 
-acTema = input(defval = false, title = 'Tema Çizgileri Gözüksün mü?')   
-acT100T200Boyama = input(defval = false, title = 'Tema 100/200 Arası Boyama Gösterilsin mi?') 
-acMa3Ma15Boyama = input(defval = true, title = 'Ma 3/15 Arası Boyama Gösterilsin mi?')
-acMa15Ma63Boyama = input(defval = false, title = 'Ma 15/63 Arası Boyama Gösterilsin mi?')
-acxMa3Al = input(defval = false, title = 'EMA 3 Al İşareti Gözüksün mü?')   
-acxMa3Sat = input(defval = true, title = 'EMA 3 Sat İşareti Gözüksün mü?')   
+// Fibo Ayarları
+acFiboLines = input(defval = true, title = 'Fibo Yatay Çizgileri Gözüksün mü?', group="Fibo Ayarları")   
 
-acxMa3x15Al = input(defval = true, title = 'EMA 3x15 (sma200 baraj) Yukarı Kes İşareti Gözüksün mü?')   
-acxMa3x15Sat = input(defval = true , title = 'EMA 3x15 (sma200 baraj) Aşağı Kes İşareti Gözüksün mü?')   
+// Pano Ayarları
+acFiboUA = input(defval = true, title = 'Fibo Üst Alt Fiyatları Panosu Gözüksün mü?')   
+acEtiket = input(defval = false, title = 'Fibo Al Sat Talimatları Panosu Gözüksün mü?')   
 
 
-acBb = input(defval = true, title = 'Bolinger Çizgisi Gözüksün mü?')   
-acBbAl = input(defval = true, title = 'Bolinger Al İşareti Gözüksün mü?')   
-acBbSat = input(defval = true, title = 'Bolinger Sat İşareti Gözüksün mü?')   
+// xMA Ayarlar
+acMa3Ma15Boyama = input(defval = true, title = 'Ma 3/15 Arası Boyama Gösterilsin mi?', group="xMA Ayarları")
+acMa15Ma63Boyama = input(defval = false, title = 'Ma 15/63 Arası Boyama Gösterilsin mi?', group="xMA Ayarları")
+acxMa3Al = input(defval = false, title = 'EMA 3 Al İşareti Gözüksün mü?', group="xMA Ayarları")   
+acxMa3Sat = input(defval = false, title = 'EMA 3 Sat İşareti Gözüksün mü?', group="xMA Ayarları")   
+acxMa3x15Al = input(defval = false, title = 'EMA 3x15 (barajlı) Kes İşareti Gözüksün mü?', group="xMA Ayarları")   
+acxMa3x15Sat = input(defval = false , title = 'EMA 3x15 (barajlı) Kes İşareti Gözüksün mü?', group="xMA Ayarları")   
+
+// xMA Çizgi ve Kesişmeleri
+string xMaTip3 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA3 tipi", group="xMA3 Değerleri")
+string xMaTip15 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA15 tipi", group="xMA15 Değerleri")
+string xMaTip63 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA63 tipi", group="xMA63 Değerleri")
+string xMaTipBaraj = input.string(defval="SMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA Baraj tipi", group="xMA Baraj Değerleri")
+
+
+demaHesapla(src,len)=>
+    ema1 = ta.ema(src, len)
+    ema2 = ta.ema(ema1, len)
+    (2 * ema1) - ema2  
+
+temaHesapla(src,len)=>
+    ema1 = ta.ema(src, len)
+    ema2 = ta.ema(ema1, len)
+    ema3 = ta.ema(ema2, len)
+    3 * (ema1 - ema2) + ema3  
+
+xMaKontrol(xMaTip, src, len)=>
+    float xMA = switch xMaTip
+        "EMA" => ta.ema(src, len) 
+        "SMA" => ta.sma(src, len) 
+        "HMA" => ta.hma(src, len) 
+        "RMA" => ta.rma(src, len) 
+        "WMA" => ta.wma(src, len) 
+        "(D)EMA" => demaHesapla(src,len)
+        "(T)EMA" => temaHesapla(src,len)
+        => 0.0 
+ 
 
 
 xMaAStyle = shape.triangledown
@@ -29,35 +60,23 @@ xMaYSize = size.small
 xMaYColor = color.lime
 xMaYLocation = location.belowbar
 
-length3 = 100 //input.int(100, minval=1)
-e31 = ta.ema(src, length3)
-e32 = ta.ema(e31, length3)
-e33 = ta.ema(e32, length3)
-dema3 = 3 * (e31 - e32) + e33    //tema100
-myTema100 = plot(dema3 and acTema ? dema3 : na, 'Tema 100', color=color.new(color.blue, 0), linewidth=3)
+lengthMa3 = input(3, 'xMA 3', group="xMA3 Değerleri")
+ma3 = xMaKontrol(xMaTip3, src, lengthMa3) 
+pma3 = plot(ma3, color=color.new(color.white, 0), linewidth=2, title='xMA 3')
 
-length4 = 200 //input.int(200, minval=1)
-e41 = ta.ema(src, length4)
-e42 = ta.ema(e41, length4)
-e43 = ta.ema(e42, length4)
-dema4 = 3 * (e41 - e42) + e43    //tema200
-myTema200 = plot(dema4 and acTema ? dema4 : na, 'Tema 200', color=color.new(#be660b, 0), linewidth=4)
+lengthMa15 = input(15, 'xMA 15', group="xMA15 Değerleri")
+ma15 = xMaKontrol(xMaTip15, src, lengthMa15) 
+pma15 = plot(ma15, color=color.new(color.yellow, 0), linewidth=2, title='xMA 15')
 
-acT100T200BoyamaRenk = acT100T200Boyama ? 70 : 100
-acT100T200Rengim = dema3 >= dema4 ? color.new(color.lime, acT100T200BoyamaRenk) : color.new(color.red, acT100T200BoyamaRenk)
-fill(myTema100, myTema200, title = 'Tema 100/200 Bölgesi', color=acT100T200Rengim)
+lengthMa63 = input(63, 'xMA 63', group="xMA63 Değerleri")
+ma63 = xMaKontrol(xMaTip63, src, lengthMa63) 
+pma63 = plot(ma63, color=color.new(color.orange, 0), linewidth=2, title='xMA 63')
 
-lengthMa3 = input(3, 'ma 3')
-ma3 = ta.ema(src, lengthMa3)
-pma3 = plot(ma3, color=color.new(color.white, 0), linewidth=2, title='ma 3')
 
-lengthMa15 = input(15, 'ma 15')
-ma15 = ta.ema(src, lengthMa15)
-pma15 = plot(ma15, color=color.new(color.purple, 0), linewidth=2, title='ma 15')
+lengthMaBaraj = input(200, 'xMA Baraj', group="xMA Baraj Değerleri")
+maBaraj = xMaKontrol(xMaTipBaraj, src, lengthMaBaraj) 
+pmaBaraj = plot(maBaraj, color=color.new(color.gray, 0), linewidth=4, title='xMA Baraj')
 
-lengthMa63 = input(63, 'ma 63')
-ma63 = ta.ema(src, lengthMa63)
-pma63 = plot(ma63, color=color.new(color.yellow, 0), linewidth=2, title='ma 63')
 
 acMa3Ma15BoyamaRenk = acMa3Ma15Boyama ? 70 : 100
 acMa3Ma15Rengim = ma3 >= ma15 ? color.new(color.lime, acMa3Ma15BoyamaRenk) : color.new(color.red, acMa3Ma15BoyamaRenk)
@@ -67,29 +86,6 @@ acMa15Ma63BoyamaRenk = acMa15Ma63Boyama ? 70 : 100
 acMa15Ma63Rengim = ma15 >= ma63 ? color.new(color.lime, acMa15Ma63BoyamaRenk) : color.new(color.red, acMa15Ma63BoyamaRenk)
 fill(pma15, pma63, title = 'Ma 15/63 Bölgesi', color=acMa15Ma63Rengim)
 
-//BB
-bbLength = 20
-bbMult = 2.0
-bbBasis = ta.sma(src, bbLength)
-bbDev = bbMult * ta.stdev(src, bbLength)
-upper = bbBasis + bbDev
-lower = bbBasis - bbDev
-
-bbSrcUst = close
-bbSrcAlt = low
-kesYbb = ta.crossover(bbSrcAlt , lower) 
-kesAbb = ta.crossunder(bbSrcUst , upper) 
-
-bb_Color = color.new(#00bcd4, 0)
-bb_Size = size.normal
-
-plot(upper and acBb ? upper : na, "Bolinger Üst", color=bb_Color, offset = 0, linewidth=2)
-plot(lower and acBb ? lower : na, "Bolinger Alt", color=bb_Color, offset = 0, linewidth=2)
-
-
-plotshape(kesAbb and acBbSat ? kesAbb : na , title = 'Bolinger Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=bb_Color, offset=0, size=bb_Size)
-plotshape(kesYbb and acBbAl ? kesYbb : na ,title ='Bolinger Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=bb_Color, offset=0, size=bb_Size)
-alertcondition(kesYbb, title="BB AL", message='2S BB AL {{ticker}}, FİYAT={{close}}')
 
 //EMA 3 KES
 kesYxMA_3 = ta.crossover(src , ma3) and ma3 < ma15 
@@ -101,15 +97,42 @@ plotshape(kesYxMA_3 and acxMa3Al ? kesYxMA_3 : na ,title ='EMA 3 Yukarı Kes', t
 
 
 //ema3 & ema15 kes
-
-//kesYema3x15 = ta.crossover(ma3 , ma15) and src <= ta.sma(src, 200)
-//kesAema3x15 = ta.crossunder(ma3 , ma15) and src >= ta.sma(src, 200)
-kesYema3x15 = ta.cross(ma3 , ma15) and src <= ma63 //ta.sma(src, 200)
-kesAema3x15 = ta.cross(ma3 , ma15) and src >= ma63 //ta.sma(src, 200)
+xMa3x15Size = size.tiny
+//kesYema3x15 = ta.crossover(ma3 , ma15) and src <= maBaraj
+//kesAema3x15 = ta.crossunder(ma3 , ma15) and src >= maBaraj
+kesYema3x15 = ta.cross(ma3 , ma15) and src <= maBaraj 
+kesAema3x15 = ta.cross(ma3 , ma15) and src >= maBaraj 
 xMA_3x15_Color = color.new(color.yellow, 0)
-plotshape(kesAema3x15 and acxMa3x15Sat ? kesAema3x15 : na  , title = 'EMA 3x15 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_3x15_Color, offset=0, size=xMaASize)
-plotshape(kesYema3x15 and acxMa3x15Al ? kesYema3x15 : na ,title ='EMA 3x15 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_3x15_Color, offset=0, size=xMaYSize)
+plotshape(kesAema3x15 and acxMa3x15Sat ? kesAema3x15 : na  , title = 'EMA 3x15 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_3x15_Color, offset=0, size=xMa3x15Size)
+plotshape(kesYema3x15 and acxMa3x15Al ? kesYema3x15 : na ,title ='EMA 3x15 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_3x15_Color, offset=0, size=xMa3x15Size)
 
+//BB
+acBb = input(defval = true, title = 'Bolinger Çizgisi Gözüksün mü?', group="Bolinger Bölümü")   
+acBbAl = input(defval = true, title = 'Bolinger Al İşareti Gözüksün mü?', group="Bolinger Bölümü")   
+acBbSat = input(defval = false, title = 'Bolinger Sat İşareti Gözüksün mü?', group="Bolinger Bölümü")   
+
+bbLength = input.int(20, minval=1, step=1, title='Bolinger Uzunluğu', group="Bolinger Bölümü")
+bbMult = input.float(2.0, minval=0.001, maxval=50.0, step=0.01, title="Bolinger Standart Sapma", group="Bolinger Bölümü")
+bbBasis = ta.sma(src, bbLength)
+bbDev = bbMult * ta.stdev(src, bbLength)
+upper = bbBasis + bbDev
+lower = bbBasis - bbDev
+
+bbSrcUst = close
+bbSrcAlt = low
+kesYbb = ta.crossover(bbSrcAlt , lower) 
+kesAbb = ta.crossunder(bbSrcUst , upper) 
+
+bb_Color = color.new(#00bcd4, 0)
+bb_Size = size.small
+
+bolP1 = plot(upper and acBb ? upper : na, "Bolinger Üst", color=bb_Color, offset = 0, linewidth=2)
+bolP2 = plot(lower and acBb ? lower : na, "Bolinger Alt", color=bb_Color, offset = 0, linewidth=2)
+fill(bolP1, bolP2, transp=95)
+
+plotshape(kesAbb and acBbSat ? kesAbb : na , title = 'Bolinger Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=bb_Color, offset=0, size=bb_Size)
+plotshape(kesYbb and acBbAl ? kesYbb : na ,title ='Bolinger Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=bb_Color, offset=0, size=bb_Size)
+alertcondition(kesYbb, title="BB AL", message='2S BB AL {{ticker}}, FİYAT={{close}}')
 
 
 // RSI/EMA
@@ -159,6 +182,186 @@ rsiSartYatay = ((myKoyuRenkD==myRsiColorTek[1] and myKoyuRenkD==myRsiColorTek[2]
 rsiSartYatayE = rsiSartYatay /// and (low <= xMA_100 and low <= xMA_200)
 plotshape(rsiSartYatayE and acRsiEmaYatay ,title ='Rsi/Ema Yatay AL' , style=shape.square, location=location.belowbar, color=myAcikRenkD, offset=0, size=size.normal)
 alertcondition(rsiSartYatayE, title="Rsi/Ema Yatay AL", message='2S Rsi/Ema Yatay AL fırsatı olabilir {{ticker}}, FİYAT={{close}}')
+
+
+
+
+
+//Fiblines
+fibLen = input(defval = 150, title = 'Fibo Hesaplama Mum Sayısı', group="Fibo Ayarları")  
+fractal_top = 0.0
+fractal_top := high < high[2] and high[1] < high[2] and high[3] < high[2] and high[4] < high[2] ? high[2] : fractal_top[1]
+fractal_bottom = 0.0
+fractal_bottom := low > low[2] and low[1] > low[2] and low[3] > low[2] and low[4] > low[2] ? low[2] : fractal_bottom[1]
+
+srcHigh = ta.highest(fractal_top, fibLen)
+srcLow = ta.lowest(fractal_bottom, fibLen)
+diff = srcHigh - srcLow
+
+line2272 = srcLow + diff * 2.272
+line2000 = srcLow + diff * 2.000
+line1618 = srcLow + diff * 1.618
+line1414 = srcLow + diff * 1.414
+line1272 = srcLow + diff * 1.272
+line1000 = srcHigh
+line0786 = srcLow + diff * 0.786
+line0618 = srcLow + diff * 0.618
+line0500 = srcLow + diff * 0.500
+line0382 = srcLow + diff * 0.382
+line0236 = srcLow + diff * 0.236
+line0000 = srcLow
+line1272_2 = srcHigh - diff * 1.272
+line1414_2 = srcHigh - diff * 1.414
+line1618_2 = srcHigh - diff * 1.618
+line2000_2 = srcHigh - diff * 2.000
+line2272_2 = srcHigh - diff * 2.272
+
+
+
+plot(line0000 and acFiboLines ? line0000 : na, title='0.000', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line0236 and acFiboLines ? line0236 : na, title='0.236', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line0382 and acFiboLines ? line0382 : na, title='0.382', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line0500 and acFiboLines ? line0500 : na, title='0.500', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line0618 and acFiboLines ? line0618 : na, title='0.618', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line0786 and acFiboLines ? line0786 : na, title='0.786', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1000 and acFiboLines ? line1000 : na, title='1.000', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1272 and acFiboLines ? line1272 : na, title='1.272', color=color.new(color.green, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1414 and acFiboLines ? line1414 : na, title='1.414', color=color.new(color.green, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1618 and acFiboLines ? line1618 : na, title='1.618', color=color.new(color.green, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line2000 and acFiboLines ? line2000 : na, title='2.000', color=color.new(color.green, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line2272 and acFiboLines ? line2272 : na, title='2.272', color=color.new(color.green, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1272_2 and acFiboLines ? line1272_2 : na, title='-0.272', color=color.new(color.red, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1414_2 and acFiboLines ? line1414_2 : na, title='-0.414', color=color.new(color.red, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1618_2 and acFiboLines ? line1618_2 : na, title='-0.618', color=color.new(color.red, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line2000_2 and acFiboLines ? line2000_2 : na, title='-1.000', color=color.new(color.red, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line2272_2 and acFiboLines ? line2272_2 : na, title='-1.272', color=color.new(color.red, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+
+
+// Pano Bölümü
+
+
+
+f_datestamp(_time)=>
+    _sec = _time * 0.001 
+    _year = 1970 + math.floor(_sec / 31556926) 
+    _sec %= 31556926
+    _month = math.floor(_sec / 2629743)+1 
+    _sec %= 2629743
+    _day = math.floor(_sec / 86400)+1
+    str.format('Tarih:{2}.{1}.{0}', str.tostring(_year, '####'), _month, _day)
+
+
+position = 40
+info_label_off = 40
+info_label_size = input.string(size.normal, options=[size.tiny, size.small, size.normal, size.large, size.huge], title='Liste Panel Büyüklüğü')
+info_panel_x = timenow + math.round(ta.change(time) * info_label_off) + 10
+info_panel_y = (ta.highest(position) + ta.lowest(position))/2
+
+mumTipi = "Mum Birimi:" + timeframe.period
+Long =  f_datestamp(timenow) + ", " + mumTipi
+sonFiyat =  ", Sembol:" + syminfo.ticker + ", Son Fiyat: " + str.tostring(close, '##.##') 
+
+
+fiyatUst  =  close * 1.1  
+fiyatAlt  =  close * 0.9
+
+
+fiyatKontrol(gelenFiyat)=>
+    if gelenFiyat < fiyatUst and gelenFiyat > fiyatAlt
+        1
+    else
+        0
+
+
+pp1 = line2272 > close and fiyatKontrol(line2272) ? '\n1) 1 adet, ' + str.tostring(line2272, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line2000, '##.00') + ' fiyattan Zincir AL' : na
+pp2 = line2000 > close and fiyatKontrol(line2000) ? '\n2) 1 adet, ' + str.tostring(line2000, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line1618, '##.00') + ' fiyattan Zincir AL' : na
+pp3 = line1618 > close and fiyatKontrol(line1618) ? '\n3) 1 adet, ' + str.tostring(line1618, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line1414, '##.00') + ' fiyattan Zincir AL' : na
+pp4 = line1414 > close and fiyatKontrol(line1414) ? '\n4) 1 adet, ' + str.tostring(line1414, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line1272, '##.00') + ' fiyattan Zincir AL' : na
+pp5 = line1272 > close and fiyatKontrol(line1272) ? '\n5) 1 adet, ' + str.tostring(line1272, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line1000, '##.00') + ' fiyattan Zincir AL' : na
+pp6 = line1000 > close and fiyatKontrol(line1000) ? '\n6) 1 adet, ' + str.tostring(line1000, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line0786, '##.00') + ' fiyattan Zincir AL' : na
+pp7 = line0786 > close and fiyatKontrol(line0786) ? '\n7) 1 adet, ' + str.tostring(line0786, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line0618, '##.00') + ' fiyattan Zincir AL' : na
+pp8 = line0618 > close and fiyatKontrol(line0618) ? '\n8) 1 adet, ' + str.tostring(line0618, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line0500, '##.00') + ' fiyattan Zincir AL' : na
+pp9 = line0500 > close and fiyatKontrol(line0500) ? '\n9) 1 adet, ' + str.tostring(line0500, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line0382, '##.00') + ' fiyattan Zincir AL' : na
+pp10 = line0382 > close and fiyatKontrol(line0382) ? '\n10) 1 adet, ' + str.tostring(line0382, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line0236, '##.00') + ' fiyattan Zincir AL' : na
+pp11 = line0236 > close and fiyatKontrol(line0236) ? '\n11) 1 adet, ' + str.tostring(line0236, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line0000, '##.00') + ' fiyattan Zincir AL' : na
+pp12 = line0000 > close and fiyatKontrol(line0000) ? '\n12) 1 adet, ' + str.tostring(line0000, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line1272_2, '##.00') + ' fiyattan Zincir AL' : na
+pp13 = line1272_2 > close and fiyatKontrol(line1272_2) ? '\n13) 1 adet, ' + str.tostring(line1272_2, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line1414_2, '##.00') + ' fiyattan Zincir AL' : na
+pp14 = line1414_2 > close and fiyatKontrol(line1414_2) ? '\n14) 1 adet, ' + str.tostring(line1414_2, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line1618_2, '##.00') + ' fiyattan Zincir AL' : na
+pp15 = line1618_2 > close and fiyatKontrol(line1618_2) ? '\n15) 1 adet, ' + str.tostring(line1618_2, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line2000_2, '##.00') + ' fiyattan Zincir AL' : na
+pp16 = line2000_2 > close and fiyatKontrol(line2000_2) ? '\n16) 1 adet, ' + str.tostring(line2000_2, '##.00') + ' Fiyattan SAT =>> ve ' + str.tostring(line2272_2, '##.00') + ' fiyattan Zincir AL' : na
+
+
+pp1a = line2000 < close and fiyatKontrol(line2000) ? '\n1) 1 adet, ' + str.tostring(line2000, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line2272, '##.00') + ' fiyattan Zincir SAT' : na
+pp2a = line1618 < close and fiyatKontrol(line1618) ? '\n2) 1 adet, ' + str.tostring(line1618, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line2000, '##.00') + ' fiyattan Zincir SAT' : na
+pp3a = line1414 < close and fiyatKontrol(line1414) ? '\n3) 1 adet, ' + str.tostring(line1414, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line1618, '##.00') + ' fiyattan Zincir SAT' : na
+pp4a = line1272 < close and fiyatKontrol(line1272) ? '\n4) 1 adet, ' + str.tostring(line1272, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line1414, '##.00') + ' fiyattan Zincir SAT' : na
+pp5a = line1000 < close and fiyatKontrol(line1000) ? '\n5) 1 adet, ' + str.tostring(line1000, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line1272, '##.00') + ' fiyattan Zincir SAT' : na
+pp6a = line0786 < close and fiyatKontrol(line0786) ? '\n6) 1 adet, ' + str.tostring(line0786, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line1000, '##.00') + ' fiyattan Zincir SAT' : na
+pp7a = line0618 < close and fiyatKontrol(line0618) ? '\n7) 1 adet, ' + str.tostring(line0618, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line0786, '##.00') + ' fiyattan Zincir SAT' : na
+pp8a = line0500 < close and fiyatKontrol(line0500) ? '\n8) 1 adet, ' + str.tostring(line0500, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line0618, '##.00') + ' fiyattan Zincir SAT' : na
+pp9a = line0382 < close and fiyatKontrol(line0382) ? '\n9) 1 adet, ' + str.tostring(line0382, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line0500, '##.00') + ' fiyattan Zincir SAT' : na
+pp10a = line0236 < close and fiyatKontrol(line0236) ? '\n10) 1 adet, ' + str.tostring(line0236, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line0382, '##.00') + ' fiyattan Zincir SAT' : na
+pp11a = line0000 < close and fiyatKontrol(line0000) ? '\n11) 1 adet, ' + str.tostring(line0000, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line0236, '##.00') + ' fiyattan Zincir SAT' : na
+pp12a = line1272_2 < close and fiyatKontrol(line1272_2) ? '\n12) 1 adet, ' + str.tostring(line1272_2, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line0000, '##.00') + ' fiyattan Zincir SAT' : na
+pp13a = line1414_2 < close and fiyatKontrol(line1414_2) ? '\n13) 1 adet, ' + str.tostring(line1414_2, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line1272_2, '##.00') + ' fiyattan Zincir SAT' : na
+pp14a = line1618_2 < close and fiyatKontrol(line1618_2) ? '\n14) 1 adet, ' + str.tostring(line1618_2, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line1414_2, '##.00') + ' fiyattan Zincir SAT' : na
+pp15a = line2000_2 < close and fiyatKontrol(line2000_2) ? '\n15) 1 adet, ' + str.tostring(line2000_2, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line1618_2, '##.00') + ' fiyattan Zincir SAT' : na
+pp16a = line2272_2 < close and fiyatKontrol(line2272_2) ? '\n16) 1 adet, ' + str.tostring(line2272_2, '##.00') + ' Fiyattan AL =>> ve ' + str.tostring(line2000_2, '##.00') + ' fiyattan Zincir SAT' : na
+
+ara1 = "\n\n -----------------------------ALIŞ TALİMATLARI-----------------------"
+ara2 = "\n -----------------------------SATIŞ TALİMATLARI----------------------"
+ara3 = "\n -----------------------------------------------------------------------"
+info_text1 = Long + sonFiyat + ara1 + pp1 + pp2 + pp3 + pp4 + pp5 + pp6 + pp7 + pp8 + pp9 + pp10 + pp11 + pp12 + pp13 + pp14 + pp15 + pp16
+info_text2 = "\n" + ara2 + pp1a + pp2a + pp3a + pp4a + pp5a + pp6a + pp7a + pp8a + pp9a + pp10a + pp11a + pp12a + pp13a + pp14a + pp15a + pp16a + ara3
+info_textlongbuy = info_text1 + info_text2 + "\n" + str.tostring(close)
+
+
+
+if acEtiket
+    info_panellongbuy =  label.new(x=info_panel_x, y=info_panel_y, text=info_textlongbuy, xloc=xloc.bar_time, yloc=yloc.price, color=color.new(color.black, 0), style=label.style_label_left, textcolor=color.new(color.lime, 0), size=info_label_size) 
+    label.delete(info_panellongbuy[1])
+
+
+//line1414
+
+araUA = "----------------"
+myFiyat = "<< Fiyat: " + str.tostring(close, '##.00') + " >>" 
+myF0 = src >  line1414 ? myFiyat + "\n" + araUA + "\n" : na
+s4 = "Üst 4: " + str.tostring(line1414, '##.00') + "\n"
+myF1 = src <= line1414 and src > line1272 ? myFiyat + "\n" : na
+s3 = "Üst 3: " + str.tostring(line1272, '##.00') + "\n"
+myF2 = src <= line1272 and src > line1000 ? myFiyat + "\n" : na
+s2 = "Üst 2: " + str.tostring(line1000, '##.00') + "\n"
+myF3 = src <= line1000 and src > line0786 ? myFiyat + "\n" : na
+s1 = "Üst 1: " + str.tostring(line0786, '##.00') + "\n"
+myF4 = src <= line0786 and src > line0236 ? araUA + "\n" + myFiyat + "\n"  : na
+a1 = "\n" + "Alt 1: " + str.tostring(line0236, '##.00') + "\n"
+myF5 = src <= line0236 and src > line0000 ? myFiyat + "\n" : na
+a2 = "Alt 2: " + str.tostring(line0000, '##.00') + "\n"
+myF6 = src <= line0000 and src > line1272_2 ? myFiyat + "\n"  : na
+a3 = "Alt 3: " + str.tostring(line1272_2, '##.00') + "\n"
+myF7 = src <= line1272_2 and src > line1414_2 ? myFiyat + "\n" : na
+a4 = "Alt 4: " + str.tostring(line1414_2, '##.00') //+ "\n"
+myF8 = src <= line1414_2 ? "\n" + araUA + "\n" + myFiyat : na
+
+//line1414_2
+
+toplaUA = myF0 + s4 + myF1 + s3 + myF2 + s2 + myF3 + s1 + myF4 + araUA + a1 + myF5 + a2 + myF6 + a3 + myF7 + a4 + myF8 //+ araUA
+info_textUA = toplaUA //+ myFiyat = "Fiyat: " + str.tostring(close)
+
+
+positionUA = 10
+info_label_offUA = 0 //10
+//info_label_size = input.string(size.normal, options=[size.tiny, size.small, size.normal, size.large, size.huge], title='Liste Panel Büyüklüğü')
+info_panel_xUA = (timenow + math.round(ta.change(time) * info_label_offUA)) - 5  //+10
+info_panel_yUA = (ta.highest(positionUA) + ta.lowest(positionUA))/2
+
+
+if acFiboUA
+    info_panelUA =  label.new(x=info_panel_xUA, y=info_panel_yUA, text=info_textUA, xloc=xloc.bar_time, yloc=yloc.price, color=color.new(color.black, 0), style=label.style_label_left, textcolor=color.new(color.lime, 0), size=info_label_size) 
+    label.delete(info_panelUA[1])
+
+
 
 
 //BURADA BITTI
