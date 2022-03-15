@@ -5,9 +5,9 @@
 
 # xMA Sistemi (2 indikatör + 1 Strateji)
 ------------------------------------------
-'xMA Strateji' Kaynak Kodu  ➤ https://github.com/ozcanozbek/FiboAlSatStratejisi/blob/main/xMA_Strateji.txt
-'xMA (3,15,63) Çizgileri' Kaynak Kodu  ➤  https://github.com/ozcanozbek/FiboAlSatStratejisi/blob/main/3_15_63_Ma_%C3%87izgisi.txt
-'xMA' Kaynak Kodu  ➤ https://github.com/ozcanozbek/FiboAlSatStratejisi/blob/main/xMA.txt
+C) 'xMA Strateji' Kaynak Kodu  ➤ https://github.com/ozcanozbek/FiboAlSatStratejisi/blob/main/xMA_Strateji.txt
+B) 'xMA (3,15,63) Çizgileri' Kaynak Kodu  ➤  https://github.com/ozcanozbek/FiboAlSatStratejisi/blob/main/3_15_63_Ma_%C3%87izgisi.txt
+A) 'xMA' Kaynak Kodu  ➤ https://github.com/ozcanozbek/FiboAlSatStratejisi/blob/main/xMA.txt
 
 
 
