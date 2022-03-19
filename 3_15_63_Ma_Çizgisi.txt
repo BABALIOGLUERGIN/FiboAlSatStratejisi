@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = '3_15_63_Ma Çizgisi V1.1.04', shorttitle = 'xMA (3,15,63) Çizgileri', overlay=true) 
+indicator(title = '3_15_63_Ma Çizgisi V1.1.05', shorttitle = 'xMA (3,15,63) Çizgileri', overlay=true) 
 src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
 
 // Fibo Ayarları
@@ -375,16 +375,24 @@ if acFiboUA
 
 //MUM FORMASYONLARI
 acDoji = input.bool(defval = false, title = 'Doji Gözüksün mü?', group="Mum Formasyon Ayarları") 
+dojiOlcusu = input.float(0.05, minval=0.01, title="Doji Ölçüsü", step=0.01, group="Mum Formasyon Ayarları")
+
 acBullishEngulfing = input.bool(defval = true, title = 'Bullnish Engulfning (Boğa Yutan) Gözüksün mü?', group="Mum Formasyon Ayarları") 
 acBearishEngulfing = input.bool(defval = true, title = 'Bearish Engulfning (Ayı Yutan) Gözüksün mü?', group="Mum Formasyon Ayarları") 
+acShootingStar = input.bool(defval = true, title = 'Shooting Star (Kayan Yıldız) Gözüksün mü?', group="Mum Formasyon Ayarları")
 
-DojiOlcusu = input.float(0.05, minval=0.01, title="Doji Ölçüsü", step=0.01, group="Mum Formasyon Ayarları")
-Dojidata=(math.abs(open - close) <= (high - low) * DojiOlcusu)
+
+Dojidata=(math.abs(open - close) <= (high - low) * dojiOlcusu)
 plotchar(Dojidata and acDoji ? Dojidata : na , title="",char="!", text="Doji", color=color.white,size=size.tiny)
 
-bullishEngulfing = (open <= close[1]) and (open < open[1]) and (close > open[1])
-bearishEngulfing = (open >= close[1]) and (open > open[1]) and (close < open[1])
-plotshape(bullishEngulfing and acBullishEngulfing ? bullishEngulfing : na, style = shape.triangleup, location = location.belowbar, text = "Boğa\nYutan", color = color.green, size = size.tiny)
-plotshape(bearishEngulfing and acBearishEngulfing ? bearishEngulfing : na , style = shape.triangledown , location = location.abovebar, text = "Ayı\nYutan", color = color.red, size = size.tiny)
+bullishEngulfing = (open[1] > close[1] and close > open and close >= open[1] and close[1] >= open and close - open > open[1] - close[1] )
+plotshape(bullishEngulfing and acBullishEngulfing ? bullishEngulfing : na, style = shape.arrowup, location = location.belowbar, text = "Boğa\nYutan", color = color.lime)
+
+bearishEngulfing = (close[1] > open[1] and open > close and open >= close[1] and open[1] >= close and open - close > close[1] - open[1] )
+plotshape(bearishEngulfing and acBearishEngulfing ? bearishEngulfing : na , style = shape.arrowdown , location = location.abovebar, text = "Ayı\nYutan", color = color.red)
+
+shootingStar = (open[1] < close[1] and open > close[1] and high - math.max(open, close) >= math.abs(open - close) * 3 and math.min(close, open) - low <= math.abs(open - close))
+plotshape(shootingStar and acShootingStar ? shootingStar : na, title= "Shooting Star", color=color.orange, style=shape.arrowdown, text="Kayan\nYıldız")
+
 
 //BURADA BITTI
