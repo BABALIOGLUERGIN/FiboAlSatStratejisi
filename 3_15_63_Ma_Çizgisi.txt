@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = '3_15_63_Ma Çizgisi V1.1.03', shorttitle = 'xMA (3,15,63) Çizgileri', overlay=true) 
+indicator(title = '3_15_63_Ma Çizgisi V1.1.04', shorttitle = 'xMA (3,15,63) Çizgileri', overlay=true) 
 src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
 
 // Fibo Ayarları
@@ -376,18 +376,18 @@ if acFiboUA
 
 //MUM FORMASYONLARI
 acDoji = input.bool(defval = false, title = 'Doji Gözüksün mü?', group="Mum Formasyon Ayarları") 
-acBullishEngulfing = input.bool(defval = false, title = 'Bullnish Engulfning Doji Gözüksün mü?', group="Mum Formasyon Ayarları") 
-acBearishEngulfing = input.bool(defval = false, title = 'Bearish Engulfning Gözüksün mü?', group="Mum Formasyon Ayarları") 
+acBullishEngulfing = input.bool(defval = true, title = 'Bullnish Engulfning (Boğa Yutan) Gözüksün mü?', group="Mum Formasyon Ayarları") 
+acBearishEngulfing = input.bool(defval = true, title = 'Bearish Engulfning (Ayı Yutan) Gözüksün mü?', group="Mum Formasyon Ayarları") 
 
 
 DojiOlcusu = input.float(0.05, minval=0.01, title="Doji Ölçüsü", step=0.01, group="Mum Formasyon Ayarları")
 Dojidata=(math.abs(open - close) <= (high - low) * DojiOlcusu)
-plotchar(Dojidata and acDoji ? Dojidata : na , title="",char="!", text='Doji', color=color.white,size=size.tiny)
+plotchar(Dojidata and acDoji ? Dojidata : na , title="",char="!", text="Doji", color=color.white,size=size.tiny)
 
 bullishEngulfing = (open <= close[1]) and (open < open[1]) and (close > open[1])
 bearishEngulfing = (open >= close[1]) and (open > open[1]) and (close < open[1])
-plotshape(bullishEngulfing and acBullishEngulfing ? bullishEngulfing : na, style = shape.triangleup, location = location.belowbar, text = "Bull\nish\n\nEngulf\ning", color = color.green, size = size.tiny)
-plotshape(bearishEngulfing and acBearishEngulfing ? bearishEngulfing : na , style = shape.triangledown , location = location.abovebar, text = "Bear\nish\n\nEngulf\ning", color = color.red, size = size.tiny)
+plotshape(bullishEngulfing and acBullishEngulfing ? bullishEngulfing : na, style = shape.triangleup, location = location.belowbar, text = "Boğa\nYutan", color = color.green, size = size.tiny)
+plotshape(bearishEngulfing and acBearishEngulfing ? bearishEngulfing : na , style = shape.triangledown , location = location.abovebar, text = "Ayı\nYutan", color = color.red, size = size.tiny)
 
 
 
