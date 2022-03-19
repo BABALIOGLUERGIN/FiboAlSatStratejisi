@@ -107,7 +107,7 @@ plotshape(kesAema3x15 and acxMa3x15Sat ? kesAema3x15 : na  , title = 'EMA 3x15 A
 plotshape(kesYema3x15 and acxMa3x15Al ? kesYema3x15 : na ,title ='EMA 3x15 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_3x15_Color, offset=0, size=xMa3x15Size)
 
 //BB
-acBb = input(defval = false, title = 'Bolinger Çizgisi Gözüksün mü?', group="Bolinger Bölümü")   
+acBb = input(defval = true, title = 'Bolinger Çizgisi Gözüksün mü?', group="Bolinger Bölümü")   
 acBbAl = input(defval = true, title = 'Bolinger Al İşareti Gözüksün mü?', group="Bolinger Bölümü")   
 acBbSat = input(defval = false, title = 'Bolinger Sat İşareti Gözüksün mü?', group="Bolinger Bölümü")   
 
@@ -373,12 +373,10 @@ if acFiboUA
     label.delete(info_panelUA[1])
 
 
-
 //MUM FORMASYONLARI
 acDoji = input.bool(defval = false, title = 'Doji Gözüksün mü?', group="Mum Formasyon Ayarları") 
 acBullishEngulfing = input.bool(defval = true, title = 'Bullnish Engulfning (Boğa Yutan) Gözüksün mü?', group="Mum Formasyon Ayarları") 
 acBearishEngulfing = input.bool(defval = true, title = 'Bearish Engulfning (Ayı Yutan) Gözüksün mü?', group="Mum Formasyon Ayarları") 
-
 
 DojiOlcusu = input.float(0.05, minval=0.01, title="Doji Ölçüsü", step=0.01, group="Mum Formasyon Ayarları")
 Dojidata=(math.abs(open - close) <= (high - low) * DojiOlcusu)
@@ -388,7 +386,5 @@ bullishEngulfing = (open <= close[1]) and (open < open[1]) and (close > open[1])
 bearishEngulfing = (open >= close[1]) and (open > open[1]) and (close < open[1])
 plotshape(bullishEngulfing and acBullishEngulfing ? bullishEngulfing : na, style = shape.triangleup, location = location.belowbar, text = "Boğa\nYutan", color = color.green, size = size.tiny)
 plotshape(bearishEngulfing and acBearishEngulfing ? bearishEngulfing : na , style = shape.triangledown , location = location.abovebar, text = "Ayı\nYutan", color = color.red, size = size.tiny)
-
-
 
 //BURADA BITTI
