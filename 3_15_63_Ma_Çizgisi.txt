@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = '3_15_63_Ma Çizgisi V1.1.05', shorttitle = 'xMA (3,15,63) Çizgileri', overlay=true) 
+indicator(title = '3_15_63_Ma Çizgisi V1.2.01', shorttitle = 'xMA (3,15,63) Çizgileri', overlay=true) 
 src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
 
 // Fibo Ayarları
@@ -15,8 +15,8 @@ acEtiket = input(defval = false, title = 'Fibo Al Sat Talimatları Panosu Gözü
 acMa3Ma15Boyama = input(defval = true, title = 'Ma 3/15 Arası Boyama Gösterilsin mi?', group="xMA Ayarları")
 acMa15Ma63Boyama = input(defval = false, title = 'Ma 15/63 Arası Boyama Gösterilsin mi?', group="xMA Ayarları")
 acxMa3Al = input(defval = false, title = 'EMA 3 Al İşareti Gözüksün mü?', group="xMA Ayarları")   
-acxMa3Sat = input(defval = true, title = 'EMA 3 Sat İşareti Gözüksün mü?', group="xMA Ayarları")   
-acxMa3x15Al = input(defval = true, title = 'EMA 3x15 (barajlı) Yukarı Kes İşareti Gözüksün mü?', group="xMA Ayarları")   
+acxMa3Sat = input(defval = false, title = 'EMA 3 Sat İşareti Gözüksün mü?', group="xMA Ayarları")   
+acxMa3x15Al = input(defval = false, title = 'EMA 3x15 (barajlı) Yukarı Kes İşareti Gözüksün mü?', group="xMA Ayarları")   
 acxMa3x15Sat = input(defval = false , title = 'EMA 3x15 (barajlı) Aşağı Kes İşareti Gözüksün mü?', group="xMA Ayarları")   
 
 // xMA Çizgi ve Kesişmeleri
@@ -128,7 +128,7 @@ bb_Size = size.small
 
 bolP1 = plot(upper and acBb ? upper : na, "Bolinger Üst", color=bb_Color, offset = 0, linewidth=2)
 bolP2 = plot(lower and acBb ? lower : na, "Bolinger Alt", color=bb_Color, offset = 0, linewidth=2)
-fill(bolP1, bolP2, transp=95)
+fill(bolP1, bolP2, transp=90)
 
 plotshape(kesAbb and acBbSat ? kesAbb : na , title = 'Bolinger Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=bb_Color, offset=0, size=bb_Size)
 plotshape(kesYbb and acBbAl ? kesYbb : na ,title ='Bolinger Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=bb_Color, offset=0, size=bb_Size)
@@ -146,8 +146,8 @@ acRsiEmaLW = input.int(defval = 4, title = 'Rsi/Ema Çizgisi Kalınlığı Sayı
 acRsiEma = input(defval = false, title = 'Rsi/Ema Çizgisi Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 acRsiEmaAl = input(defval = false, title = 'Rsi/Ema Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 acRsiEmaSat = input(defval = false, title = 'Rsi/Ema Sat İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
-acRsiEmaYatay = input(defval = true, title = 'Rsi/Ema Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
-acRsiEmaCifteYatay = input(defval = true, title = 'Rsi/Ema Çift Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaYatay = input(defval = false, title = 'Rsi/Ema Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaCifteYatay = input(defval = false, title = 'Rsi/Ema Çift Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 
 myKoyuRenkY = input.color(#00897B , "Alım Bölgesinde (zirvede) Yükselirken", group="Rsi/Ema Çizgisi") 
 myAcikRenkY = input.color(color.green, "Satım Bölgesinden (dipte) Yükselirken", group="Rsi/Ema Çizgisi") 
@@ -376,9 +376,9 @@ if acFiboUA
 acDoji = input.bool(defval = false, title = 'Doji Gözüksün mü?', group="Mum Formasyon Ayarları") 
 dojiOlcusu = input.float(0.05, minval=0.01, title="Doji Ölçüsü", step=0.01, group="Mum Formasyon Ayarları")
 
-acBullishEngulfing = input.bool(defval = true, title = 'Bullnish Engulfning (Yutan Boğa) Gözüksün mü?', group="Mum Formasyon Ayarları") 
-acBearishEngulfing = input.bool(defval = true, title = 'Bearish Engulfning (Yutan Ayı) Gözüksün mü?', group="Mum Formasyon Ayarları") 
-acShootingStar = input.bool(defval = true, title = 'Shooting Star (Kayan Yıldız) Gözüksün mü?', group="Mum Formasyon Ayarları")
+acBullishEngulfing = input.bool(defval = false, title = 'Bullnish Engulfning (Yutan Boğa) Gözüksün mü?', group="Mum Formasyon Ayarları") 
+acBearishEngulfing = input.bool(defval = false, title = 'Bearish Engulfning (Yutan Ayı) Gözüksün mü?', group="Mum Formasyon Ayarları") 
+acShootingStar = input.bool(defval = false, title = 'Shooting Star (Kayan Yıldız) Gözüksün mü?', group="Mum Formasyon Ayarları")
 acEveningStar =  input.bool(defval = false, title = 'Evening Star (Akşam Yıldızı) Gözüksün mü?', group="Mum Formasyon Ayarları")
 acMorningStar =  input.bool(defval = false, title = 'Morning Star (Sabah Yıldızı) Gözüksün mü?', group="Mum Formasyon Ayarları")
 
@@ -453,7 +453,7 @@ sLF = ta.crossunder( close , stopLossFibo) and high > upper
 
 
 plotshape(sLF and acSLF ? sLF : na , title = 'Özel Sat Fırsatı', text='', style=xMaAStyle , location=xMaALocation, color=colorOSF, offset=0, size=OSF_Size)
-
+alertcondition(sLF, title="ÖSF SAT", message='2S ÖSF SAT {{ticker}}, FİYAT={{close}}')
 
 
 //BURADA BITTI
