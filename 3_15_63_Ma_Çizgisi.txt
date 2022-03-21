@@ -77,8 +77,9 @@ pma63 = plot(ma63 and acXma63Cizgi ? ma63 : na, color=color.new(color.orange, 0)
 
 
 lengthMaBaraj = input(144, 'xMA Baraj', group="xMA Baraj Değerleri")
+acXmaBarajCizgi = input.bool(defval = true, title = 'xMA Baraj Çizgisi Gösterilsin mi?', group="xMABaraj Değerleri")
 maBaraj = xMaKontrol(xMaTipBaraj, src, lengthMaBaraj) 
-pmaBaraj = plot(maBaraj, color=color.new(color.gray, 0), linewidth=4, title='xMA Baraj')
+pmaBaraj = plot(maBaraj and acXmaBarajCizgi ? maBaraj : na, color=color.new(color.gray, 0), linewidth=4, title='xMA Baraj')
 
 
 acMa3Ma15BoyamaRenk = acMa3Ma15Boyama ? 70 : 100
