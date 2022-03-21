@@ -139,7 +139,7 @@ alertcondition(kesYbb, title="BB AL", message='2S BB AL {{ticker}}, FİYAT={{clo
 
 
 //BBB
-acBbB = input(defval = true, title = 'Büyük Bolinger Çizgisi Gözüksün mü?', group="Büyük Bolinger Bölümü")   
+acBbB = input(defval = false, title = 'Büyük Bolinger Çizgisi Gözüksün mü?', group="Büyük Bolinger Bölümü")   
 bbLengthB = input.int(200, minval=1, step=1, title='Büyük Bolinger Uzunluğu', group="Büyük Bolinger Bölümü")
 bbMultB = input.float(3.18, minval=0.001, maxval=50.0, step=0.01, title="Büyük Bolinger Standart Sapma", group="Büyük Bolinger Bölümü")
 bbBasisB = ta.sma(src, bbLengthB)
