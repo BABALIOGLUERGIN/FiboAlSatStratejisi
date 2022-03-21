@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = '3_15_63_Ma Çizgisi V1.2.01', shorttitle = 'xMA (3,15,63) Çizgileri', overlay=true) 
+indicator(title = '3_15_63_Ma Çizgisi V1.2.02', shorttitle = 'xMA (3,15,63) Çizgileri', overlay=true) 
 src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
 
 // Fibo Ayarları
@@ -61,16 +61,19 @@ xMaYColor = color.lime
 xMaYLocation = location.belowbar
 
 lengthMa3 = input(21, 'xMA 3', group="xMA3 Değerleri")
+acXma3Cizgi = input.bool(defval = true, title = 'xMA 3 Çizgisi Gösterilsin mi?', group="xMA3 Değerleri")
 ma3 = xMaKontrol(xMaTip3, src, lengthMa3) 
-pma3 = plot(ma3, color=color.new(color.white, 0), linewidth=2, title='xMA 3')
+pma3 = plot(ma3 and acXma3Cizgi ? ma3 : na, color=color.new(color.white, 0), linewidth=2, title='xMA 3')
 
 lengthMa15 = input(50, 'xMA 15', group="xMA15 Değerleri")
+acXma15Cizgi = input.bool(defval = true, title = 'xMA 15 Çizgisi Gösterilsin mi?', group="xMA15 Değerleri")
 ma15 = xMaKontrol(xMaTip15, src, lengthMa15) 
-pma15 = plot(ma15, color=color.new(color.yellow, 0), linewidth=2, title='xMA 15')
+pma15 = plot(ma15 and acXma15Cizgi ? ma15 : na, color=color.new(color.yellow, 0), linewidth=2, title='xMA 15')
 
 lengthMa63 = input(144, 'xMA 63', group="xMA63 Değerleri")
+acXma63Cizgi = input.bool(defval = false, title = 'xMA 63 Çizgisi Gösterilsin mi?', group="xMA63 Değerleri")
 ma63 = xMaKontrol(xMaTip63, src, lengthMa63) 
-pma63 = plot(ma63, color=color.new(color.orange, 0), linewidth=2, title='xMA 63')
+pma63 = plot(ma63 and acXma63Cizgi ? ma63 : na, color=color.new(color.orange, 0), linewidth=2, title='xMA 63')
 
 
 lengthMaBaraj = input(144, 'xMA Baraj', group="xMA Baraj Değerleri")
@@ -107,10 +110,10 @@ plotshape(kesAema3x15 and acxMa3x15Sat ? kesAema3x15 : na  , title = 'EMA 3x15 A
 plotshape(kesYema3x15 and acxMa3x15Al ? kesYema3x15 : na ,title ='EMA 3x15 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_3x15_Color, offset=0, size=xMa3x15Size)
 
 //BB
+
 acBb = input(defval = true, title = 'Bolinger Çizgisi Gözüksün mü?', group="Bolinger Bölümü")   
 acBbAl = input(defval = true, title = 'Bolinger Al İşareti Gözüksün mü?', group="Bolinger Bölümü")   
 acBbSat = input(defval = false, title = 'Bolinger Sat İşareti Gözüksün mü?', group="Bolinger Bölümü")   
-
 bbLength = input.int(20, minval=1, step=1, title='Bolinger Uzunluğu', group="Bolinger Bölümü")
 bbMult = input.float(1.7, minval=0.001, maxval=50.0, step=0.01, title="Bolinger Standart Sapma", group="Bolinger Bölümü")
 bbBasis = ta.sma(src, bbLength)
@@ -134,6 +137,20 @@ plotshape(kesAbb and acBbSat ? kesAbb : na , title = 'Bolinger Aşağı Kes', te
 plotshape(kesYbb and acBbAl ? kesYbb : na ,title ='Bolinger Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=bb_Color, offset=0, size=bb_Size)
 alertcondition(kesYbb, title="BB AL", message='2S BB AL {{ticker}}, FİYAT={{close}}')
 
+
+//BBB
+acBbB = input(defval = true, title = 'Büyük Bolinger Çizgisi Gözüksün mü?', group="Büyük Bolinger Bölümü")   
+bbLengthB = input.int(200, minval=1, step=1, title='Büyük Bolinger Uzunluğu', group="Büyük Bolinger Bölümü")
+bbMultB = input.float(3.18, minval=0.001, maxval=50.0, step=0.01, title="Büyük Bolinger Standart Sapma", group="Büyük Bolinger Bölümü")
+bbBasisB = ta.sma(src, bbLengthB)
+bbDevB = bbMultB * ta.stdev(src, bbLengthB)
+upperB = bbBasisB + bbDevB
+lowerB = bbBasisB - bbDevB
+
+plot(bbBasisB and acBbB ? bbBasisB  : na, "Büyük Basis", color=color.lime, offset=0, linewidth=4)
+p1B = plot(upperB and acBbB ? upperB : na, "Upper", color=color.lime, offset=0, linewidth=2)
+p2B = plot(lowerB and acBbB ? lowerB : na, "Lower", color=color.lime, offset=0, linewidth=2)
+fill(p1B, p2B, color=color.lime, transp=90)
 
 // RSI/EMA
 myClose1S = request.security(syminfo.tickerid, timeframe.period, src)
