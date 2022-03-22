@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = '3_15_63_Ma Çizgisi V1.2.02', shorttitle = 'xMA (3,15,63) Çizgileri', overlay=true) 
+indicator(title = '3_15_63_Ma Çizgisi V1.2.03', shorttitle = 'xMA (3,15,63) Çizgileri', overlay=true) 
 src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
 
 // Fibo Ayarları
@@ -404,10 +404,10 @@ Dojidata=(math.abs(open - close) <= (high - low) * dojiOlcusu)
 plotchar(Dojidata and acDoji ? Dojidata : na , title="",char="!", text="Doji\n", color=color.white,size=size.tiny)
 
 bullishEngulfing = (open[1] > close[1] and close > open and close >= open[1] and close[1] >= open and close - open > open[1] - close[1] )
-plotshape(bullishEngulfing and acBullishEngulfing ? bullishEngulfing : na, style = shape.arrowup, location = location.belowbar, text = "Yutan\nBoğa\n", color = color.lime)
+plotshape(bullishEngulfing and acBullishEngulfing ? bullishEngulfing : na, style = shape.arrowup, location = location.belowbar, text = "Yutan\nAyı\n", color = color.lime)
 
 bearishEngulfing = (close[1] > open[1] and open > close and open >= close[1] and open[1] >= close and open - close > close[1] - open[1] )
-plotshape(bearishEngulfing and acBearishEngulfing ? bearishEngulfing : na , style = shape.arrowdown , location = location.abovebar, text = "Yutan\nAyı\n", color = color.red)
+plotshape(bearishEngulfing and acBearishEngulfing ? bearishEngulfing : na , style = shape.arrowdown , location = location.abovebar, text = "Yutan\nBoğa\n", color = color.red)
 
 shootingStar = (open[1] < close[1] and open > close[1] and high - math.max(open, close) >= math.abs(open - close) * 3 and math.min(close, open) - low <= math.abs(open - close))
 plotshape(shootingStar and acShootingStar ? shootingStar : na, title= "Shooting Star", color=color.orange, style=shape.arrowdown, text="Kayan\nYıldız\n")
