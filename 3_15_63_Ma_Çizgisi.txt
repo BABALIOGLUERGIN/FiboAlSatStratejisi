@@ -3,14 +3,12 @@
 indicator(title = '3_15_63_Ma Çizgisi V1.2.04', shorttitle = '3 xMA Çizgisi', overlay=true) 
 src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
 
-
 // Fibo Ayarları
 acFiboLines = input(defval = true, title = 'Fibo Yatay Çizgileri Gözüksün mü?', group="Fibo Ayarları")   
 
 // Pano Ayarları
 acFiboUA = input(defval = false, title = 'Fibo Üst Alt Fiyatları Panosu Gözüksün mü?')   
 acEtiket = input(defval = false, title = 'Fibo Al Sat Talimatları Panosu Gözüksün mü?')   
-
 
 // xMA Ayarlar
 acMa3Ma15Boyama = input(defval = true, title = 'Ma 3/15 Arası Boyama Gösterilsin mi?', group="xMA Ayarları")
@@ -165,6 +163,12 @@ acRsiEmaLW = input.int(defval = 4, title = 'Rsi/Ema Çizgisi Kalınlığı Sayı
 acRsiEma = input(defval = false, title = 'Rsi/Ema Çizgisi Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 acRsiEmaAl = input(defval = false, title = 'Rsi/Ema Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 acRsiEmaSat = input(defval = false, title = 'Rsi/Ema Sat İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+
+acRsiEmaScalpAl = input(defval = false, title = 'Rsi/Ema Scalp Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaScalpSat = input(defval = false, title = 'Rsi/Ema Scalp Sat İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+
+
+
 acRsiEmaYatay = input(defval = false, title = 'Rsi/Ema Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 acRsiEmaCifteYatay = input(defval = false, title = 'Rsi/Ema Çift Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 
@@ -214,8 +218,13 @@ plotshape(rsiSartYatayE and acRsiEmaYatay ,title ='Rsi/Ema Yatay AL' , style=sha
 alertcondition(rsiSartYatayE, title="Rsi/Ema Yatay AL", message='2S Rsi/Ema Yatay AL fırsatı olabilir {{ticker}}, FİYAT={{close}}')
 
 
+// Kırmızıdan Vişneye Düşerse
+rsiKirmiziVisne = (myRsiColorTek[3]==myAcikRenkD and myRsiColorTek[2]==myAcikRenkD)  and (myRsiColorTek[1] == myKoyuRenkD and myRsiColorTek == myKoyuRenkD) 
+plotshape(rsiKirmiziVisne and acRsiEmaScalpAl ,title ='Rsi/Ema Scalp AL' , style=shape.triangledown, location=location.belowbar, color=color.new(color.red, 0), offset=0, size=size.large)
 
-
+// Yeşilden Koyuya Çıkarsa
+rsiYesilKoyu = (myRsiColorTek[2]==myAcikRenkY) and (myRsiColorTek[1] == myKoyuRenkY and myRsiColorTek == myKoyuRenkY) 
+plotshape(rsiYesilKoyu and acRsiEmaScalpSat ,title ='Rsi/Ema Scalp SAT', style=shape.triangleup, location=location.abovebar, color=color.new(#7ef558, 0), offset=0, size=size.large)
 
 //Fiblines
 fibLen = input(defval = 150, title = 'Fibo Hesaplama Mum Sayısı', group="Fibo Ayarları")  
