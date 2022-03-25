@@ -3,8 +3,11 @@
 
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = 'xPano V1.1.02', shorttitle = 'xPano', overlay=true) 
+indicator(title = 'xPano V1.1.03', shorttitle = 'xPano', overlay=true) 
 src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
+
+
+
 
 
 xMaAStyle = shape.triangledown
@@ -126,8 +129,8 @@ acRsiEmaAl = input(defval = false, title = 'Rsi/Ema Al İşaretleri Gösterilsin
 acRsiEmaSat = input(defval = false, title = 'Rsi/Ema Sat İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 
 
-acRsiEmaScalpAl = input(defval = false, title = 'Rsi/Ema Scalp Al Haberi İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
-acRsiEmaScalpSat = input(defval = false, title = 'Rsi/Ema Scalp Sat Haberi İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+//acRsiEmaScalpAl = input(defval = false, title = 'Rsi/Ema Scalp Al Haberi İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+//acRsiEmaScalpSat = input(defval = false, title = 'Rsi/Ema Scalp Sat Haberi İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 
 
 acRsiEmaScalpAl2 = input(defval = false, title = 'Rsi/Ema Scalp Al Fırsatı İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
@@ -189,11 +192,11 @@ alertcondition(rsiSartYatayE, title="Rsi/Ema Yatay AL", message='2S Rsi/Ema Yata
 
 // Kırmızıdan Vişneye Düşerse
 rsiKirmiziVisne = (myRsiColorTek[3]==myAcikRenkD and myRsiColorTek[2]==myAcikRenkD)  and (myRsiColorTek[1] == myKoyuRenkD and myRsiColorTek == myKoyuRenkD) 
-plotshape(rsiKirmiziVisne and acRsiEmaScalpAl ,title ='Rsi/Ema Scalp AL Haberi' , style=shape.labeldown, location=location.belowbar, color=color.new(color.red, 0), offset=0, size=size.normal)
+//plotshape(rsiKirmiziVisne and acRsiEmaScalpAl ,title ='Rsi/Ema Scalp AL Haberi' , style=shape.labeldown, location=location.belowbar, color=color.new(color.red, 0), offset=0, size=size.normal)
 
 // Yeşilden Koyuya Çıkarsa
 rsiYesilKoyu = (myRsiColorTek[2]==myAcikRenkY) and (myRsiColorTek[1] == myKoyuRenkY and myRsiColorTek == myKoyuRenkY) 
-plotshape(rsiYesilKoyu and acRsiEmaScalpSat ,title ='Rsi/Ema Scalp SAT Haberi', style=shape.labelup, location=location.abovebar, color=color.new(color.red, 0), offset=0, size=size.normal)
+//plotshape(rsiYesilKoyu and acRsiEmaScalpSat ,title ='Rsi/Ema Scalp SAT Haberi', style=shape.labelup, location=location.abovebar, color=color.new(color.red, 0), offset=0, size=size.normal)
 
 
 //Scalp AL
@@ -424,6 +427,20 @@ plotshape(eveningStar and acEveningStar ? eveningStar : na , title= "Evening Sta
 morningStar=(close[2] < open[2] and math.max(open[1], close[1]) < close[2] and open > math.max(open[1], close[1]) and close > open )
 plotshape(morningStar and acMorningStar ? morningStar : na,  title= "Morning Star", location=location.belowbar, color=color.lime, style=shape.arrowup, text="Sabah\nYıldızı\n")
 
+//BBB
+acBbB = input(defval = false, title = 'Büyük Bolinger Çizgisi Gözüksün mü?', group="Büyük Bolinger Bölümü")   
+bbLengthB = input.int(200, minval=1, step=1, title='Büyük Bolinger Uzunluğu', group="Büyük Bolinger Bölümü")
+bbMultB = input.float(3.18, minval=0.001, maxval=50.0, step=0.01, title="Büyük Bolinger Standart Sapma", group="Büyük Bolinger Bölümü")
+bbBasisB = ta.sma(src, bbLengthB)
+bbDevB = bbMultB * ta.stdev(src, bbLengthB)
+upperB = bbBasisB + bbDevB
+lowerB = bbBasisB - bbDevB
+
+plot(bbBasisB and acBbB ? bbBasisB  : na, "Büyük Basis", color=color.lime, offset=0, linewidth=4)
+p1B = plot(upperB and acBbB ? upperB : na, "Upper", color=color.lime, offset=0, linewidth=2)
+p2B = plot(lowerB and acBbB ? lowerB : na, "Lower", color=color.lime, offset=0, linewidth=2)
+//fill(p1B, p2B, color=color.lime, transp=90)
+fill(p1B, p2B, color=color.new(color.lime, 95))
 
 
 //BURADA BITTI
