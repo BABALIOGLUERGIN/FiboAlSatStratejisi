@@ -3,7 +3,7 @@
 
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = 'xPano V1.1.01', shorttitle = 'xPano', overlay=true) 
+indicator(title = 'xPano V1.1.02', shorttitle = 'xPano', overlay=true) 
 src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
 
 
@@ -393,6 +393,37 @@ sLF = ta.crossunder( close , stopLossFibo) and high > upper
 
 plotshape(sLF and acSLF ? sLF : na , title = 'Özel Sat Fırsatı', text='', style=xMaAStyle , location=xMaALocation, color=colorOSF, offset=0, size=OSF_Size)
 alertcondition(sLF, title="ÖSF SAT", message='2S ÖSF SAT {{ticker}}, FİYAT={{close}}')
+
+//MUM FORMASYONLARI
+acDoji = input.bool(defval = false, title = 'Doji Gözüksün mü?', group="Mum Formasyon Ayarları") 
+dojiOlcusu = input.float(0.05, minval=0.01, title="Doji Ölçüsü", step=0.01, group="Mum Formasyon Ayarları")
+
+acBullishEngulfing = input.bool(defval = false, title = 'Bullnish Engulfning (Yutan Boğa) Gözüksün mü?', group="Mum Formasyon Ayarları") 
+acBearishEngulfing = input.bool(defval = false, title = 'Bearish Engulfning (Yutan Ayı) Gözüksün mü?', group="Mum Formasyon Ayarları") 
+acShootingStar = input.bool(defval = false, title = 'Shooting Star (Kayan Yıldız) Gözüksün mü?', group="Mum Formasyon Ayarları")
+acEveningStar =  input.bool(defval = false, title = 'Evening Star (Akşam Yıldızı) Gözüksün mü?', group="Mum Formasyon Ayarları")
+acMorningStar =  input.bool(defval = false, title = 'Morning Star (Sabah Yıldızı) Gözüksün mü?', group="Mum Formasyon Ayarları")
+
+Dojidata=(math.abs(open - close) <= (high - low) * dojiOlcusu)
+plotchar(Dojidata and acDoji ? Dojidata : na , title="",char="!", text="Doji\n", color=color.white,size=size.tiny)
+
+bullishEngulfing = (open[1] > close[1] and close > open and close >= open[1] and close[1] >= open and close - open > open[1] - close[1] )
+plotshape(bullishEngulfing and acBullishEngulfing ? bullishEngulfing : na, style = shape.arrowup, location = location.belowbar, text = "Yutan\nAyı\n", color = color.lime)
+
+bearishEngulfing = (close[1] > open[1] and open > close and open >= close[1] and open[1] >= close and open - close > close[1] - open[1] )
+plotshape(bearishEngulfing and acBearishEngulfing ? bearishEngulfing : na , style = shape.arrowdown , location = location.abovebar, text = "Yutan\nBoğa\n", color = color.red)
+
+shootingStar = (open[1] < close[1] and open > close[1] and high - math.max(open, close) >= math.abs(open - close) * 3 and math.min(close, open) - low <= math.abs(open - close))
+plotshape(shootingStar and acShootingStar ? shootingStar : na, title= "Shooting Star", color=color.orange, style=shape.arrowdown, text="Kayan\nYıldız\n")
+
+
+
+eveningStar=(close[2] > open[2] and math.min(open[1], close[1]) > close[2] and open < math.min(open[1], close[1]) and close < open )
+plotshape(eveningStar and acEveningStar ? eveningStar : na , title= "Evening Star", color=color.red, style=shape.arrowdown, text="Akşam\nYıldızı\n")
+
+morningStar=(close[2] < open[2] and math.max(open[1], close[1]) < close[2] and open > math.max(open[1], close[1]) and close > open )
+plotshape(morningStar and acMorningStar ? morningStar : na,  title= "Morning Star", location=location.belowbar, color=color.lime, style=shape.arrowup, text="Sabah\nYıldızı\n")
+
 
 
 //BURADA BITTI
