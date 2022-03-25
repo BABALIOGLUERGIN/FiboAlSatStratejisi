@@ -15,14 +15,14 @@ acEtiket = input(defval = false, title = 'Fibo Al Sat Talimatları Panosu Gözü
 //acMa15Ma63Boyama = input(defval = false, title = 'Ma 15/63 Arası Boyama Gösterilsin mi?', group="xMA Ayarları")
 acxMa3Al = input(defval = false, title = 'EMA 3 Al İşareti Gözüksün mü?', group="xMA Ayarları")   
 acxMa3Sat = input(defval = false, title = 'EMA 3 Sat İşareti Gözüksün mü?', group="xMA Ayarları")   
-acxMa3x15Al = input(defval = false, title = 'EMA 3x15 (barajlı) Yukarı Kes İşareti Gözüksün mü?', group="xMA Ayarları")   
+acxMa3x15Al = input(defval = true, title = 'EMA 3x15 (barajlı) Yukarı Kes İşareti Gözüksün mü?', group="xMA Ayarları")   
 acxMa3x15Sat = input(defval = false , title = 'EMA 3x15 (barajlı) Aşağı Kes İşareti Gözüksün mü?', group="xMA Ayarları")   
 
 // xMA Çizgi ve Kesişmeleri
 string xMaTip3 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA3 tipi", group="xMA3 Değerleri")
 string xMaTip15 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA15 tipi", group="xMA15 Değerleri")
 string xMaTip63 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA63 tipi", group="xMA63 Değerleri")
-string xMaTipBaraj = input.string(defval="SMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA Baraj tipi", group="xMA Baraj Değerleri")
+string xMaTipBaraj = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA Baraj tipi", group="xMA Baraj Değerleri")
 
 
 demaHesapla(src,len)=>
@@ -59,24 +59,24 @@ xMaYSize = size.small
 xMaYColor = color.lime
 xMaYLocation = location.belowbar
 
-lengthMa3 = input(21, 'xMA 3', group="xMA3 Değerleri")
+lengthMa3 = input(9, 'xMA 3', group="xMA3 Değerleri")
 acXma3Cizgi = input.bool(defval = true, title = 'xMA 3 Çizgisi Gösterilsin mi?', group="xMA3 Değerleri")
 ma3 = xMaKontrol(xMaTip3, src, lengthMa3) 
 pma3 = plot(ma3 and acXma3Cizgi ? ma3 : na, color=color.new(color.white, 0), linewidth=2, title='xMA 3')
 
-lengthMa15 = input(50, 'xMA 15', group="xMA15 Değerleri")
+lengthMa15 = input(100, 'xMA 15', group="xMA15 Değerleri")
 acXma15Cizgi = input.bool(defval = true, title = 'xMA 15 Çizgisi Gösterilsin mi?', group="xMA15 Değerleri")
 ma15 = xMaKontrol(xMaTip15, src, lengthMa15) 
 pma15 = plot(ma15 and acXma15Cizgi ? ma15 : na, color=color.new(color.yellow, 0), linewidth=2, title='xMA 15')
 
-lengthMa63 = input(144, 'xMA 63', group="xMA63 Değerleri")
-acXma63Cizgi = input.bool(defval = false, title = 'xMA 63 Çizgisi Gösterilsin mi?', group="xMA63 Değerleri")
+lengthMa63 = input(200, 'xMA 63', group="xMA63 Değerleri")
+acXma63Cizgi = input.bool(defval = true, title = 'xMA 63 Çizgisi Gösterilsin mi?', group="xMA63 Değerleri")
 ma63 = xMaKontrol(xMaTip63, src, lengthMa63) 
 pma63 = plot(ma63 and acXma63Cizgi ? ma63 : na, color=color.new(color.orange, 0), linewidth=2, title='xMA 63')
 
 
-lengthMaBaraj = input(144, 'xMA Baraj', group="xMA Baraj Değerleri")
-acXmaBarajCizgi = input.bool(defval = true, title = 'xMA Baraj Çizgisi Gösterilsin mi?', group="xMABaraj Değerleri")
+lengthMaBaraj = input(100, 'xMA Baraj', group="xMA Baraj Değerleri")
+acXmaBarajCizgi = input.bool(defval = false, title = 'xMA Baraj Çizgisi Gösterilsin mi?', group="xMABaraj Değerleri")
 maBaraj = xMaKontrol(xMaTipBaraj, src, lengthMaBaraj) 
 pmaBaraj = plot(maBaraj and acXmaBarajCizgi ? maBaraj : na, color=color.new(color.gray, 0), linewidth=4, title='xMA Baraj')
 
@@ -110,11 +110,11 @@ plotshape(kesYema3x15 and acxMa3x15Al ? kesYema3x15 : na ,title ='EMA 3x15 Yukar
 
 //BB
 
-acBb = input(defval = true, title = 'Bolinger Çizgisi Gözüksün mü?', group="Bolinger Bölümü")   
-acBbAl = input(defval = true, title = 'Bolinger Al İşareti Gözüksün mü?', group="Bolinger Bölümü")   
-acBbSat = input(defval = false, title = 'Bolinger Sat İşareti Gözüksün mü?', group="Bolinger Bölümü")   
-bbLength = input.int(20, minval=1, step=1, title='Bolinger Uzunluğu', group="Bolinger Bölümü")
-bbMult = input.float(1.7, minval=0.001, maxval=50.0, step=0.01, title="Bolinger Standart Sapma", group="Bolinger Bölümü")
+acBb = input(defval = true, title = 'Küçük Bolinger Çizgileri Gözüksün mü?', group="Küçük Bolinger Bölümü")   
+acBbAl = input(defval = true, title = 'Küçük Bolinger Al İşareti Gözüksün mü?', group="Küçük Bolinger Bölümü")   
+acBbSat = input(defval = false, title = 'Küçük Bolinger Sat İşareti Gözüksün mü?', group="Küçük Bolinger Bölümü")   
+bbLength = input.int(20, minval=1, step=1, title='Küçük Bolinger Uzunluğu', group="Küçük Bolinger Bölümü")
+bbMult = input.float(1.7, minval=0.001, maxval=50.0, step=0.01, title="Küçük Bolinger Standart Sapma", group="Küçük Bolinger Bölümü")
 bbBasis = ta.sma(src, bbLength)
 bbDev = bbMult * ta.stdev(src, bbLength)
 upper = bbBasis + bbDev
@@ -128,12 +128,12 @@ kesAbb = ta.crossunder(bbSrcUst , upper)
 bb_Color = color.new(#00bcd4, 0)
 bb_Size = size.small
 
-bolP1 = plot(upper and acBb ? upper : na, "Bolinger Üst", color=bb_Color, offset = 0, linewidth=2)
-bolP2 = plot(lower and acBb ? lower : na, "Bolinger Alt", color=bb_Color, offset = 0, linewidth=2)
-fill(bolP1, bolP2, transp=90)
+bolP1 = plot(upper and acBb ? upper : na, "Küçük Bolinger Üst", color=bb_Color, offset = 0, linewidth=2)
+bolP2 = plot(lower and acBb ? lower : na, "Küçük Bolinger Alt", color=bb_Color, offset = 0, linewidth=2)
+fill(bolP1, bolP2, title='Küçük Bolinger Bölgesi', transp=79)
 
-plotshape(kesAbb and acBbSat ? kesAbb : na , title = 'Bolinger Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=bb_Color, offset=0, size=bb_Size)
-plotshape(kesYbb and acBbAl ? kesYbb : na ,title ='Bolinger Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=bb_Color, offset=0, size=bb_Size)
+plotshape(kesAbb and acBbSat ? kesAbb : na , title = 'Küçük Bolinger Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=bb_Color, offset=0, size=bb_Size)
+plotshape(kesYbb and acBbAl ? kesYbb : na ,title ='Küçük Bolinger Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=bb_Color, offset=0, size=bb_Size)
 alertcondition(kesYbb, title="BB AL", message='2S BB AL {{ticker}}, FİYAT={{close}}')
 
 
@@ -146,10 +146,10 @@ bbDevB = bbMultB * ta.stdev(src, bbLengthB)
 upperB = bbBasisB + bbDevB
 lowerB = bbBasisB - bbDevB
 
-plot(bbBasisB and acBbB ? bbBasisB  : na, "Büyük Basis", color=color.lime, offset=0, linewidth=4)
-p1B = plot(upperB and acBbB ? upperB : na, "Upper", color=color.lime, offset=0, linewidth=2)
-p2B = plot(lowerB and acBbB ? lowerB : na, "Lower", color=color.lime, offset=0, linewidth=2)
-fill(p1B, p2B, color=color.lime, transp=90)
+plot(bbBasisB and acBbB ? bbBasisB  : na, "Büyük Bolinger Orta Çizgi", color=color.lime, offset=0, linewidth=4)
+p1B = plot(upperB and acBbB ? upperB : na, "Büyük Bolinger Üst", color=color.lime, offset=0, linewidth=2)
+p2B = plot(lowerB and acBbB ? lowerB : na, "Büyük Bolinger Alt", color=color.lime, offset=0, linewidth=2)
+fill(p1B, p2B, title='Büyük Bolinger Bölgesi', color=color.lime, transp=90)
 
 // RSI/EMA
 myClose1S = request.security(syminfo.tickerid, timeframe.period, src)
@@ -159,7 +159,7 @@ myEmaD = input.int(12, title='Ema Değeri', group="Rsi/Ema Çizgisi Değerleri")
 myEma121S = ta.ema(myRsi1S, myEmaD)
 acRsiEmaLW = input.int(defval = 4, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri', group="Rsi/Ema Çizgisi Değerleri") 
 
-acRsiEma = input(defval = false, title = 'Rsi/Ema Çizgisi Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEma = input(defval = true, title = 'Rsi/Ema Çizgisi Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 acRsiEmaAl = input(defval = false, title = 'Rsi/Ema Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 acRsiEmaSat = input(defval = false, title = 'Rsi/Ema Sat İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 
@@ -171,11 +171,11 @@ acRsiEmaScalpSat = input(defval = false, title = 'Rsi/Ema Scalp Sat İşaretleri
 acRsiEmaYatay = input(defval = false, title = 'Rsi/Ema Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 acRsiEmaCifteYatay = input(defval = false, title = 'Rsi/Ema Çift Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 
-myKoyuRenkY = input.color(#00897B , "Alım Bölgesinde (zirvede) Yükselirken", group="Rsi/Ema Çizgisi") 
-myAcikRenkY = input.color(color.green, "Satım Bölgesinden (dipte) Yükselirken", group="Rsi/Ema Çizgisi") 
+myKoyuRenkY = input.color(#00897B , title = "Alım Bölgesinde (zirvede) Yükselirken", group="Rsi/Ema Çizgisi") 
+myAcikRenkY = input.color(color.green, title = "Satım Bölgesinden (dipte) Yükselirken", group="Rsi/Ema Çizgisi") 
 
-myAcikRenkD = input.color(color.red , "Alım Bölgesinden (zirvede) Düşerken", group="Rsi/Ema Çizgisi") 
-myKoyuRenkD = input.color(#880E4F  , "Satım Bölgesinde (dipte) Düşerken", group="Rsi/Ema Çizgisi") 
+myAcikRenkD = input.color(color.red , title = "Alım Bölgesinden (zirvede) Düşerken", group="Rsi/Ema Çizgisi") 
+myKoyuRenkD = input.color(#880E4F  , title =  "Satım Bölgesinde (dipte) Düşerken", group="Rsi/Ema Çizgisi") 
 
 myRsiColorY = myRsi1S <= 60 ? myAcikRenkY : myKoyuRenkY     
 myRsiColorD = myRsi1S <= 40 ? myKoyuRenkD : myAcikRenkD   
@@ -410,23 +410,23 @@ acEveningStar =  input.bool(defval = false, title = 'Evening Star (Akşam Yıld�
 acMorningStar =  input.bool(defval = false, title = 'Morning Star (Sabah Yıldızı) Gözüksün mü?', group="Mum Formasyon Ayarları")
 
 Dojidata=(math.abs(open - close) <= (high - low) * dojiOlcusu)
-plotchar(Dojidata and acDoji ? Dojidata : na , title="",char="!", text="Doji\n", color=color.white,size=size.tiny)
+plotchar(Dojidata and acDoji ? Dojidata : na, title="Doji", char="!", text="Doji\n", color=color.white,size=size.tiny)
 
 bullishEngulfing = (open[1] > close[1] and close > open and close >= open[1] and close[1] >= open and close - open > open[1] - close[1] )
-plotshape(bullishEngulfing and acBullishEngulfing ? bullishEngulfing : na, style = shape.arrowup, location = location.belowbar, text = "Yutan\nAyı\n", color = color.lime)
+plotshape(bullishEngulfing and acBullishEngulfing ? bullishEngulfing : na, style = shape.arrowup, location = location.belowbar, title="Yutan Ayı", text = "Yutan\nAyı\n", color = color.lime)
 
 bearishEngulfing = (close[1] > open[1] and open > close and open >= close[1] and open[1] >= close and open - close > close[1] - open[1] )
-plotshape(bearishEngulfing and acBearishEngulfing ? bearishEngulfing : na , style = shape.arrowdown , location = location.abovebar, text = "Yutan\nBoğa\n", color = color.red)
+plotshape(bearishEngulfing and acBearishEngulfing ? bearishEngulfing : na , style = shape.arrowdown , location = location.abovebar, title="Yutan Boğa", text = "Yutan\nBoğa\n", color = color.red)
 
 shootingStar = (open[1] < close[1] and open > close[1] and high - math.max(open, close) >= math.abs(open - close) * 3 and math.min(close, open) - low <= math.abs(open - close))
-plotshape(shootingStar and acShootingStar ? shootingStar : na, title= "Shooting Star", color=color.orange, style=shape.arrowdown, text="Kayan\nYıldız\n")
+plotshape(shootingStar and acShootingStar ? shootingStar : na, title= "Kayan Yıldız", color=color.orange, style=shape.arrowdown, text="Kayan\nYıldız\n")
 
 
 eveningStar=(close[2] > open[2] and math.min(open[1], close[1]) > close[2] and open < math.min(open[1], close[1]) and close < open )
-plotshape(eveningStar and acEveningStar ? eveningStar : na , title= "Evening Star", color=color.red, style=shape.arrowdown, text="Akşam\nYıldızı\n")
+plotshape(eveningStar and acEveningStar ? eveningStar : na , title= "Akşam Yıldızı", color=color.red, style=shape.arrowdown, text="Akşam\nYıldızı\n")
 
 morningStar=(close[2] < open[2] and math.max(open[1], close[1]) < close[2] and open > math.max(open[1], close[1]) and close > open )
-plotshape(morningStar and acMorningStar ? morningStar : na,  title= "Morning Star", location=location.belowbar, color=color.lime, style=shape.arrowup, text="Sabah\nYıldızı\n")
+plotshape(morningStar and acMorningStar ? morningStar : na,  title= "Sabah Yıldızı", location=location.belowbar, color=color.lime, style=shape.arrowup, text="Sabah\nYıldızı\n")
 
 
 //Özel Sat
