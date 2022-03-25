@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = '3_15_63_Ma Çizgisi V1.2.04', shorttitle = '3 xMA Çizgisi', overlay=true) 
+indicator(title = '3_15_63_Ma Çizgisi V1.3.01', shorttitle = '3 xMA Çizgisi', overlay=true) 
 src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
 
 // Fibo Ayarları
@@ -11,8 +11,8 @@ acFiboUA = input(defval = false, title = 'Fibo Üst Alt Fiyatları Panosu Gözü
 acEtiket = input(defval = false, title = 'Fibo Al Sat Talimatları Panosu Gözüksün mü?')   
 
 // xMA Ayarlar
-acMa3Ma15Boyama = input(defval = true, title = 'Ma 3/15 Arası Boyama Gösterilsin mi?', group="xMA Ayarları")
-acMa15Ma63Boyama = input(defval = false, title = 'Ma 15/63 Arası Boyama Gösterilsin mi?', group="xMA Ayarları")
+//acMa3Ma15Boyama = input(defval = true, title = 'Ma 3/15 Arası Boyama Gösterilsin mi?', group="xMA Ayarları")
+//acMa15Ma63Boyama = input(defval = false, title = 'Ma 15/63 Arası Boyama Gösterilsin mi?', group="xMA Ayarları")
 acxMa3Al = input(defval = false, title = 'EMA 3 Al İşareti Gözüksün mü?', group="xMA Ayarları")   
 acxMa3Sat = input(defval = false, title = 'EMA 3 Sat İşareti Gözüksün mü?', group="xMA Ayarları")   
 acxMa3x15Al = input(defval = false, title = 'EMA 3x15 (barajlı) Yukarı Kes İşareti Gözüksün mü?', group="xMA Ayarları")   
@@ -81,14 +81,13 @@ maBaraj = xMaKontrol(xMaTipBaraj, src, lengthMaBaraj)
 pmaBaraj = plot(maBaraj and acXmaBarajCizgi ? maBaraj : na, color=color.new(color.gray, 0), linewidth=4, title='xMA Baraj')
 
 
-acMa3Ma15BoyamaRenk = acMa3Ma15Boyama ? 70 : 100
-acMa3Ma15Rengim = ma3 >= ma15 ? color.new(color.lime, acMa3Ma15BoyamaRenk) : color.new(color.red, acMa3Ma15BoyamaRenk)
+//acMa3Ma15BoyamaRenk = acMa3Ma15Boyama ? 70 : 100
+acMa3Ma15Rengim = ma3 >= ma15 ? color.new(color.lime,77) : color.new(color.red,77) 
 fill(pma3, pma15, title = 'Ma 3/15 Bölgesi', color=acMa3Ma15Rengim)
 
-acMa15Ma63BoyamaRenk = acMa15Ma63Boyama ? 70 : 100
-acMa15Ma63Rengim = ma15 >= ma63 ? color.new(color.lime, acMa15Ma63BoyamaRenk) : color.new(color.red, acMa15Ma63BoyamaRenk)
+//acMa15Ma63BoyamaRenk = acMa15Ma63Boyama ? 70 : 100
+acMa15Ma63Rengim = ma15 >= ma63 ? color.new(color.lime, 77) : color.new(color.red, 77)
 fill(pma15, pma63, title = 'Ma 15/63 Bölgesi', color=acMa15Ma63Rengim)
-
 
 //EMA 3 KES
 kesYxMA_3 = ta.crossover(src , ma3) and ma3 < ma15 
