@@ -1,10 +1,15 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = '3_15_63_Ma Çizgisi V1.3.01', shorttitle = '3 xMA Çizgisi', overlay=true) 
+indicator(title = '3_15_63_Ma Çizgisi V1.3.02', shorttitle = '3 xMA Çizgisi', overlay=true) 
 src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
 
 // Fibo Ayarları
 acFiboLines = input(defval = true, title = 'Fibo Yatay Çizgileri Gözüksün mü?', group="Fibo Ayarları")   
+
+acFlUst = input(defval = true, title = 'Fibo Üst Yatay Çizgileri Gözüksün mü?', group="Fibo Ayarları")   
+acFlOrta = input(defval = true, title = 'Fibo Orta Yatay Çizgileri Gözüksün mü?', group="Fibo Ayarları")   
+acFlAlt = input(defval = true, title = 'Fibo Alt Yatay Çizgileri Gözüksün mü?', group="Fibo Ayarları")   
+
 
 // Pano Ayarları
 acFiboUA = input(defval = false, title = 'Fibo Üst Alt Fiyatları Panosu Gözüksün mü?')   
@@ -163,8 +168,13 @@ acRsiEma = input(defval = true, title = 'Rsi/Ema Çizgisi Gösterilsin mi?', gro
 acRsiEmaAl = input(defval = false, title = 'Rsi/Ema Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 acRsiEmaSat = input(defval = false, title = 'Rsi/Ema Sat İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 
-acRsiEmaScalpAl = input(defval = false, title = 'Rsi/Ema Scalp Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
-acRsiEmaScalpSat = input(defval = false, title = 'Rsi/Ema Scalp Sat İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+
+//acRsiEmaScalpAl = input(defval = false, title = 'Rsi/Ema Scalp Al Haberi İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+//acRsiEmaScalpSat = input(defval = false, title = 'Rsi/Ema Scalp Sat Haberi İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+
+
+acRsiEmaScalpAl2 = input(defval = false, title = 'Rsi/Ema Scalp Al Fırsatı İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaScalpSat2 = input(defval = false, title = 'Rsi/Ema Scalp Sat Fırsatı İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 
 
 
@@ -179,7 +189,9 @@ myKoyuRenkD = input.color(#880E4F  , title =  "Satım Bölgesinde (dipte) Düşe
 
 myRsiColorY = myRsi1S <= 60 ? myAcikRenkY : myKoyuRenkY     
 myRsiColorD = myRsi1S <= 40 ? myKoyuRenkD : myAcikRenkD   
+
 myRsiColorTek = myRsi1S >= myEma121S ? myRsiColorY : myRsiColorD
+myRsiEmaLine = myRsi1S >= myEma121S ? high : low
 
 plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=myRsiColorTek, title="RsiEma", linewidth=acRsiEmaLW)
 
@@ -219,11 +231,32 @@ alertcondition(rsiSartYatayE, title="Rsi/Ema Yatay AL", message='2S Rsi/Ema Yata
 
 // Kırmızıdan Vişneye Düşerse
 rsiKirmiziVisne = (myRsiColorTek[3]==myAcikRenkD and myRsiColorTek[2]==myAcikRenkD)  and (myRsiColorTek[1] == myKoyuRenkD and myRsiColorTek == myKoyuRenkD) 
-plotshape(rsiKirmiziVisne and acRsiEmaScalpAl ,title ='Rsi/Ema Scalp AL' , style=shape.triangledown, location=location.belowbar, color=color.new(color.red, 0), offset=0, size=size.large)
+//plotshape(rsiKirmiziVisne and acRsiEmaScalpAl ,title ='Rsi/Ema Scalp AL Haberi' , style=shape.labeldown, location=location.belowbar, color=color.new(color.red, 0), offset=0, size=size.normal)
 
 // Yeşilden Koyuya Çıkarsa
 rsiYesilKoyu = (myRsiColorTek[2]==myAcikRenkY) and (myRsiColorTek[1] == myKoyuRenkY and myRsiColorTek == myKoyuRenkY) 
-plotshape(rsiYesilKoyu and acRsiEmaScalpSat ,title ='Rsi/Ema Scalp SAT', style=shape.triangleup, location=location.abovebar, color=color.new(#7ef558, 0), offset=0, size=size.large)
+//plotshape(rsiYesilKoyu and acRsiEmaScalpSat ,title ='Rsi/Ema Scalp SAT Haberi', style=shape.labelup, location=location.abovebar, color=color.new(color.red, 0), offset=0, size=size.normal)
+
+
+//Scalp AL
+rsiSartScalpAl1 = 1==0 or (myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkY)
+rsiSartScalpAl2 = 1==0 or (myRsiColorTek[2]==myAcikRenkD and myRsiColorTek[1]==myAcikRenkD) and (myRsiColorTek == myKoyuRenkY)
+rsiSartScalpAl3 = 1==0 or (myRsiColorTek[2]==myAcikRenkD and myRsiColorTek[1]==myAcikRenkD) and (myRsiColorTek == myAcikRenkY)
+rsiSartScalpAl = rsiSartScalpAl1 or rsiSartScalpAl2 or rsiSartScalpAl3
+plotshape(rsiSartScalpAl and acRsiEmaScalpAl2 ,title ='Rsi/Ema Scalp AL Fırsatı' , style=shape.labelup, location=location.belowbar, color=color.new(#7ef558, 0), offset=0, size=size.normal)
+
+//Scalp SAT
+rsiSartScalpSat1 = 1==0 or (myRsiColorTek[2]==myKoyuRenkY) and (myRsiColorTek[1] == myAcikRenkD or myRsiColorTek[1] == myKoyuRenkD) and (myRsiColorTek == myAcikRenkD or myRsiColorTek == myKoyuRenkD)
+rsiSartScalpSat2 = 1==0 or (myRsiColorTek[1]==myAcikRenkY) and (myRsiColorTek == myKoyuRenkD)
+rsiSartScalpSat3 = 1==0 or (myRsiColorTek[2]==myKoyuRenkY and myRsiColorTek[1]==myKoyuRenkY and myRsiColorTek == myKoyuRenkY) and (high<high[1] and high[1]<high[2])
+rsiSartScalpSat4 = 1==0 or (myRsiColorTek[2]==myAcikRenkY and myRsiColorTek[1]==myAcikRenkY and myRsiColorTek == myAcikRenkY) and (high<high[1] and high[1]<high[2])
+rsiSartScalpSat = rsiSartScalpSat1 or rsiSartScalpSat2 or rsiSartScalpSat3 or rsiSartScalpSat4
+plotshape(rsiSartScalpSat and acRsiEmaScalpSat2 ,title ='Rsi/Ema Scalp SAT Fırsatı', style=shape.labeldown, location=location.abovebar, color=color.new(#7ef558, 0), offset=0, size=size.normal)
+
+
+
+
+
 
 //Fiblines
 fibLen = input(defval = 150, title = 'Fibo Hesaplama Mum Sayısı', group="Fibo Ayarları")  
@@ -255,23 +288,23 @@ line2000_2 = srcHigh - diff * 2.000
 line2272_2 = srcHigh - diff * 2.272
 
 
-plot(line2272 and acFiboLines ? line2272 : na, title='2.272', color=color.new(color.green, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
-plot(line2000 and acFiboLines ? line2000 : na, title='2.000', color=color.new(color.green, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
-plot(line1618 and acFiboLines ? line1618 : na, title='1.618', color=color.new(color.green, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
-plot(line1414 and acFiboLines ? line1414 : na, title='1.414', color=color.new(color.green, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
-plot(line1272 and acFiboLines ? line1272 : na, title='1.272', color=color.new(color.green, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
-plot(line1000 and acFiboLines ? line1000 : na, title='1.000', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
-plot(line0786 and acFiboLines ? line0786 : na, title='0.786', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
-plot(line0618 and acFiboLines ? line0618 : na, title='0.618', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
-plot(line0500 and acFiboLines ? line0500 : na, title='0.500', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
-plot(line0382 and acFiboLines ? line0382 : na, title='0.382', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
-plot(line0236 and acFiboLines ? line0236 : na, title='0.236', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
-plot(line0000 and acFiboLines ? line0000 : na, title='0.000', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
-plot(line1272_2 and acFiboLines ? line1272_2 : na, title='-0.272', color=color.new(color.red, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
-plot(line1414_2 and acFiboLines ? line1414_2 : na, title='-0.414', color=color.new(color.red, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
-plot(line1618_2 and acFiboLines ? line1618_2 : na, title='-0.618', color=color.new(color.red, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
-plot(line2000_2 and acFiboLines ? line2000_2 : na, title='-1.000', color=color.new(color.red, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
-plot(line2272_2 and acFiboLines ? line2272_2 : na, title='-1.272', color=color.new(color.red, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line2272 and acFiboLines and acFlUst ? line2272 : na, title='2.272', color=color.new(color.green, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line2000 and acFiboLines and acFlUst ? line2000 : na, title='2.000', color=color.new(color.green, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1618 and acFiboLines and acFlUst ? line1618 : na, title='1.618', color=color.new(color.green, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1414 and acFiboLines and acFlUst ? line1414 : na, title='1.414', color=color.new(color.green, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1272 and acFiboLines and acFlUst ? line1272 : na, title='1.272', color=color.new(color.green, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1000 and acFiboLines and acFlOrta ? line1000 : na, title='1.000', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line0786 and acFiboLines and acFlOrta ? line0786 : na, title='0.786', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line0618 and acFiboLines and acFlOrta ? line0618 : na, title='0.618', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line0500 and acFiboLines and acFlOrta ? line0500 : na, title='0.500', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line0382 and acFiboLines and acFlOrta ? line0382 : na, title='0.382', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line0236 and acFiboLines and acFlOrta ? line0236 : na, title='0.236', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line0000 and acFiboLines and acFlOrta ? line0000 : na, title='0.000', color=color.new(#2E9AFE, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1272_2 and acFiboLines and acFlAlt ? line1272_2 : na, title='-0.272', color=color.new(color.red, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1414_2 and acFiboLines and acFlAlt ? line1414_2 : na, title='-0.414', color=color.new(color.red, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line1618_2 and acFiboLines and acFlAlt ? line1618_2 : na, title='-0.618', color=color.new(color.red, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line2000_2 and acFiboLines and acFlAlt ? line2000_2 : na, title='-1.000', color=color.new(color.red, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
+plot(line2272_2 and acFiboLines and acFlAlt ? line2272_2 : na, title='-1.272', color=color.new(color.red, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
 
 
 // Pano Bölümü
@@ -403,8 +436,8 @@ if acFiboUA
 acDoji = input.bool(defval = false, title = 'Doji Gözüksün mü?', group="Mum Formasyon Ayarları") 
 dojiOlcusu = input.float(0.05, minval=0.01, title="Doji Ölçüsü", step=0.01, group="Mum Formasyon Ayarları")
 
-acBullishEngulfing = input.bool(defval = false, title = 'Bullnish Engulfning (Yutan Boğa) Gözüksün mü?', group="Mum Formasyon Ayarları") 
-acBearishEngulfing = input.bool(defval = false, title = 'Bearish Engulfning (Yutan Ayı) Gözüksün mü?', group="Mum Formasyon Ayarları") 
+acBullishEngulfing = input.bool(defval = false, title = 'Bullnish Engulfning (Yutan Ayı) Gözüksün mü?', group="Mum Formasyon Ayarları") 
+acBearishEngulfing = input.bool(defval = false, title = 'Bearish Engulfning (Yutan Boğa) Gözüksün mü?', group="Mum Formasyon Ayarları") 
 acShootingStar = input.bool(defval = false, title = 'Shooting Star (Kayan Yıldız) Gözüksün mü?', group="Mum Formasyon Ayarları")
 acEveningStar =  input.bool(defval = false, title = 'Evening Star (Akşam Yıldızı) Gözüksün mü?', group="Mum Formasyon Ayarları")
 acMorningStar =  input.bool(defval = false, title = 'Morning Star (Sabah Yıldızı) Gözüksün mü?', group="Mum Formasyon Ayarları")
