@@ -2,7 +2,7 @@
 // © ozcanozbek
 
 //@version=5
-indicator(title ="xMA - V1.2.02", shorttitle ="xMA" ,overlay=true)
+indicator(title ="xMA - V1.2.03", shorttitle ="xMA" ,overlay=true)
 src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
 
 // xMA Çizgi ve Kesişmeleri
