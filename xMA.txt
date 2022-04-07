@@ -2,7 +2,7 @@
 // © ozcanozbek
 
 //@version=5
-indicator(title ="xMA - V1.2.03", shorttitle ="xMA" ,overlay=true)
+indicator(title ="xMA - V1.2.03", shorttitle ="xMA" ,overlay=true, timeframe="")
 src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
 
 // xMA Çizgi ve Kesişmeleri
@@ -175,7 +175,7 @@ plotshape(kesAxMA_34 and acxMa34Cizgisi and acxMaKesmeler and acxMaAKesmeler and
 plotshape(kesAxMA_89 and acxMa89Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa89AKesmeler ? kesAxMA_89 : na ,title ='xMa89 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_89_Color, offset=0, size=xMaASize)
 
 plotshape(kesAxMA_100 and acxMa100Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa100AKesmeler ? kesAxMA_100 : na ,title ='xMa100 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_100_Color, offset=0, size=xMaASize)
-alertcondition(kesAxMA_100, title="xMA100 AK", message='2S xMA100 AF (100 ü aşağı kesti) {{ticker}}, FİYAT={{close}}')
+alertcondition(kesAxMA_100, title="xMA100 AK", message='2S xMA100 AK (100 ü aşağı kesti) {{ticker}}, FİYAT={{close}}')
 
 plotshape(kesAxMA_144 and acxMa144Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa144AKesmeler ? kesAxMA_144 : na ,title ='xMa144 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_144_Color, offset=0, size=xMaASize)
 
@@ -185,6 +185,8 @@ alertcondition(kesAxMA_200, title="xMA200 AK", message='2S xMA200 AK (200 ü aş
 plotshape(kesAxMA_50 and acxMa50Cizgisi and acxMaKesmeler and acxMaAKesmeler and acxMa50AKesmeler ? kesAxMA_50 : na ,title ='xMa50 Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=xMA_50_Color, offset=0, size=xMaASize)
 alertcondition(kesAxMA_50, title="xMA50 SSF", message='2S xMA50 SSF (son SATIŞ fırsatı olabilir) {{ticker}}, FİYAT={{close}}')
 
+
+alertcondition(kesAxMA_100 or kesAxMA_200, title="(xMA100 veya xMA200) AK", message='2S xMA100 veya xMA200 AK (100 veya 200 ü aşağı kesti) {{ticker}}, FİYAT={{close}}')
 
 
 plotshape(kesYxMA_9 and acxMa9Cizgisi  and acxMaKesmeler and acxMaYKesmeler and acxMa9YKesmeler ? kesYxMA_9 : na ,title ='xMa9 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_9_Color, offset=0, size=xMaYSize)
@@ -202,7 +204,7 @@ plotshape(kesYxMA_144 and acxMa144Cizgisi and acxMaKesmeler and acxMaYKesmeler a
 plotshape(kesYxMA_200 and acxMa200Cizgisi and acxMaKesmeler and acxMaYKesmeler and acxMa200YKesmeler ? kesYxMA_200 : na ,title ='xMa200 Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=xMA_200_Color, offset=0, size=xMaYSize)
 alertcondition(kesYxMA_200, title="xMA200 YK", message='2S xMA200 YK (200 ü yukarı kesti) {{ticker}}, FİYAT={{close}}')
 
-
+alertcondition(kesYxMA_100 or kesYxMA_200, title="(xMA100 veya xMA200) YK", message='2S xMA100 veya xMA200 YK (100 veya 200 ü yukarı kesti) {{ticker}}, FİYAT={{close}}')
 
 // RSI/EMA
 myClose1S = request.security(syminfo.tickerid, timeframe.period, src)
@@ -251,7 +253,5 @@ rsiSartYatay = ((myKoyuRenkD==myRsiColorTek[1] and myKoyuRenkD==myRsiColorTek[2]
 rsiSartYatayE = rsiSartYatay and (low <= xMA_100 and low <= xMA_200)
 plotshape(rsiSartYatayE and acRsiEmaYatay ,title ='Rsi/Ema Yatay AL' , style=shape.square, location=location.belowbar, color=myAcikRenkD, offset=0, size=size.normal)
 alertcondition(rsiSartYatayE, title="Rsi/Ema Yatay AL", message='2S Rsi/Ema Yatay AL fırsatı olabilir {{ticker}}, FİYAT={{close}}')
-
-
 
 //BURADA BİTTİ
