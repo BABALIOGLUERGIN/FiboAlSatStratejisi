@@ -1,0 +1,255 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © ozcanozbek
+
+//@version=5
+indicator(title = 'Rsi/Ema Çizgisi Sade V1.1.1' , shorttitle='Rsi/Ema Çizgisi Sade', format=format.volume, timeframe="")
+
+src = close
+
+
+
+//Fiblines
+fibLen = input(defval = 150, title = 'Fibo Hesaplama Mum Sayısı', group="Fibo Ayarları")  
+fractal_top = 0.0
+fractal_top := high < high[2] and high[1] < high[2] and high[3] < high[2] and high[4] < high[2] ? high[2] : fractal_top[1]
+fractal_bottom = 0.0
+fractal_bottom := low > low[2] and low[1] > low[2] and low[3] > low[2] and low[4] > low[2] ? low[2] : fractal_bottom[1]
+
+srcHigh = ta.highest(fractal_top, fibLen)
+srcLow = ta.lowest(fractal_bottom, fibLen)
+diff = srcHigh - srcLow
+
+line2272 = srcLow + diff * 2.272
+line2000 = srcLow + diff * 2.000
+line1618 = srcLow + diff * 1.618
+line1414 = srcLow + diff * 1.414
+line1272 = srcLow + diff * 1.272
+line1000 = srcHigh
+line0786 = srcLow + diff * 0.786
+line0618 = srcLow + diff * 0.618
+line0500 = srcLow + diff * 0.500
+line0382 = srcLow + diff * 0.382
+line0236 = srcLow + diff * 0.236
+line0000 = srcLow
+line1272_2 = srcHigh - diff * 1.272
+line1414_2 = srcHigh - diff * 1.414
+line1618_2 = srcHigh - diff * 1.618
+line2000_2 = srcHigh - diff * 2.000
+line2272_2 = srcHigh - diff * 2.272
+
+
+// RSI/EMA
+myClose1S = request.security(syminfo.tickerid, timeframe.period, src)
+myRsiD = input.int(14, title='RSI Değeri', group="Rsi/Ema Çizgisi Değerleri")
+myRsi1S = ta.rsi(myClose1S,myRsiD)
+myEmaD = input.int(12, title='Ema Değeri', group="Rsi/Ema Çizgisi Değerleri")
+myEma121S = ta.ema(myRsi1S, myEmaD)
+acRsiEmaLW = input.int(defval = 4, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri', group="Rsi/Ema Çizgisi Değerleri") 
+
+acRsiEma = input(defval = true, title = 'Rsi/Ema Çizgisi Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaAl = input(defval = false, title = 'Rsi/Ema Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaSat = input(defval = false, title = 'Rsi/Ema Sat İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaYatay = input(defval = false, title = 'Rsi/Ema Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaCifteYatay = input(defval = false, title = 'Rsi/Ema Çift Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+
+myKoyuRenkY = input.color(#00897B , "Alım Bölgesinde (zirvede) Yükselirken", group="Rsi/Ema Çizgisi") 
+myAcikRenkY = input.color(color.green, "Satım Bölgesinden (dipte) Yükselirken", group="Rsi/Ema Çizgisi") 
+
+myAcikRenkD = input.color(color.red , "Alım Bölgesinden (zirvede) Düşerken", group="Rsi/Ema Çizgisi") 
+myKoyuRenkD = input.color(#880E4F  , "Satım Bölgesinde (dipte) Düşerken", group="Rsi/Ema Çizgisi") 
+
+myRsiColorY = myRsi1S <= 60 ? myAcikRenkY : myKoyuRenkY     
+myRsiColorD = myRsi1S <= 40 ? myKoyuRenkD : myAcikRenkD   
+myRsiColorTek = myRsi1S >= myEma121S ? myRsiColorY : myRsiColorD
+myRsiEmaLine = myRsi1S >= myEma121S ? high : low
+
+
+plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=myRsiColorTek, title="RsiEma", linewidth=acRsiEmaLW)
+
+
+rsiSartAl = (myRsiColorTek[1]==myAcikRenkD or myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkY or myRsiColorTek == myKoyuRenkY) 
+plotshape(rsiSartAl and acRsiEmaAl ,title ='Rsi/Ema AL' , style=shape.triangleup, location=location.belowbar, color=color.new(#00bcd4, 0), offset=0, size=size.normal)
+alertcondition(rsiSartAl, title="Rsi/Ema AL", message='Rsi/Ema AL fırsatı olabilir (xMA100 ve xMA200 konumunu kontrol et) {{ticker}}, FİYAT={{close}}')
+
+rsiSartSat = (myRsiColorTek[1]==myAcikRenkY or myRsiColorTek[1]==myKoyuRenkY) and (myRsiColorTek == myAcikRenkD or myRsiColorTek == myKoyuRenkD) 
+plotshape(rsiSartSat and acRsiEmaSat ,title ='Rsi/Ema SAT', style=shape.triangledown, location=location.abovebar, color=color.new(#00bcd4, 0), offset=0, size=size.normal)
+alertcondition(rsiSartSat, title="Rsi/Ema SAT", message='Rsi/Ema SAT fırsatı olabilir (xMA50 konumunu kontrol et) {{ticker}}, FİYAT={{close}}')
+
+rsiSartCiftYatay1 = (myKoyuRenkD==myRsiColorTek[1] and myKoyuRenkD==myRsiColorTek[2] and myKoyuRenkD==myRsiColorTek[3]) 
+//or (myAcikRenkD==myRsiColorTek[1] and myAcikRenkD==myRsiColorTek[2] and myAcikRenkD==myRsiColorTek[3])
+rsiSartCiftYatay2 = (low==low[1] or close==close[1] or high==high[1] or open==open[1]) and (low==low[2] or close==close[2] or high==high[2] or open==open[2])
+rsiSartCiftYatay = rsiSartCiftYatay1 and rsiSartCiftYatay2
+plotshape(rsiSartCiftYatay and acRsiEmaCifteYatay ,title ='Rsi/Ema Çift Yatay AL' , style=shape.square, location=location.belowbar, color=myKoyuRenkD, offset=0, size=size.large)
+alertcondition(rsiSartCiftYatay, title="Rsi/Ema Çift Yatay AL", message='2S Rsi/Ema Çift Yatay AL fırsatı olabilir {{ticker}}, FİYAT={{close}}')
+
+
+//rsiSartYatay = ((myKoyuRenkD==myRsiColorTek[1] and myKoyuRenkD==myRsiColorTek[2]) or (myAcikRenkD==myRsiColorTek[1] and myAcikRenkD==myRsiColorTek[2])) and (low==low[1])
+//rsiSartYatayE = rsiSartYatay and (low <= xMA_100 and low <= xMA_200)
+//plotshape(rsiSartYatayE and acRsiEmaYatay ,title ='Rsi/Ema Yatay AL' , style=shape.square, location=location.belowbar, color=myAcikRenkD, offset=0, size=size.normal)
+//alertcondition(rsiSartYatayE, title="Rsi/Ema Yatay AL", message='2S Rsi/Ema Yatay AL fırsatı olabilir {{ticker}}, FİYAT={{close}}')
+
+//BB
+//acBb = input(defval = false, title = 'Küçük Bolinger Çizgileri Gözüksün mü?', group="Küçük Bolinger Bölümü")   
+//acBbAl = input(defval = false, title = 'Küçük Bolinger Al İşareti Gözüksün mü?', group="Küçük Bolinger Bölümü")   
+//acBbSat = input(defval = false, title = 'Küçük Bolinger Sat İşareti Gözüksün mü?', group="Küçük Bolinger Bölümü")   
+bbLength = input.int(20, minval=1, step=1, title='Küçük Bolinger Uzunluğu', group="Küçük Bolinger Bölümü")
+bbMult = input.float(1.7, minval=0.001, maxval=50.0, step=0.01, title="Küçük Bolinger Standart Sapma", group="Küçük Bolinger Bölümü")
+bbBasis = ta.sma(src, bbLength)
+bbDev = bbMult * ta.stdev(src, bbLength)
+upper = bbBasis + bbDev
+lower = bbBasis - bbDev
+
+//bbSrcUst = close
+//bbSrcAlt = low
+//kesYbb = ta.crossover(myRsiEmaLine , lower) and src > ma15
+//kesAbb = ta.crossunder(myRsiEmaLine , upper) 
+
+//bb_Color = color.new(#00bcd4, 0)
+//bb_ColorIsaret = color.new(color.orange, 0)
+//bb_Size = size.small
+
+//bolP1 = plot(upper and acBb ? upper : na, "Küçük Bolinger Üst", color=bb_Color, offset = 0, linewidth=2)
+//bolP2 = plot(lower and acBb ? lower : na, "Küçük Bolinger Alt", color=bb_Color, offset = 0, linewidth=2)
+//fill(bolP1, bolP2, title='Küçük Bolinger Bölgesi', transp=79)
+
+//plotshape(kesAbb and acBbSat ? kesAbb : na , title = 'Küçük Bolinger Aşağı Kes', text='', style=xMaAStyle , location=xMaALocation, color=bb_ColorIsaret, offset=0, size=bb_Size)
+//plotshape(kesYbb and acBbAl ? kesYbb : na ,title ='Küçük Bolinger Yukarı Kes', text='', style=xMaYStyle , location=xMaYLocation, color=bb_ColorIsaret, offset=0, size=bb_Size)
+//alertcondition(kesYbb, title="BB AL", message='2S BB AL {{ticker}}, FİYAT={{close}}')
+
+
+//Özel Sat
+acSLF = input.bool(defval = true, title = 'Özel Sat Fırsatı Gözüksün mü?', group="Özel Sat Fırsatı Ayarları")   
+
+xC = myRsiEmaLine[1]
+stopLossFibo = 0.0
+
+if xC >= line2272
+    stopLossFibo := line2272
+if xC >= line2000 and xC < line2272
+    stopLossFibo := line2000
+if xC >= line1618 and xC < line2000
+    stopLossFibo := line1618
+if xC >= line1414 and xC < line1618
+    stopLossFibo := line1414
+if xC >= line1272 and xC < line1414
+    stopLossFibo := line1272
+if xC >= line1000 and xC < line1272
+    stopLossFibo := line1000
+if xC >= line0786 and xC < line1000
+    stopLossFibo := line0786
+if xC >= line0618 and xC < line0786
+    stopLossFibo := line0618
+if xC >= line0500 and xC < line0618
+    stopLossFibo := line0500
+if xC >= line0382 and xC < line0500
+    stopLossFibo := line0382
+if xC >= line0236 and xC < line0382
+    stopLossFibo := line0236
+if xC >= line0000 and xC < line0236
+    stopLossFibo := line0000
+if xC >= line1272_2 and xC < line0000
+    stopLossFibo := line1272_2
+if xC >= line1414_2 and xC < line1272_2
+    stopLossFibo := line1414_2
+if xC >= line1618_2 and xC < line1414_2
+    stopLossFibo := line1618_2
+if xC >= line2000_2 and xC < line1618_2
+    stopLossFibo := line2000_2
+if xC >= line2272_2 and xC < line2000_2
+    stopLossFibo := line2272_2
+if xC < line2272_2
+    stopLossFibo := line2272_2
+
+colorOSF = color.new(#880E4F, 0)  
+OSF_Size = size.normal
+xMaAStyle = shape.triangledown
+xMaALocation = location.abovebar
+
+//sLF = close < stopLossFibo
+sLF = ta.crossunder( myRsiEmaLine , stopLossFibo) and high > upper
+
+plotshape(sLF and acSLF ? sLF : na , title = 'Özel Sat Fırsatı', text='', style=xMaAStyle , location=xMaALocation, color=colorOSF, offset= 0 , size=OSF_Size)
+alertcondition(sLF, title="ÖSF SAT", message='2S ÖSF SAT {{ticker}}, FİYAT={{close}}')
+
+
+//Özel Al
+acALF = input.bool(defval = true, title = 'Özel Al Fırsatı Gözüksün mü?', group="Özel Fırsat Ayarları")   
+
+xC := myRsiEmaLine[1]
+stopLossFibo := 0.0
+
+
+//if xC >= line2272                       stopLossFibo := line2272
+//if xC >= line2000 and xC < line2272    stopLossFibo := line2000
+//if xC >= line1618 and xC < line2000    stopLossFibo := line1618
+//if xC >= line1414 and xC < line1618    stopLossFibo := line1414
+//if xC >= line1272 and xC < line1414    stopLossFibo := line1272
+//if xC >= line1000 and xC < line1272    stopLossFibo := line1000
+//if xC >= line0786 and xC < line1000    stopLossFibo := line0786
+//if xC >= line0618 and xC < line0786    stopLossFibo := line0618
+//if xC >= line0500 and xC < line0618    stopLossFibo := line0500
+//if xC >= line0382 and xC < line0500    stopLossFibo := line0382
+//if xC >= line0236 and xC < line0382    stopLossFibo := line0236
+//if xC >= line0000 and xC < line0236    stopLossFibo := line0000
+//if xC >= line1272_2 and xC < line0000    stopLossFibo := line1272_2
+//if xC >= line1414_2 and xC < line1272_2    stopLossFibo := line1414_2
+//if xC >= line1618_2 and xC < line1414_2    stopLossFibo := line1618_2
+//if xC >= line2000_2 and xC < line1618_2    stopLossFibo := line2000_2
+//if xC >= line2272_2 and xC < line2000_2    stopLossFibo := line2272_2
+//if xC < line2272_2    stopLossFibo := line2272_2
+
+
+if xC < line2272_2
+    stopLossFibo := line2272_2
+if xC > line2272_2 and xC <= line2000_2
+    stopLossFibo := line2000_2
+if xC > line2000_2 and xC <= line1618_2
+    stopLossFibo := line1618_2
+if xC > line1618_2 and xC <= line1414_2
+    stopLossFibo := line1414_2
+if xC > line1414_2 and xC <= line1272_2
+    stopLossFibo := line1272_2
+if xC > line1272_2 and xC <= line0000
+    stopLossFibo := line0000
+if xC > line0000 and xC <= line0236
+    stopLossFibo := line0236
+if xC > line0236 and xC <= line0382
+    stopLossFibo := line0382
+if xC > line0382 and xC <= line0500
+    stopLossFibo := line0500
+if xC > line0500 and xC <= line0618
+    stopLossFibo := line0618
+if xC > line0618 and xC <= line0786
+    stopLossFibo := line0786
+if xC > line0786 and xC <= line1000
+    stopLossFibo := line1000
+if xC > line1000 and xC <= line1272
+    stopLossFibo := line1272
+if xC > line1272 and xC <= line1414
+    stopLossFibo := line1414
+if xC > line1414 and xC <= line1618
+    stopLossFibo := line1618
+if xC > line1618 and xC <= line2000
+    stopLossFibo := line2000
+if xC > line2000 and xC <= line2272
+    stopLossFibo := line2272
+if xC > line2272
+    stopLossFibo := line2272
+
+
+
+
+//sLF = close < stopLossFibo
+aLF = ta.crossover( myRsiEmaLine , stopLossFibo) and low <= lower
+
+
+plotshape(aLF and acALF ? aLF : na , title = 'Özel Al Fırsatı', text='', style=shape.triangleup , location=location.belowbar, color=color.new(#880E4F, 0), offset=0, size=size.normal)
+alertcondition(aLF, title="ÖSF AL", message='2S ÖSF AL {{ticker}}, FİYAT={{close}}')
+
+
+
+//plot(myRsi1S)
+//plot(myEma121S)
+
+
+//BURADA BİTTİ
