@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = '3_15_63_Ma Çizgisi V1.3.04', shorttitle = '3 xMA Çizgisi', overlay=true) 
+indicator(title = '3_15_63_Ma Çizgisi V1.3.05', shorttitle = '3 xMA Çizgisi', overlay=true) 
 src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
 
 // Fibo Ayarları
@@ -398,7 +398,7 @@ if acEtiket
 //line1414
 
 araUA = "----------------"
-myFiyat = "<< Fiyat: " + str.tostring(close, '##.00') + " >>" 
+myFiyat = "<< FİYAT: " + str.tostring(close, '##.00') + " >>" 
 myF0 = src >  line1414 ? myFiyat + "\n" + araUA + "\n" : na
 s4 = "Üst 4: " + str.tostring(line1414, '##.00') + "\n"
 myF1 = src <= line1414 and src > line1272 ? myFiyat + "\n" : na
@@ -407,8 +407,20 @@ myF2 = src <= line1272 and src > line1000 ? myFiyat + "\n" : na
 s2 = "Üst 2: " + str.tostring(line1000, '##.00') + "\n"
 myF3 = src <= line1000 and src > line0786 ? myFiyat + "\n" : na
 s1 = "Üst 1: " + str.tostring(line0786, '##.00') + "\n"
-myF4 = src <= line0786 and src > line0236 ? araUA + "\n" + myFiyat + "\n"  : na
+
+myOA1 = src <= line0786 and src > line0618 ? "\n" + myFiyat : na
+oa1 = "\n" + "Orta +1: " + str.tostring(line0618, '##.00') + "\n"
+
+myON1 = src <= line0618 and src > line0500 ? myFiyat + "\n" : na
+o0 = "Orta  0: " + str.tostring(line0500, '##.00') + "\n"
+
+myOE1 = src <= line0500 and src > line0382 ? myFiyat + "\n" : na
+oe1 = "Orta -1: " + str.tostring(line0382, '##.00') + "\n"
+
+
+myF4 = src <= line0382 and src > line0236 ? araUA + "\n" + myFiyat + "\n"  : na
 a1 = "\n" + "Alt 1: " + str.tostring(line0236, '##.00') + "\n"
+
 myF5 = src <= line0236 and src > line0000 ? myFiyat + "\n" : na
 a2 = "Alt 2: " + str.tostring(line0000, '##.00') + "\n"
 myF6 = src <= line0000 and src > line1272_2 ? myFiyat + "\n"  : na
@@ -419,7 +431,8 @@ myF8 = src <= line1414_2 ? "\n" + araUA + "\n" + myFiyat : na
 
 //line1414_2
 
-toplaUA = myF0 + s4 + myF1 + s3 + myF2 + s2 + myF3 + s1 + myF4 + araUA + a1 + myF5 + a2 + myF6 + a3 + myF7 + a4 + myF8 //+ araUA
+toplaUA = myF0 + s4 + myF1 + s3 + myF2 + s2 + myF3 + s1 + araUA + myOA1 + oa1 + myON1 + o0 + myOE1 + oe1 + myF4 + araUA + a1 + myF5 + a2 + myF6 + a3 + myF7 + a4 + myF8 //+ araUA
+//toplaUA = myF0 + s4 + myF1 + s3 + myF2 + s2 + myF3 + s1 + myF4 + araUA + a1 + myF5 + a2 + myF6 + a3 + myF7 + a4 + myF8 //+ araUA
 info_textUA = toplaUA //+ myFiyat = "Fiyat: " + str.tostring(close)
 
 
@@ -466,7 +479,7 @@ plotshape(morningStar and acMorningStar ? morningStar : na,  title= "Sabah Yıld
 
 
 //Özel Sat
-acSLF = input.bool(defval = true, title = 'Özel Sat Fırsatı Gözüksün mü?', group="Özel Sat Fırsatı Ayarları")   
+acSLF = input.bool(defval = true, title = 'Özel Sat Fırsatı Gözüksün mü?', group="Özel Fırsat Ayarları")   
 
 xC = myRsiEmaLine[1]
 stopLossFibo = 0.0
@@ -515,8 +528,88 @@ OSF_Size = size.normal
 sLF = ta.crossunder( myRsiEmaLine , stopLossFibo) and high > upper
 
 
-plotshape(sLF and acSLF ? sLF : na , title = 'Özel Sat Fırsatı', text='', style=xMaAStyle , location=xMaALocation, color=colorOSF, offset=0, size=OSF_Size)
+plotshape(sLF and acSLF ? sLF : na , title = 'Özel Sat Fırsatı', text='', style=shape.triangledown , location=location.abovebar, color=colorOSF, offset=0, size=OSF_Size)
 alertcondition(sLF, title="ÖSF SAT", message='2S ÖSF SAT {{ticker}}, FİYAT={{close}}')
+
+
+//plot(myRsi1S)
+//plot(myEma121S)
+
+
+
+//Özel Al
+acALF = input.bool(defval = true, title = 'Özel Al Fırsatı Gözüksün mü?', group="Özel Fırsat Ayarları")   
+
+xC := myRsiEmaLine[1]
+stopLossFibo := 0.0
+
+
+//if xC >= line2272                       stopLossFibo := line2272
+//if xC >= line2000 and xC < line2272    stopLossFibo := line2000
+//if xC >= line1618 and xC < line2000    stopLossFibo := line1618
+//if xC >= line1414 and xC < line1618    stopLossFibo := line1414
+//if xC >= line1272 and xC < line1414    stopLossFibo := line1272
+//if xC >= line1000 and xC < line1272    stopLossFibo := line1000
+//if xC >= line0786 and xC < line1000    stopLossFibo := line0786
+//if xC >= line0618 and xC < line0786    stopLossFibo := line0618
+//if xC >= line0500 and xC < line0618    stopLossFibo := line0500
+//if xC >= line0382 and xC < line0500    stopLossFibo := line0382
+//if xC >= line0236 and xC < line0382    stopLossFibo := line0236
+//if xC >= line0000 and xC < line0236    stopLossFibo := line0000
+//if xC >= line1272_2 and xC < line0000    stopLossFibo := line1272_2
+//if xC >= line1414_2 and xC < line1272_2    stopLossFibo := line1414_2
+//if xC >= line1618_2 and xC < line1414_2    stopLossFibo := line1618_2
+//if xC >= line2000_2 and xC < line1618_2    stopLossFibo := line2000_2
+//if xC >= line2272_2 and xC < line2000_2    stopLossFibo := line2272_2
+//if xC < line2272_2    stopLossFibo := line2272_2
+
+
+if xC < line2272_2
+    stopLossFibo := line2272_2
+if xC > line2272_2 and xC <= line2000_2
+    stopLossFibo := line2000_2
+if xC > line2000_2 and xC <= line1618_2
+    stopLossFibo := line1618_2
+if xC > line1618_2 and xC <= line1414_2
+    stopLossFibo := line1414_2
+if xC > line1414_2 and xC <= line1272_2
+    stopLossFibo := line1272_2
+if xC > line1272_2 and xC <= line0000
+    stopLossFibo := line0000
+if xC > line0000 and xC <= line0236
+    stopLossFibo := line0236
+if xC > line0236 and xC <= line0382
+    stopLossFibo := line0382
+if xC > line0382 and xC <= line0500
+    stopLossFibo := line0500
+if xC > line0500 and xC <= line0618
+    stopLossFibo := line0618
+if xC > line0618 and xC <= line0786
+    stopLossFibo := line0786
+if xC > line0786 and xC <= line1000
+    stopLossFibo := line1000
+if xC > line1000 and xC <= line1272
+    stopLossFibo := line1272
+if xC > line1272 and xC <= line1414
+    stopLossFibo := line1414
+if xC > line1414 and xC <= line1618
+    stopLossFibo := line1618
+if xC > line1618 and xC <= line2000
+    stopLossFibo := line2000
+if xC > line2000 and xC <= line2272
+    stopLossFibo := line2272
+if xC > line2272
+    stopLossFibo := line2272
+
+
+
+
+//sLF = close < stopLossFibo
+aLF = ta.cross( myRsiEmaLine , stopLossFibo) and low <= lower
+
+
+plotshape(aLF and acALF ? aLF : na , title = 'Özel Al Fırsatı', text='', style=shape.triangleup , location=location.belowbar, color=color.new(#880E4F, 0), offset=0, size=size.normal)
+alertcondition(aLF, title="ÖSF AL", message='2S ÖSF AL {{ticker}}, FİYAT={{close}}')
 
 
 //plot(myRsi1S)
