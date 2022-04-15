@@ -2,15 +2,78 @@
 // © ozcanozbek
 
 //@version=5
-indicator(title = 'Rsi/Ema Çizgisi Sade V1.1.2' , shorttitle='Rsi/Ema Çizgisi Sade', overlay=true, format=format.volume, timeframe="")
+indicator(title = 'Rsi/Ema Çizgisi Sade V1.2.1' , shorttitle='Rsi/Ema Sade', overlay=true, timeframe="", timeframe_gaps=true)
 
-src = close
+
+//myClose = request.security(syminfo.tickerid, timeframe.period, close)
+//src = request.security(syminfo.tickerid, timeframe.period, close)
+
+//src = input.source(close, "Kaynak", group="Kaynak Çeşitleri")
+
+float src        = input.source(close, "Source", group="Kaynak Çeşitleri")
+
 
 // Fibo Ayarları
 acFiboLines = input(defval = true, title = 'Fibo Yatay Çizgileri Gözüksün mü?', group="Fibo Ayarları")   
 acFlUst = input(defval = true, title = 'Fibo Üst Yatay Çizgileri Gözüksün mü?', group="Fibo Ayarları")   
 acFlOrta = input(defval = true, title = 'Fibo Orta Yatay Çizgileri Gözüksün mü?', group="Fibo Ayarları")   
 acFlAlt = input(defval = true, title = 'Fibo Alt Yatay Çizgileri Gözüksün mü?', group="Fibo Ayarları")   
+
+
+
+//TimeFrame
+string xMAMum9 = input.timeframe(defval = "Grafik", title = "xMA Çalışma Mumu" ,options=["Grafik", "1 Dakika", "5 Dakika", "15 Dakika", "30 Dakika", "2 Saat", "4 Saat", "1 Gün", "1 Hafta", "1 Ay"] , group="xMA Değerleri")
+
+// xMA Çizgi ve Kesişmeleri
+string xMaTip9 = input.string(defval="EMA", options = ["EMA", "(D)EMA", "(T)EMA", "SMA", "HMA", "RMA", "WMA"], title=  "xMA tipi", group="xMA Değerleri")
+
+demaHesapla(mySrc,len)=>
+    ema1 = ta.ema(close, len)
+    ema2 = ta.ema(ema1, len)
+    (2 * ema1) - ema2  
+
+temaHesapla(mySrc,len)=>
+    ema1 = ta.ema(close, len)
+    ema2 = ta.ema(ema1, len)
+    ema3 = ta.ema(ema2, len)
+    3 * (ema1 - ema2) + ema3  
+
+xMaKontrol(xMaTip, mySrc, len)=>
+    float xMA = switch xMaTip
+        "EMA" => ta.ema(close, len) 
+        "SMA" => ta.sma(close, len) 
+        "HMA" => ta.hma(close, len) 
+        "RMA" => ta.rma(close, len) 
+        "WMA" => ta.wma(close, len) 
+        "(D)EMA" => demaHesapla(close,len)
+        "(T)EMA" => temaHesapla(close,len)
+        => 0.0 
+
+xMaMumKontrol(xMaMumTip)=>
+    string xMA = switch xMaMumTip
+        "1 Dakika" => "1"
+        "5 Dakika" => "5"
+        "15 Dakika" => "15"
+        "30 Dakika" => "30"
+        "2 Saat" => "120" 
+        "4 Saat" => "240" 
+        "1 Gün" => "D"
+        "1 Hafta" => "W"
+        "1 Ay" => "M"
+        => str.tostring(timeframe.period)
+
+
+acxMaCizgisi = input(defval = true, title = 'xMA Çizgileri Gözüksün mü?', group="xMA Çizgileri")  
+acxMa9Cizgisi = input(defval = false, title = 'xMA Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
+
+xMA_9_Color = color.new(color.lime, 0)
+
+
+length0a = input(20, 'xMA', group="xMA Değerleri")
+xMaMum9Src = xMaMumKontrol(xMAMum9)
+xMA_9 = xMaKontrol(xMaTip9, close, length0a) 
+xMA_9Src = request.security(syminfo.tickerid,xMaMum9Src, xMA_9)
+xMA_9_Plot = plot(xMA_9Src and acxMaCizgisi and acxMa9Cizgisi ? xMA_9Src : na , color=xMA_9_Color, linewidth=3, title='xMa Çizgisi')
 
 
 //Fiblines
@@ -61,7 +124,6 @@ plot(line2000_2 and acFiboLines and acFlAlt ? line2000_2 : na, title='-1.000', c
 plot(line2272_2 and acFiboLines and acFlAlt ? line2272_2 : na, title='-1.272', color=color.new(color.red, 0), style=plot.style_cross, trackprice=true, offset=-9999, linewidth=1)
 
 
-
 // RSI/EMA
 myClose1S = request.security(syminfo.tickerid, timeframe.period, src)
 myRsiD = input.int(14, title='RSI Değeri', group="Rsi/Ema Çizgisi Değerleri")
@@ -88,7 +150,10 @@ myRsiColorTek = myRsi1S >= myEma121S ? myRsiColorY : myRsiColorD
 myRsiEmaLine = myRsi1S >= myEma121S ? high : low
 
 
-plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=myRsiColorTek, title="RsiEma", linewidth=acRsiEmaLW)
+myRsiEmaCizgim = plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=myRsiColorTek, linewidth=acRsiEmaLW, title='RsiEma Cizgisi')
+
+
+//xMA_9_Plot = plot(xMA_9Src and acxMaCizgisi and acxMa9Cizgisi ? xMA_9Src : na , color=xMA_9_Color, linewidth=3, title='xMa9 Çizgisi')
 
 
 rsiSartAl = (myRsiColorTek[1]==myAcikRenkD or myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkY or myRsiColorTek == myKoyuRenkY) 
@@ -261,19 +326,35 @@ if xC > line2272
     stopLossFibo := line2272
 
 
-
-
 //sLF = close < stopLossFibo
 aLF = ta.crossover( myRsiEmaLine , stopLossFibo) and low <= lower
 
 
 plotshape(aLF and acALF ? aLF : na , title = 'Özel Al Fırsatı', text='', style=shape.triangleup , location=location.belowbar, color=color.new(#880E4F, 0), offset=0, size=size.normal)
 alertcondition(aLF, title="ÖSF AL", message='2S ÖSF AL {{ticker}}, FİYAT={{close}}')
-
-
-
 //plot(myRsi1S)
 //plot(myEma121S)
+
+
+
+//BOYAMALAR
+///acBoyama = input(defval = false, title = 'Boyama Gözüksün mü?', group="Boyama Bölümü")   
+
+///myRenkBir = input.color(color.lime , "Birinci Sınır Renk", group="Boyama Bölümü") 
+///myRenkIki = input.color(color.red, "İkinci Sınır Renk", group="Boyama Bölümü") 
+
+ilk = myRsiEmaCizgim
+son = xMA_9_Plot
+
+//myBoya = acBoyama ? ba1 >= ba2 ? myRenkBir : myRenkIki : color.new(color.white, 100)
+///myBoya = myRsiEmaLine >= xMA_9Src ? myRenkBir : myRenkIki 
+///myBoya = myRsiEmaLine >= xMA_9Src ? myRsiColorTek : na 
+
+
+//myBoya1 = myRsi1S >= myEma121S ? myRsiColorY : myRsiColorD
+myBoya1 = myRsi1S >= myEma121S ? myRsiColorY : na
+myBoya = (myRsiEmaLine >= xMA_9Src) ? myBoya1 : na 
+fill(ilk, son , title = 'Bölge', color = myBoya, fillgaps = true, transp=0)
 
 
 //BURADA BİTTİ
