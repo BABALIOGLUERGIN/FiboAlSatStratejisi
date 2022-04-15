@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = '3_15_63_Ma Çizgisi V1.3.05', shorttitle = '3 xMA Çizgisi', overlay=true) 
+indicator(title = '3_15_63_Ma Çizgisi V1.3.06', shorttitle = '3 xMA Çizgisi', overlay=true) 
 src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
 
 // Fibo Ayarları
@@ -12,8 +12,8 @@ acFlAlt = input(defval = true, title = 'Fibo Alt Yatay Çizgileri Gözüksün m�
 
 
 // Pano Ayarları
-acFiboUA = input(defval = true, title = 'Fibo Üst Alt Fiyatları Panosu Gözüksün mü?')   
-acEtiket = input(defval = false, title = 'Fibo Al Sat Talimatları Panosu Gözüksün mü?')   
+acFiboUA = input(defval = true, title = 'Fibo Üst Alt Fiyatları Panosu Gözüksün mü?', group="Pano Ayarları")   
+acEtiket = input(defval = false, title = 'Fibo Al Sat Talimatları Panosu Gözüksün mü?', group="Pano Ayarları")   
 
 // xMA Ayarlar
 //acMa3Ma15Boyama = input(defval = true, title = 'Ma 3/15 Arası Boyama Gösterilsin mi?', group="xMA Ayarları")
@@ -326,7 +326,7 @@ f_datestamp(_time)=>
 
 position = 40
 info_label_off = 40
-info_label_size = input.string(size.normal, options=[size.tiny, size.small, size.normal, size.large, size.huge], title='Liste Panel Büyüklüğü')
+info_label_size = input.string(size.normal, options=[size.tiny, size.small, size.normal, size.large, size.huge], title='Pano Yazı Büyüklüğü', group="Pano Ayarları")
 info_panel_x = timenow + math.round(ta.change(time) * info_label_off) + 10
 info_panel_y = (ta.highest(position) + ta.lowest(position))/2
 
