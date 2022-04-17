@@ -2,7 +2,7 @@
 // © ozcanozbek
 
 //@version=5
-indicator(title = 'Rsi/Ema Çizgisi Sade V1.2.2' , shorttitle='Rsi/Ema Sade', overlay=true, timeframe="", timeframe_gaps=true)
+indicator(title = 'Rsi/Ema Çizgisi Sade V1.2.4' , shorttitle='Rsi/Ema Sade', overlay=true, timeframe="", timeframe_gaps=true)
 
 
 //myClose = request.security(syminfo.tickerid, timeframe.period, close)
@@ -138,6 +138,11 @@ acRsiEmaSat = input(defval = false, title = 'Rsi/Ema Sat İşaretleri Gösterils
 acRsiEmaYatay = input(defval = false, title = 'Rsi/Ema Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 acRsiEmaCifteYatay = input(defval = false, title = 'Rsi/Ema Çift Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 
+
+//acRExMaAl = input(defval = false, title = 'RsiEma/xMA Yukarı Kes İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+//acRExMaSat = input(defval = false, title = 'RsiEma/xMA Aşağı Kes İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+
+
 myKoyuRenkY = input.color(#00897B , "Alım Bölgesinde (zirvede) Yükselirken", group="Rsi/Ema Çizgisi") 
 myAcikRenkY = input.color(color.green, "Satım Bölgesinden (dipte) Yükselirken", group="Rsi/Ema Çizgisi") 
 
@@ -181,6 +186,12 @@ alertcondition(rsiSartCiftYatay, title="Rsi/Ema Çift Yatay AL", message='2S Rsi
 acBb = input(defval = false, title = 'Küçük Bolinger Çizgileri Gözüksün mü?', group="Küçük Bolinger Bölümü")   
 acBbAl = input(defval = false, title = 'Küçük Bolinger Al İşareti Gözüksün mü?', group="Küçük Bolinger Bölümü")   
 acBbSat = input(defval = false, title = 'Küçük Bolinger Sat İşareti Gözüksün mü?', group="Küçük Bolinger Bölümü")   
+
+acBbAlx = input(defval = false, title = 'Küçük Bolinger Aşağı Bölgeye İşareti Gözüksün mü?', group="Küçük Bolinger Bölümü")   
+acBbSatx = input(defval = false, title = 'Küçük Bolinger Yukarı Bölgeye İşareti Gözüksün mü?', group="Küçük Bolinger Bölümü")   
+
+
+
 bbLength = input.int(20, minval=1, step=1, title='Küçük Bolinger Uzunluğu', group="Küçük Bolinger Bölümü")
 bbMult = input.float(1.7, minval=0.001, maxval=50.0, step=0.01, title="Küçük Bolinger Standart Sapma", group="Küçük Bolinger Bölümü")
 bbBasis = ta.sma(src, bbLength)
@@ -191,11 +202,18 @@ lower = bbBasis - bbDev
 bbSrcUst = close
 bbSrcAlt = low
 kesYbb = ta.crossover(myRsiEmaLine , lower) //and low <= xMA_9Src
+kesYbbx = ta.crossunder(myRsiEmaLine , lower) //and low <= xMA_9Src
+
 kesAbb = ta.crossunder(myRsiEmaLine , upper) //and high > xMA_9Src
+kesAbbx = ta.crossover(myRsiEmaLine , upper) //and high > xMA_9Src
 
 bb_Color = color.new(#00bcd4, 0)
-bb_ColorIsaret = color.new(color.orange, 0)
-bb_Size = size.small
+bb_ColorIsaret = color.new(color.red, 0)
+bb_Size = size.tiny
+
+bb_ColorIsaretX = color.new(color.lime, 0)
+bb_SizeX = size.tiny
+
 
 bolP1 = plot(upper and acBb ? upper : na, "Küçük Bolinger Üst", color=bb_Color, offset = 0, linewidth=2)
 bolP2 = plot(lower and acBb ? lower : na, "Küçük Bolinger Alt", color=bb_Color, offset = 0, linewidth=2)
@@ -214,9 +232,17 @@ xBbYLocation = location.belowbar
 
 
 plotshape(kesAbb and acBbSat ? kesAbb : na , title = 'Küçük Bolinger Aşağı Kes', text='', style=xBbAStyle , location=xBbALocation, color=bb_ColorIsaret, offset=0, size=bb_Size)
-plotshape(kesYbb and acBbAl ? kesYbb : na ,title ='Küçük Bolinger Yukarı Kes', text='', style=xBbYStyle , location=xBbYLocation, color=bb_ColorIsaret, offset=0, size=bb_Size)
-alertcondition(kesYbb, title="BB AL", message='BB AL {{ticker}}, FİYAT={{close}}')
-alertcondition(kesAbb, title="BB SAT", message='BB SAT {{ticker}}, FİYAT={{close}}')
+plotshape(kesYbb and acBbAl ? kesYbb : na ,title ='Küçük Bolinger Yukarı Kes', text='', style=xBbYStyle , location=xBbYLocation, color=bb_ColorIsaretX, offset=0, size=bb_Size)
+alertcondition(kesYbb, title="BB AL? FIRSATI", message='BB AL? FIRSATI {{ticker}}, FİYAT={{close}}')
+alertcondition(kesAbb, title="BB SAT? FIRSATI", message='BB SAT? FIRSATI {{ticker}}, FİYAT={{close}}')
+alertcondition(kesYbb or kesAbb, title="BB AL?/SAT? FIRSATI", message='BB AL?/SAT? FIRSATI {{ticker}}, FİYAT={{close}}')
+
+
+plotshape(kesAbbx and acBbSatx ? kesAbbx : na , title = 'Küçük Bolinger Yukarı Bölgeye Taşma', text='', style=xBbYStyle , location=xBbALocation, color=bb_ColorIsaret, offset=0, size=bb_SizeX)
+plotshape(kesYbbx and acBbAlx ? kesYbbx : na ,title ='Küçük Bolinger Aşağı Bölgeye Düşüş', text='', style=xBbAStyle , location=xBbYLocation, color=bb_ColorIsaretX, offset=0, size=bb_SizeX)
+alertcondition(kesYbbx, title="BB AL? BÖLGESİ", message='BB AL? BÖLGESİ {{ticker}}, FİYAT={{close}}')
+alertcondition(kesAbbx, title="BB SAT? BÖLGESİ", message='BB SAT? BÖLGESİ {{ticker}}, FİYAT={{close}}')
+
 
 
 //Özel Sat
@@ -358,6 +384,22 @@ alertcondition(aLF, title="ÖSF AL", message='2S ÖSF AL {{ticker}}, FİYAT={{cl
 
 ilk = myRsiEmaCizgim
 son = xMA_9_Plot
+
+
+
+//re_ColorIsaret = color.new(color.white, 0)
+//re_Size = size.normal
+//kesYre = ta.crossover(myRsiEmaLine , xMA_9) //and low <= xMA_9Src
+//kesAre = ta.crossunder(myRsiEmaLine , xMA_9) //and high > xMA_9Src
+//plotshape(kesAre and acRExMaSat ? kesAbb : na , title = 'RsiEma/xMA Aşağı Kes', text='', style=xBbAStyle , location=xBbALocation, color=re_ColorIsaret, offset=0, size=re_Size)
+//plotshape(kesYre and acRExMaAl ? kesYbb : na ,title ='RsiEma/xMA Yukarı Kes', text='', style=xBbYStyle , location=xBbYLocation, color=re_ColorIsaret, offset=0, size=re_Size)
+///alertcondition(kesYbb, title="BB AL? FIRSATI", message='BB AL? FIRSATI {{ticker}}, FİYAT={{close}}')
+///alertcondition(kesAbb, title="BB SAT? FIRSATI", message='BB SAT? FIRSATI {{ticker}}, FİYAT={{close}}')
+///alertcondition(kesYbb or kesAbb, title="BB AL?/SAT? FIRSATI", message='BB AL?/SAT? FIRSATI {{ticker}}, FİYAT={{close}}')
+
+
+
+
 
 //myBoya = acBoyama ? ba1 >= ba2 ? myRenkBir : myRenkIki : color.new(color.white, 100)
 ///myBoya = myRsiEmaLine >= xMA_9Src ? myRenkBir : myRenkIki 
