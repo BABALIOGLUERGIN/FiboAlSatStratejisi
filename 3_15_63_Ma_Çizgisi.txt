@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = '3_15_63_Ma Çizgisi V1.3.07', shorttitle = '3 xMA Çizgisi', overlay=true) 
+indicator(title = '3_15_63_Ma Çizgisi V1.3.09', shorttitle = '3 xMA Çizgisi', overlay=true) 
 src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
 
 // Fibo Ayarları
@@ -110,8 +110,8 @@ myEma121S = ta.ema(myRsi1S, myEmaD)
 acRsiEmaLW = input.int(defval = 4, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri', group="Rsi/Ema Çizgisi Değerleri") 
 
 acRsiEma = input(defval = false, title = 'Rsi/Ema Çizgisi Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
-acRsiEmaAl = input(defval = false, title = 'Rsi/Ema Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
-acRsiEmaSat = input(defval = false, title = 'Rsi/Ema Sat İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaAl = input(defval = false, title = 'Kademeli DİP İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaSat = input(defval = false, title = 'Kademeli ZİRVE İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 
 acxMa3x15Al = input(defval = true, title = 'Rsi/Ema Scalp (xMA15) Yukarı Kes İşareti Gözüksün mü?', group="Rsi/Ema Çizgisi")   
 acxMa3x15Sat = input(defval = true , title = 'Rsi/Ema Scalp (büyük bolinger) Aşağı Kes İşareti Gözüksün mü?', group="Rsi/Ema Çizgisi")   
@@ -155,13 +155,15 @@ plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=myRsiColorTek, tit
 //plotshape(kesCizgiRsiEmaRed and acCizgiRsiEma ,title ='Rsi/Ema AL' , style=shape.circle, location=location.belowbar, color=color.new(color.red, 0), offset=0, size=size.tiny)
 
 
-rsiSartAl = (myRsiColorTek[1]==myAcikRenkD or myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkY or myRsiColorTek == myKoyuRenkY) and src < maBaraj
-plotshape(rsiSartAl and acRsiEmaAl ,title ='Rsi/Ema AL' , style=shape.triangleup, location=location.belowbar, color=color.new(#00bcd4, 0), offset=0, size=size.normal)
-alertcondition(rsiSartAl, title="Rsi/Ema AL", message='Rsi/Ema AL fırsatı olabilir (xMA100 ve xMA200 konumunu kontrol et) {{ticker}}, FİYAT={{close}}')
+//rsiSartAl = (myRsiColorTek[1]==myAcikRenkD or myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkY or myRsiColorTek == myKoyuRenkY) and src < maBaraj
+rsiSartAl = (myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkD or myRsiColorTek == myAcikRenkY or myRsiColorTek == myKoyuRenkY) and src < maBaraj
+plotshape(rsiSartAl and acRsiEmaAl ,title ='Kademeli DİP' , style=shape.triangleup, location=location.belowbar, color=color.new(#00bcd4, 0), offset=0, size=size.normal)
+alertcondition(rsiSartAl, title="Kademeli DİP", message='{{ticker}} Kademeli DİP fırsatı olabilir, FİYAT={{close}}')
 
-rsiSartSat = (myRsiColorTek[1]==myAcikRenkY or myRsiColorTek[1]==myKoyuRenkY) and (myRsiColorTek == myAcikRenkD or myRsiColorTek == myKoyuRenkD) and src <= ma3
-plotshape(rsiSartSat and acRsiEmaSat ,title ='Rsi/Ema SAT', style=shape.triangledown, location=location.abovebar, color=color.new(#00bcd4, 0), offset=0, size=size.normal)
-alertcondition(rsiSartSat, title="Rsi/Ema SAT", message='Rsi/Ema SAT fırsatı olabilir (xMA50 konumunu kontrol et) {{ticker}}, FİYAT={{close}}')
+//rsiSartSat = (myRsiColorTek[1]==myAcikRenkY or myRsiColorTek[1]==myKoyuRenkY) and (myRsiColorTek == myAcikRenkD or myRsiColorTek == myKoyuRenkD) and src <= ma3
+rsiSartSat = (myRsiColorTek[1]==myKoyuRenkY) and (myRsiColorTek == myAcikRenkD) and src >= maBaraj
+plotshape(rsiSartSat and acRsiEmaSat ,title ='Kademeli ZİRVE', style=shape.triangledown, location=location.abovebar, color=color.new(#00bcd4, 0), offset=0, size=size.normal)
+alertcondition(rsiSartSat, title="Kademeli ZİRVE", message='{{ticker}} Kademeli ZİRVE fırsatı olabilir, FİYAT={{close}}')
 
 rsiSartCiftYatay1 = (myKoyuRenkD==myRsiColorTek[1] and myKoyuRenkD==myRsiColorTek[2] and myKoyuRenkD==myRsiColorTek[3]) 
 //or (myAcikRenkD==myRsiColorTek[1] and myAcikRenkD==myRsiColorTek[2] and myAcikRenkD==myRsiColorTek[3])
