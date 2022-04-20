@@ -2,7 +2,7 @@
 // © ozcanozbek
 
 //@version=5
-indicator(title = 'Rsi/Ema Çizgisi Sade V1.2.4' , shorttitle='Rsi/Ema Sade', overlay=true, timeframe="", timeframe_gaps=true)
+indicator(title = 'Rsi/Ema Çizgisi Sade V1.2.5' , shorttitle='Rsi/Ema Sade', overlay=true, timeframe="", timeframe_gaps=true)
 
 
 //myClose = request.security(syminfo.tickerid, timeframe.period, close)
@@ -63,13 +63,13 @@ xMaMumKontrol(xMaMumTip)=>
         => str.tostring(timeframe.period)
 
 
-acxMaCizgisi = input(defval = true, title = 'xMA Çizgileri Gözüksün mü?', group="xMA Çizgileri")  
+acxMaCizgisi = input(defval = false, title = 'xMA Çizgileri Gözüksün mü?', group="xMA Çizgileri")  
 acxMa9Cizgisi = input(defval = false, title = 'xMA Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 
 xMA_9_Color = color.new(color.lime, 0)
 
 
-length0a = input(20, 'xMA', group="xMA Değerleri")
+length0a = input(50, 'xMA', group="xMA Değerleri")
 xMaMum9Src = xMaMumKontrol(xMAMum9)
 xMA_9 = xMaKontrol(xMaTip9, close, length0a) 
 xMA_9Src = request.security(syminfo.tickerid,xMaMum9Src, xMA_9)
@@ -132,7 +132,7 @@ myEmaD = input.int(12, title='Ema Değeri', group="Rsi/Ema Çizgisi Değerleri")
 myEma121S = ta.ema(myRsi1S, myEmaD)
 acRsiEmaLW = input.int(defval = 4, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri', group="Rsi/Ema Çizgisi Değerleri") 
 
-acRsiEma = input(defval = true, title = 'Rsi/Ema Çizgisi Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEma = input(defval = false, title = 'Rsi/Ema Çizgisi Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 acRsiEmaAl = input(defval = false, title = 'Rsi/Ema Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 acRsiEmaSat = input(defval = false, title = 'Rsi/Ema Sat İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 acRsiEmaYatay = input(defval = false, title = 'Rsi/Ema Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
@@ -184,11 +184,11 @@ alertcondition(rsiSartCiftYatay, title="Rsi/Ema Çift Yatay AL", message='2S Rsi
 
 //BB
 acBb = input(defval = false, title = 'Küçük Bolinger Çizgileri Gözüksün mü?', group="Küçük Bolinger Bölümü")   
-acBbAl = input(defval = false, title = 'Küçük Bolinger Al İşareti Gözüksün mü?', group="Küçük Bolinger Bölümü")   
-acBbSat = input(defval = false, title = 'Küçük Bolinger Sat İşareti Gözüksün mü?', group="Küçük Bolinger Bölümü")   
+acBbAl = input(defval = true, title = 'Küçük Bolinger Al İşareti Gözüksün mü?', group="Küçük Bolinger Bölümü")   
+acBbSat = input(defval = true, title = 'Küçük Bolinger Sat İşareti Gözüksün mü?', group="Küçük Bolinger Bölümü")   
 
-acBbAlx = input(defval = false, title = 'Küçük Bolinger Aşağı Bölgeye İşareti Gözüksün mü?', group="Küçük Bolinger Bölümü")   
-acBbSatx = input(defval = false, title = 'Küçük Bolinger Yukarı Bölgeye İşareti Gözüksün mü?', group="Küçük Bolinger Bölümü")   
+acBbAlx = input(defval = true, title = 'Küçük Bolinger Aşağı Bölgeye İşareti Gözüksün mü?', group="Küçük Bolinger Bölümü")   
+acBbSatx = input(defval = true, title = 'Küçük Bolinger Yukarı Bölgeye İşareti Gözüksün mü?', group="Küçük Bolinger Bölümü")   
 
 
 
