@@ -1,6 +1,6 @@
 //O2can O2bek (Özcan Özbek)
 //@version=5
-indicator(title = '3_15_63_Ma Çizgisi V1.3.10', shorttitle = '3 xMA Çizgisi', overlay=true) 
+indicator(title = '3_15_63_Ma Çizgisi V1.3.11', shorttitle = '3 xMA Çizgisi', overlay=true) 
 src = input(title='Kaynak', defval=close, group="Kaynak Çeşitleri")
 
 // Fibo Ayarları
@@ -460,6 +460,9 @@ acShootingStar = input.bool(defval = false, title = 'Shooting Star (Kayan Yıld�
 acEveningStar =  input.bool(defval = false, title = 'Evening Star (Akşam Yıldızı) Gözüksün mü?', group="Mum Formasyon Ayarları")
 acMorningStar =  input.bool(defval = false, title = 'Morning Star (Sabah Yıldızı) Gözüksün mü?', group="Mum Formasyon Ayarları")
 
+acCekic =  input.bool(defval = false, title = 'Hammer (Çekiç) Sembolü (Ç) Gözüksün mü?', group="Mum Formasyon Ayarları")
+acTersCekic =  input.bool(defval = false, title = 'Inverted Hammer (Ters Çekiç) Sembolü (tÇ) Gözüksün mü?', group="Mum Formasyon Ayarları")
+
 Dojidata=(math.abs(open - close) <= (high - low) * dojiOlcusu)
 plotchar(Dojidata and acDoji ? Dojidata : na, title="Doji", char="!", text="Doji\n", color=color.white,size=size.tiny)
 
@@ -478,6 +481,15 @@ plotshape(eveningStar and acEveningStar ? eveningStar : na , title= "Akşam Yıl
 
 morningStar=(close[2] < open[2] and math.max(open[1], close[1]) < close[2] and open > math.max(open[1], close[1]) and close > open )
 plotshape(morningStar and acMorningStar ? morningStar : na,  title= "Sabah Yıldızı", location=location.belowbar, color=color.lime, style=shape.arrowup, text="Sabah\nYıldızı\n")
+
+
+
+cekic=(((high - low)>3*(open -close)) and  ((close - low)/(.001 + high - low) > 0.6) and ((open - low)/(.001 + high - low) > 0.6))
+plotshape(cekic and acCekic ? cekic : na , title= "Çekiç", location=location.belowbar, color=color.white, style=shape.diamond, text="Ç")
+
+tersCekic=(((high - low)>3*(open -close)) and  ((high - close)/(.001 + high - low) > 0.6) and ((high - open)/(.001 + high - low) > 0.6))
+plotshape(tersCekic and acTersCekic ? tersCekic : na , title= "Ters Çekiç", location=location.belowbar, color=color.white, style=shape.diamond, text="tÇ")
+
 
 
 //Özel Sat
