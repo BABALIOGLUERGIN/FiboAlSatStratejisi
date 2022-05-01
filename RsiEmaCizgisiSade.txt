@@ -2,7 +2,7 @@
 // © ozcanozbek
 
 //@version=5
-indicator(title = 'Rsi/Ema Çizgisi Sade V1.2.5' , shorttitle='Rsi/Ema Sade', overlay=true, timeframe="", timeframe_gaps=true)
+indicator(title = 'Rsi/Ema Çizgisi Sade V1.3.0' , shorttitle='Rsi/Ema Sade', overlay=true, timeframe="", timeframe_gaps=true)
 
 
 //myClose = request.security(syminfo.tickerid, timeframe.period, close)
@@ -66,7 +66,7 @@ xMaMumKontrol(xMaMumTip)=>
 acxMaCizgisi = input(defval = false, title = 'xMA Çizgileri Gözüksün mü?', group="xMA Çizgileri")  
 acxMa9Cizgisi = input(defval = false, title = 'xMA Çizgisi Gözüksün mü?', group="xMA Çizgileri")   
 
-xMA_9_Color = color.new(color.lime, 0)
+xMA_9_Color = color.new(color.orange, 0)
 
 
 length0a = input(50, 'xMA', group="xMA Değerleri")
@@ -132,9 +132,9 @@ myEmaD = input.int(12, title='Ema Değeri', group="Rsi/Ema Çizgisi Değerleri")
 myEma121S = ta.ema(myRsi1S, myEmaD)
 acRsiEmaLW = input.int(defval = 4, title = 'Rsi/Ema Çizgisi Kalınlığı Sayısal Değeri', group="Rsi/Ema Çizgisi Değerleri") 
 
-acRsiEma = input(defval = false, title = 'Rsi/Ema Çizgisi Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
-acRsiEmaAl = input(defval = false, title = 'Rsi/Ema Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
-acRsiEmaSat = input(defval = false, title = 'Rsi/Ema Sat İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEma = input(defval = true, title = 'Rsi/Ema Çizgisi Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaAl = input(defval = false, title = 'Kademeli DİP İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
+acRsiEmaSat = input(defval = false, title = 'Kademeli ZİRVE İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 acRsiEmaYatay = input(defval = false, title = 'Rsi/Ema Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 acRsiEmaCifteYatay = input(defval = false, title = 'Rsi/Ema Çift Yatay Al İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 
@@ -143,11 +143,11 @@ acRsiEmaCifteYatay = input(defval = false, title = 'Rsi/Ema Çift Yatay Al İşa
 //acRExMaSat = input(defval = false, title = 'RsiEma/xMA Aşağı Kes İşaretleri Gösterilsin mi?', group="Rsi/Ema Çizgisi") 
 
 
-myKoyuRenkY = input.color(#00897B , "Alım Bölgesinde (zirvede) Yükselirken", group="Rsi/Ema Çizgisi") 
-myAcikRenkY = input.color(color.green, "Satım Bölgesinden (dipte) Yükselirken", group="Rsi/Ema Çizgisi") 
+myKoyuRenkY = input.color(color.new(#00897B, 0)  , "Alım Bölgesinde (zirvede) Yükselirken", group="Rsi/Ema Çizgisi") 
+myAcikRenkY = input.color(color.new(color.green, 0), "Satım Bölgesinden (dipte) Yükselirken", group="Rsi/Ema Çizgisi") 
 
-myAcikRenkD = input.color(color.red , "Alım Bölgesinden (zirvede) Düşerken", group="Rsi/Ema Çizgisi") 
-myKoyuRenkD = input.color(#880E4F  , "Satım Bölgesinde (dipte) Düşerken", group="Rsi/Ema Çizgisi") 
+myAcikRenkD = input.color(color.new(color.red, 80) , "Alım Bölgesinden (zirvede) Düşerken", group="Rsi/Ema Çizgisi") 
+myKoyuRenkD = input.color(color.new(#880E4F, 0)  , "Satım Bölgesinde (dipte) Düşerken", group="Rsi/Ema Çizgisi") 
 
 myRsiColorY = myRsi1S <= 60 ? myAcikRenkY : myKoyuRenkY     
 myRsiColorD = myRsi1S <= 40 ? myKoyuRenkD : myAcikRenkD   
@@ -161,13 +161,16 @@ myRsiEmaCizgim = plot(acRsiEma ? myRsi1S >= myEma121S ? high : low : na, color=m
 //xMA_9_Plot = plot(xMA_9Src and acxMaCizgisi and acxMa9Cizgisi ? xMA_9Src : na , color=xMA_9_Color, linewidth=3, title='xMa9 Çizgisi')
 
 
-rsiSartAl = (myRsiColorTek[1]==myAcikRenkD or myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkY or myRsiColorTek == myKoyuRenkY) 
-plotshape(rsiSartAl and acRsiEmaAl ,title ='Rsi/Ema AL' , style=shape.triangleup, location=location.belowbar, color=color.new(#00bcd4, 0), offset=0, size=size.normal)
-alertcondition(rsiSartAl, title="Rsi/Ema AL", message='Rsi/Ema AL fırsatı olabilir (xMA100 ve xMA200 konumunu kontrol et) {{ticker}}, FİYAT={{close}}')
 
-rsiSartSat = (myRsiColorTek[1]==myAcikRenkY or myRsiColorTek[1]==myKoyuRenkY) and (myRsiColorTek == myAcikRenkD or myRsiColorTek == myKoyuRenkD) 
-plotshape(rsiSartSat and acRsiEmaSat ,title ='Rsi/Ema SAT', style=shape.triangledown, location=location.abovebar, color=color.new(#00bcd4, 0), offset=0, size=size.normal)
-alertcondition(rsiSartSat, title="Rsi/Ema SAT", message='Rsi/Ema SAT fırsatı olabilir (xMA50 konumunu kontrol et) {{ticker}}, FİYAT={{close}}')
+//rsiSartAl = (myRsiColorTek[1]==myAcikRenkD or myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkY or myRsiColorTek == myKoyuRenkY) and src < maBaraj
+rsiSartAl = (myRsiColorTek[1]==myKoyuRenkD) and (myRsiColorTek == myAcikRenkD or myRsiColorTek == myAcikRenkY or myRsiColorTek == myKoyuRenkY) and src < xMA_9Src //and src < maBaraj
+plotshape(rsiSartAl and acRsiEmaAl ,title ='Kademeli DİP' , style=shape.triangleup, location=location.belowbar, color=color.new(#00bcd4, 0), offset=0, size=size.normal)
+alertcondition(rsiSartAl, title="Kademeli DİP", message='{{ticker}} Kademeli DİP fırsatı olabilir, FİYAT={{close}}')
+
+//rsiSartSat = (myRsiColorTek[1]==myAcikRenkY or myRsiColorTek[1]==myKoyuRenkY) and (myRsiColorTek == myAcikRenkD or myRsiColorTek == myKoyuRenkD) and src <= ma3
+rsiSartSat = (myRsiColorTek[1]==myKoyuRenkY) and (myRsiColorTek == myAcikRenkD) and src >= xMA_9Src //and src >= maBaraj
+plotshape(rsiSartSat and acRsiEmaSat ,title ='Kademeli ZİRVE', style=shape.triangledown, location=location.abovebar, color=color.new(#00bcd4, 0), offset=0, size=size.normal)
+alertcondition(rsiSartSat, title="Kademeli ZİRVE", message='{{ticker}} Kademeli ZİRVE fırsatı olabilir, FİYAT={{close}}')
 
 rsiSartCiftYatay1 = (myKoyuRenkD==myRsiColorTek[1] and myKoyuRenkD==myRsiColorTek[2] and myKoyuRenkD==myRsiColorTek[3]) 
 //or (myAcikRenkD==myRsiColorTek[1] and myAcikRenkD==myRsiColorTek[2] and myAcikRenkD==myRsiColorTek[3])
@@ -409,7 +412,7 @@ son = xMA_9_Plot
 //myBoya1 = myRsi1S >= myEma121S ? myRsiColorY : myRsiColorD
 myBoya1 = myRsi1S >= myEma121S ? myRsiColorY : na
 myBoya = (myRsiEmaLine >= xMA_9Src) ? myBoya1 : na 
-fill(ilk, son , title = 'Bölge', color = myBoya, fillgaps = true, transp=0)
+//fill(ilk, son , title = 'Bölge', color = myBoya, fillgaps = true, transp=0)
 
 
 //BURADA BİTTİ
