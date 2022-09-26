@@ -1,5 +1,5 @@
 //@version=5
-indicator(title ="xFiboAlarm - V1.0.01", shorttitle ="xFiboAlarm" ,overlay=true)
+indicator(title ="xFiboAlarm - V1.0.02", shorttitle ="xFiboAlarm" ,overlay=true)
 src = input(title='source', defval=close, group="Kaynak Çeşitleri")
 
 //Fiblines
@@ -225,13 +225,13 @@ acFiboN6AKesmeler = input(defval = true, title = '0.236 Fibo Çizgisine Değme �
 acFiboN7AKesmeler = input(defval = true, title = '0.000 Fibo Çizgisine Değme İşaretleri Gözüksün mü?', group="Fibo Değme İşaretleri")   
 
 
-isaretKesAFiboN1 = kesAFiboN1 and acFiboN1AKesmeler and acFiboN1 and acFiboLines ? kesAFiboN1 : na
-isaretKesAFiboN2 = kesAFiboN2 and acFiboN2AKesmeler and acFiboN2 and acFiboLines ? kesAFiboN2 : na
-isaretKesAFiboN3 = kesAFiboN3 and acFiboN3AKesmeler and acFiboN3 and acFiboLines ? kesAFiboN3 : na
-isaretKesAFiboN4 = (kesAFiboN4 or kesYFiboN4) and acFiboN4AKesmeler and acFiboN4 and acFiboLines ? (kesAFiboN4 or kesYFiboN4) : na
-isaretKesAFiboN5 = kesAFiboN5 and acFiboN5AKesmeler and acFiboN5 and acFiboLines ? kesAFiboN5 : na
-isaretKesAFiboN6 = (kesAFiboN6 or kesYFiboN6) and acFiboN6AKesmeler and acFiboN6 and acFiboLines ? (kesAFiboN6 or kesYFiboN6) : na
-isaretKesAFiboN7 = kesAFiboN7 and acFiboN7AKesmeler and acFiboN7 and acFiboLines ? kesAFiboN7 : na
+isaretKesAFiboN1 = kesAFiboN1 and acFiboN1AKesmeler and acFiboN1 ? kesAFiboN1 : na
+isaretKesAFiboN2 = kesAFiboN2 and acFiboN2AKesmeler and acFiboN2 ? kesAFiboN2 : na
+isaretKesAFiboN3 = kesAFiboN3 and acFiboN3AKesmeler and acFiboN3  ? kesAFiboN3 : na
+isaretKesAFiboN4 = (kesAFiboN4 or kesYFiboN4) and acFiboN4AKesmeler and acFiboN4 ? (kesAFiboN4 or kesYFiboN4) : na
+isaretKesAFiboN5 = kesAFiboN5 and acFiboN5AKesmeler and acFiboN5 ? kesAFiboN5 : na
+isaretKesAFiboN6 = (kesAFiboN6 or kesYFiboN6) and acFiboN6AKesmeler and acFiboN6 ? (kesAFiboN6 or kesYFiboN6) : na
+isaretKesAFiboN7 = kesAFiboN7 and acFiboN7AKesmeler and acFiboN7 ? kesAFiboN7 : na
 
 
 plotshape(isaretKesAFiboN1, textcolor = fiboKademeRenk, text = '', title ='1.000 Fibo Kes', style=fiboAStyle, location=fiboALocation, color=kesAFiboN1 ? color.white : na, offset=0, size=fiboASize)
