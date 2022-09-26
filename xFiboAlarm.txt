@@ -1,5 +1,5 @@
 //@version=5
-indicator(title ="xFiboAlarm - V1.0.02", shorttitle ="xFiboAlarm" ,overlay=true)
+indicator(title ="xFiboAlarm - V1.0.03", shorttitle ="xFiboAlarm" ,overlay=true)
 src = input(title='source', defval=close, group="Kaynak Çeşitleri")
 
 //Fiblines
@@ -200,6 +200,9 @@ alertcondition(kesYFiboN6, title="AL Yukarı Kesti 0.236", message='AL Yukarı K
 //kesYFiboY5 = ta.crossover(src , fiboY5) 
 
 
+alertcondition(kesYFiboN4 or kesYFiboN6, title="*AL Yukarı Kesti 0.236 veya 0.500", message='AL Yukarı Kesti 0.236 veya 0.500 {{ticker}}, FİYAT={{close}}')
+alertcondition(kesAFiboN1 or kesAFiboN2 or kesAFiboN3 or kesAFiboN4 or kesAFiboN5 or kesAFiboN6 or kesAFiboN7, title="*SAT Aşağı Kesti Fibolar", message='SAT Aşağı Kesti Fibolar {{ticker}}, FİYAT={{close}}')
+
 
 
 fiboKademeRenk = color.lime
@@ -241,6 +244,9 @@ plotshape(isaretKesAFiboN4, textcolor = fiboKademeRenk, text = '', title ='0.500
 plotshape(isaretKesAFiboN5, textcolor = fiboKademeRenk, text = '', title ='0.382 Fibo Kes', style=fiboAStyle, location=fiboALocation, color=kesAFiboN5 ? fiboAColor : na, offset=0, size=fiboASize)
 plotshape(isaretKesAFiboN6, textcolor = fiboKademeRenk, text = '', title ='0.236 Fibo Kes', style=fiboAStyle, location=fiboALocation, color=kesYFiboN6 ? fiboYColor : fiboAColor, offset=0, size=fiboASize)
 plotshape(isaretKesAFiboN7, textcolor = fiboKademeRenk, text = '', title ='0.000 Fibo Kes', style=fiboAStyle, location=fiboALocation, color=kesAFiboN7 ? fiboAColor : na , offset=0, size=fiboASize)
+
+//plotshape(kesYFiboN4 or kesYFiboN6 , textcolor = fiboKademeRenk, text = '', title ='0.236 veya 0.500 Fibo Yukarı Kes', style=fiboAStyle, location=fiboALocation, color=color.yellow, offset=0, size=size.tiny)
+
 
 
 //BURADA BİTTİ
